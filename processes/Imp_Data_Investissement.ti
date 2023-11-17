@@ -1,14 +1,13 @@
 #region Prolog
 
-#****Begin: Generated Statements***
-#****End: Generated Statements****
-
 #***********************************************************************************************
-# CREATEUR : VRT
-# DATE DE CREATION : 21/09/2023
+# CREATEUR : CTY
+# DATE DE CREATION : 17/11/2023
 # DERNIERE MODIFICATION EFFECTUEE PAR : 
 # DATE DE DERNIERE MODIFICATION : 
-# DESCRIPTION DU PROCESSUS : MAJ des données réel du cube Credit_Bail
+# DESCRIPTION DU PROCESSUS : 
+# Import détail l'amortissement par mois et par magasin de chaque immobilisation
+# Maj de la dimension Immobilisation au passage
 #************************************************************************************************
 
 ###############################   MONITORING   #################################
@@ -36,25 +35,52 @@ ELSE ;
 	cUtilisateur        = TM1User();
 ENDIF ;
 
+sDate = TimSt( Now, '\Y\m\d' );
+
+sUser = ATTRS( '}Clients' , cUtilisateur , '}TM1_DefaultDisplayValue' );
+nLong = LONG ( sUser ) ;
+sUser = SUBST ( sUser , 20 , nLong - 19 ) ;
+
 ### 1. Déclaration des variables
 
+# Cubes
+sCubeConditionnement = 'Param_Conditionnement_Sac' ;
+
 # Pour suppression des vues et ss ensemble temporaire
-nDebug = 1 ; 
+nDebug = 1 ;
+
+# Pour entête dans le fichier de rejet
+nEntete = 0 ;
+
+# Compteur d'erreur
+nError = 0 ; 
 
 #**Fichier Debug
 sFichierRepDebug = CellGetS ( sCubeParamT , 'Txt_RepertoireDebug' , 'ValeurS' );
-sDebug = sFichierRepDebug | 'test'|cMainProcName|'.txt' ;
+sDebug = sFichierRepDebug | 'test'|cMainProcName|'.csv' ;
+
+#**Fichier Rejet
+sFichierRepRejet = CellGetS ( sCubeParamT , 'Txt_RepertoireRejet' , 'ValeurS' );
+sRejet = sFichierRepRejet | 'Rejet_'| '_' | pMois | '_' | sUser | '_' | sDate | '_' | cMainProcName|'.csv' ;
+
+# Suppression du fichier de rejet si Existant
+IF ( FileExists( sRejet ) = 1 ) ;
+  ASCIIDelete( sRejet );
+ENDIF ;
+
 
 
 ###############################   FIN MONITORING   #################################
 
 # Définition du périmètre
-# Ce processus ne gère que du réel
-sExercice = CellGetS( 'ParametresFonctionnels', 'ExerciceEnCours', 'ValeurS' );
-sExercice = DimensionElementPrincipalName( 'Exercice', sExercice );
+# Cible toujours réel
+
+sExercice = DimensionElementPrincipalName ( 'Exercice' , CellGetS( 'ParametresFonctionnels', 'ExerciceEnCours' , 'ValeurS' ) );
 sScenario = 'REEL' ;
 sVersion = 'VF' ;
 
+# Redéfinition des paramètres pour utiliser le code des éléments
+sMois = DimensionElementPrincipalName( 'Mois', pMois );
 
 ###########################################
 ## Définition du fichier source
@@ -72,7 +98,7 @@ IF ( sRepertoire @= '' % sNomFichier @= '' ) ;
 ENDIF ;
 
 # Renommage du fichier source selon les paramètres utilisateur
-sNomFichier = sNomFichier | '_' | sExercice | '_' | sScenario | '.csv'  ;
+sNomFichier = sNomFichier | '_' | sMois | '_' | sExercice | '_' | sScenario | '.csv'  ;
 sNomComplet = sRepertoire | sNomFichier ;
 
 # Controle de la présence du fichier source dans le répertoire
@@ -86,18 +112,20 @@ DatasourceNameForServer = sNomComplet ;
 DataSourceASCIIDelimiter = ';' ;
 
 
+
 ###########################################
-## Creation vue CIBLE sur Cout_Elec
+## Creation vue CIBLE sur Vente_Sac
 ###########################################
 
 ### Déclaration des variables
-sCubeCible = 'Credit_Bail';
+sCubeCible = 'Vente_Sac';
 sDimCible1 = 'Exercice';
 sDimCible2 = 'Version' ; 
 sDimCible3 = 'Scenario' ; 
-sDimCible4 = 'Type_Credit_Bail' ; 
-sDimCible5 = 'Magasin' ; 
-sDimCible = 'm_Cout_Elec';
+sDimCible4 = 'Mois' ; 
+sDimCible5 = 'Type_Sac' ;
+sDimCible6 = 'Magasin' ; 
+sDimCible = 'm_Vente_Sac';
 
 
 # Le nom de la vue du cube :
@@ -130,48 +158,34 @@ SubsetCreate ( sDimCible3 , sSubsetZero , nDebug ) ;
 SubsetElementInsert ( sDimCible3 , sSubsetZero , sScenario , nDebug ) ;
 ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible3 , sSubsetZero ) ; 
 
-# Type_Vredit_Bail
+# Mois 
 SubsetDestroy ( sDimCible4 , sSubsetZero ) ; 
-StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible4 | ' ] ) } , 0 ) }' ;
-SubsetCreateByMDX ( sSubsetZero , StringMDX , nDebug  ) ;
+SubsetCreate ( sDimCible4 , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible4 , sSubsetZero , sMois , nDebug ) ;
 ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible4 , sSubsetZero ) ; 
 
-# Magasin
-SubsetDestroy ( sDimCible5 , sSubsetZero ) ; 
-StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible5 | ' ] ) } , 0 ) }' ;
-SubsetCreateByMDX ( sSubsetZero , StringMDX , nDebug  ) ;
+# Type_Sac
+SubsetDestroy ( sDimCible5 , sSubsetZero ) ;
+SubsetCreate ( sDimCible5 , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible5 , sSubsetZero , sTypeSac , nDebug ) ;
 ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible5 , sSubsetZero ) ; 
 
-# m_Credit_Bail
-SubsetDestroy ( sDimCible , sSubsetZero ) ; 
-StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible | ' ] ) } , 0 ) }' ;
+# Magasin
+SubsetDestroy ( sDimCible6 , sSubsetZero ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible6 | ' ] ) } , 0 ) }' ;
 SubsetCreateByMDX ( sSubsetZero , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible6 , sSubsetZero ) ; 
+
+# m_Vente_Sac
+SubsetDestroy ( sDimCible , sSubsetZero ) ;
+SubsetCreate ( sDimCible , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible , sSubsetZero , 'Quantite' , nDebug ) ;
 ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible , sSubsetZero ) ;
 
 # RAZ de la vue zero
 ViewZeroOut( sCubeCible, sVueZero );
 #endregion
-#region Metadata
-
-#****Begin: Generated Statements***
-#****End: Generated Statements****
-#endregion
-#region Data
-
-#****Begin: Generated Statements***
-#****End: Generated Statements****
-
-# Test livraison GitHub
-IF ( 1 = 2 ) ;
-  ItemSkip;
-ENDIF ;
-=======
-
-#endregion
 #region Epilog
-
-#****Begin: Generated Statements***
-#****End: Generated Statements****
 
 #------------------------------------------------ MONITORING  ------------------------------------------------#
 
@@ -201,4 +215,10 @@ CELLPUTS( Z_LOCAL_TIME, sCubeParamS , cMainProcName ,'DernExe');
 CELLPUTS( Z_UTILISATEUR, sCubeParamS , cMainProcName ,'txt_Utilisateur' );
 
 #------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+
+# Message si erreur du processus
+IF ( nError > 0 ) ;
+  sMessage = 'Des rejets ont été générés, veuillez consulter le répertoire pour plus de détail' ;
+  ItemReject( sMessage );
+ENDIF ;
 #endregion
