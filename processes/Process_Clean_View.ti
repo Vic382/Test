@@ -1,0 +1,122 @@
+#region Prolog
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#***********************************************************************************************************
+#***********************************************************************************************************
+# CREATEUR : DIMO SOFTWARE - CTY
+# DATE DE CREATION : 07/07/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : Ce processus vous permet de vider la vue que vous 
+# avez mentionné dans le paramètre 
+# 
+#***********************************************************************************************************
+
+#***********************************************************************************************************
+#                                  Définition des cubes
+#***********************************************************************************************************
+
+sCubeParamP	             = 'ParametresSources' ;
+sCubeParamT	             = 'ParametrageT' ;
+
+#***********************************************************************************************************
+#                                  Définition des dimensions
+#***********************************************************************************************************
+sDimCube = '}Cubes' ;
+
+#***********************************************************************************************************
+#                                  Définition des constantes
+#***********************************************************************************************************
+
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+#***********************************************************************************************************
+#                                  Définition des variables
+#***********************************************************************************************************
+
+# Pour échanger avec Process_Log_Create
+NumericGlobalVariable ('zLogNumero') ;
+
+#**Fichier Debug
+sFichierRepDebug = 'D:\IBM\Instances\GENERIQUE\DEBUG\' ;
+sDebug = sFichierRepDebug | 'testBNS.txt' ;
+
+
+#***********************************************************************************************************
+#                                  Initialisation des variables
+#***********************************************************************************************************
+zLogNumero        = 1 ;
+nErrorsExport  = 0 ;
+
+sCube = pCube ; 
+sView = pView ; 
+
+
+#***********************************************************************************************************
+#                                  Test sur l'existance de la vue
+#***********************************************************************************************************
+nVueExists = ViewExists( sCube , sView );
+
+IF ( nVueExists = 0 ) ;
+
+  nErrors = 1 ;
+  ProcessBreak ;
+ENDIF ;
+
+
+## COM : Remise à Zéro d'une vue
+ViewZeroOut ( sCube , sView ) ;
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+# Declaration variables et constantes
+
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+Z_LOCAL_TIME=   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+Z_UTILISATEUR = TM1User;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+CELLPUTS( Z_STATUS , sCubeParamP , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamP ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamP , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamP , cMainProcName ,'txt_Utilisateur' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+#endregion

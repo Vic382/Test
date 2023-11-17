@@ -1,0 +1,180 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#***********************************************************************************************************
+# CREATEUR : DIMO SOFTWARE - VRT
+# DATE DE CREATION : 02/11/2023
+# DERNIERE MODIFICATION FFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : 
+# Mise à jour de la sécurité des dimensions
+#***********************************************************************************************************
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+#***********************************************************************************************************
+#                                  Définition des constantes
+#***********************************************************************************************************
+
+sCubeParamP	             = 'ParametresSources' ;
+sCubeParamS         = 'ParametresSources' ;
+sCubeParamT	             = 'ParametrageT' ;
+
+cMainProcName = GetProcessName();
+cRepertoireRacine = GetProcessErrorFileDirectory;
+cTimeStamp = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess = cTimeStamp | '_' | cRandomInt;
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+#**********************************************************************************************************
+#                               MAJ SECURITY USER GROUP
+#**********************************************************************************************************
+
+#***********************************************************************************************************
+#                                  Définition des cubes
+#***********************************************************************************************************
+
+sCubeParamP = 'ParametresSources' ;
+sCubeParamT = 'ParametrageT' ;
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+
+##Définition des variables:
+
+nDebug = 1 ;
+
+###########################################
+## Creation subset Source
+###########################################
+
+# Declaration des variables du cube source
+
+sDimSource = '}Dimensions' ;
+
+# Le nom des sous-ensembles
+sSubsetSource = 'Source_Subset_' | Today (0) | '_' | GetProcessName () ; 
+
+# }Dimensions
+IF( SubsetExists( sDimSource , sSubsetSource ) = 1 );
+  SubsetDestroy( sDimSource , sSubsetSource );
+ENDIF;
+StringMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDimSource|'] )}, 0)}';
+SubsetCreatebyMDX( sSubsetSource , StringMDX , nDebug ) ;
+
+#Définition de la source
+DataSourceNameForServer = sDimSource ;
+DatasourceDimensionSubset = sSubsetSource ;
+
+
+###########################################
+## Creation vue zero
+###########################################
+
+# Le nom de la vue du cube :
+sVueZero = 'RAZ_vue_' | Today (0) | '_' | GetProcessName () ; 
+
+# Declaration des variables du cube cible
+sCubeCible = '}DimensionSecurity' ;
+sDimCible1 = '}Dimensions' ;
+sDimCible = '}Groups' ;
+
+IF( ViewExists( sCubeCible, sVueZero ) = 1 );
+  ViewDestroy( sCubeCible, sVueZero );
+ENDIF;
+ViewCreate( sCubeCible, sVueZero , nDebug );
+
+
+# Création des sous-ensembles des dimensions du cube
+
+# }Dimensions
+IF( SubsetExists( sDimCible1 , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible1 , sVueZero );
+ENDIF;
+StringMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDimCible1|'] )}, 0)}' ;
+SubsetCreatebyMDX( sVueZero , StringMDX , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible1 , sVueZero ) ; 
+
+# }Groups
+IF( SubsetExists( sDimCible , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible , sVueZero );
+ENDIF;
+StringMDX = 'EXCEPT ( {TM1FILTERBYLEVEL( {TM1SUBSETALL( ['|sDimCible|'] )}, 0)}, { ['|sDimCible|'].[ADMIN] , ['|sDimCible|'].[SecurityAdmin] , ['|sDimCible|'].[DataAdmin] , ['|sDimCible|'].[OperationsAdmin] , ['|sDimCible|'].[}tp_Everyone] } )';
+SubsetCreatebyMDX( sVueZero , StringMDX , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible , sVueZero ) ; 
+
+# RAZ de la vue zero
+ViewZeroOut( sCubeCible, sVueZero ) ;
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# Alimentation en READ de toutes les dimensions
+# C'est la sécurité cube et ElementSecurity qui sécurisera les données
+
+# Initialisation d'une boucle sur la dimension Groupe
+
+nTailleBoucle = DIMSIZ( sDimCible );
+i = 1 ;
+
+While ( i <= nTailleBoucle ) ;
+
+  sGroupe = DIMNM( sDimCible , i );
+  
+  # Exclusion des groupes admin
+  IF ( sGroupe @<> 'ADMIN' & sGroupe @<> 'SecurityAdmin' & sGroupe @<> 'DataAdmin' & sGroupe @<> 'OperationsAdmin' & sGroupe @<> '}tp_Everyone') ;
+    IF ( ELLEV ( sDimCible , sGroupe ) = 0 ) ;
+      CellPutS ( 'READ' , sCubeCible , Dimension , sGroupe ) ;
+    ENDIF ;
+  ENDIF ;
+  
+  i = i + 1 ;
+  
+END ;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+# Declaration variables et constantes
+Z_FIN_EXE = StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE = Subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+Z_STATUS = IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION = Z_FIN_EXE - Z_DEBUT_EXE;
+Z_LOCAL_TIME =   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+Z_UTILISATEUR = TM1User;
+
+# Nettoyage -> CAMID("pans:u:cty@dimosoftware.com") into 'cty@dimosoftware.com'
+nDebut= SCAN( 'pans:u:', Z_UTILISATEUR );
+nDebutLong = LONG('pans:u:');
+nStart = nDebut + nDebutLong ;
+nTotal = LONG(Z_UTILISATEUR) ;
+sUser = SUBST(Z_UTILISATEUR, nStart, nTotal - nStart - 1) ;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+CELLPUTS( Z_STATUS , sCubeParamS , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamS ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamS , cMainProcName ,'DernExe');
+CELLPUTS( sUser, sCubeParamS , cMainProcName ,'txt_Utilisateur' );
+#CELLPUTS( Mois, sCubeParamS , cMainProcName ,'DernRef' );
+#------------------------------------------------ FIN - MONITORING  -------------------------------------------#
+#endregion

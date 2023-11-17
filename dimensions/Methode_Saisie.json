@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"Methode_Saisie",
+	"Hierarchies@Code.links":
+	[
+		"Methode_Saisie.hierarchies/Methode_Saisie.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Methode_Saisie')/Hierarchies('Methode_Saisie')"
+	}
+}

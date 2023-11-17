@@ -1,0 +1,21 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_Param_Taux_Penetration",
+	"Elements":
+	[
+		{
+			"Name":"Taux_Penetration",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Taux_Variation",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_Param_Taux_Penetration.subsets/Niv0.json",
+		"m_Param_Taux_Penetration.subsets/Niv0_Desc..json",
+		"m_Param_Taux_Penetration.subsets/Par Défaut.json"
+	]
+}

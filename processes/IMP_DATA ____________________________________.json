@@ -1,0 +1,13 @@
+{
+	"@type":"Process",
+	"Name":"IMP_DATA ____________________________________",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"IMP_DATA ____________________________________.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€_ParameterConstraints=e30=€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

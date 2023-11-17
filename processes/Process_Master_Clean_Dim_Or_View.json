@@ -1,0 +1,63 @@
+{
+	"@type":"Process",
+	"Name":"Process_Master_Clean_Dim_Or_View",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Process_Master_Clean_Dim_Or_View.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€_ParameterConstraints=e30=€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pCleanCube",
+			"Prompt":"Voulez vous vider un cube ? ( x = Oui  '' = Non )",
+			"Value":"*",
+			"Type":"String"
+		},
+		{
+			"Name":"pCube",
+			"Prompt":"Quel cube voulez vous vider ?",
+			"Value":"Documentation_Processus",
+			"Type":"String"
+		},
+		{
+			"Name":"pCleanView",
+			"Prompt":"Voulez vous vider une vue ? ( x = Oui  '' = Non )",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pCubeView",
+			"Prompt":"Dans quel cube voulez vous vider la vue ?",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pView",
+			"Prompt":"Quelle vue voulez vous vider ?",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pCleanDim",
+			"Prompt":"Voulez vous vider une vue ? ( x = Oui  '' = Non )",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDim",
+			"Prompt":"Quelle dimension voulez vider ? ( * = Tous )",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pElement",
+			"Prompt":"Quel element voulez vous supprimer ? ( * = Tous )",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

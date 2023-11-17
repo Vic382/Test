@@ -1,0 +1,25 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Prestataire_Elec",
+	"Elements":
+	[
+		{
+			"Name":"EDF",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Regie_1",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Regie_2",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"Prestataire_Elec.subsets/Niv0.json",
+		"Prestataire_Elec.subsets/Par Défaut.json",
+		"Prestataire_Elec.subsets/Tous.json"
+	]
+}

@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"m_Stock_Sac",
+	"Hierarchies@Code.links":
+	[
+		"m_Stock_Sac.hierarchies/m_Stock_Sac.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_Stock_Sac')/Hierarchies('m_Stock_Sac')"
+	}
+}

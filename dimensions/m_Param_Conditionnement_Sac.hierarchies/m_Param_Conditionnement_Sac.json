@@ -1,0 +1,33 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_Param_Conditionnement_Sac",
+	"Elements":
+	[
+		{
+			"Name":"Nb_Sac_Carton",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Marge_Carton",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Nb_Carton_Ouverture",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Type_Sac_Reference",
+			"Type":"String"
+		},
+		{
+			"Name":"Taux_Variation",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_Param_Conditionnement_Sac.subsets/Niv0.json",
+		"m_Param_Conditionnement_Sac.subsets/Niv0_Desc..json",
+		"m_Param_Conditionnement_Sac.subsets/Par Défaut.json"
+	]
+}
