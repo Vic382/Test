@@ -1,0 +1,39 @@
+{
+	"@type":"Process",
+	"Name":"Process_Master_Periode",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Process_Master_Periode.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€_ParameterConstraints=e30=€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pAnneeDebut",
+			"Prompt":"Quelle année de début ?",
+			"Value":"2022",
+			"Type":"String"
+		},
+		{
+			"Name":"pAnneeFin",
+			"Prompt":"Quelle année de fin ?",
+			"Value":"2030",
+			"Type":"String"
+		},
+		{
+			"Name":"pMoisDebut",
+			"Prompt":"Quel mois de début d'exercice ?",
+			"Value":"M04",
+			"Type":"String"
+		},
+		{
+			"Name":"pMoisFin",
+			"Prompt":"Quel mois de fin d'exercice ? ",
+			"Value":"M03",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}
