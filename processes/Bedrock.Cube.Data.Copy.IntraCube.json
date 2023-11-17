@@ -1,0 +1,123 @@
+{
+	"@type":"Process",
+	"Name":"Bedrock.Cube.Data.Copy.IntraCube",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"Bedrock.Cube.Data.Copy.IntraCube.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pCube",
+			"Prompt":"REQUIRED: Cube Name",
+			"Value":"Devise",
+			"Type":"String"
+		},
+		{
+			"Name":"pView",
+			"Prompt":"OPTIONAL: Name of the views and subsets to create (if blank Bedrock + a random number will be used)",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pFilter",
+			"Prompt":"OPTIONAL: Filter Unmapped Dimensions using format: Year: 2006 + 2007 & Scenario: Actual + Budget etc",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pElementMapping",
+			"Prompt":"REQUIRED: Map source elements to target elements using format Dim1ToCopy:SourceElement->TargetElement & Dim2ToCopy:Source Element->TargetElement etc",
+			"Value":"Version:V0->V1",
+			"Type":"String"
+		},
+		{
+			"Name":"pFactor",
+			"Prompt":"OPTIONAL: Multiply source value by factor (1 keeps the value as is). To modify existing values make the target element the same as the source with pZeroTarget = 0",
+			"Value":1,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pDimensionDelim",
+			"Prompt":"OPTIONAL: Delimiter for start of Dimension/Element set",
+			"Value":"&",
+			"Type":"String"
+		},
+		{
+			"Name":"pElementStartDelim",
+			"Prompt":"OPTIONAL: Delimiter for start of element list",
+			"Value":":",
+			"Type":"String"
+		},
+		{
+			"Name":"pElementDelim",
+			"Prompt":"OPTIONAL: Delimiter between elements",
+			"Value":"+",
+			"Type":"String"
+		},
+		{
+			"Name":"pMappingDelimiter",
+			"Prompt":"OPTIONAL: Delimiter between source element and target element in pElementMapping",
+			"Value":"->",
+			"Type":"String"
+		},
+		{
+			"Name":"pZeroTarget",
+			"Prompt":"OPTIONAL: Zero out Target Element PRIOR to Copy? (Boolean 1=True)",
+			"Value":1,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pZeroSource",
+			"Prompt":"OPTIONAL: Zero out Source Element AFTER Copy? (Boolean 1=True)",
+			"Value":0,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pDeleteViewsAndSubsets",
+			"Prompt":"OPTIONAL: 0 = Keep view and subsets",
+			"Value":1,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pSuppressConsol",
+			"Prompt":"OPTIONAL: Suppress Consolidations (Skip = 1) Only 0 for strings",
+			"Value":1,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pSuppressRules",
+			"Prompt":"OPTIONAL: Suppress Rules (Skip = 1)",
+			"Value":1,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pAccumulate",
+			"Prompt":"OPTIONAL: 1 = Add source to existing value in target (if zero out target = 0 False). 0 = Replace target with source.",
+			"Value":0,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pDropAndReattachRules",
+			"Prompt":"OPTIONAL: Drop rules before copying then reattach afterwards (1 = Yes",
+			"Value":0,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pCopyDataViaClonedCube",
+			"Prompt":"OPTIONAL: Copy via cloned cube. Only use if pSuppressRules = 0 and pDropAndReattachRules = 1 (1 = Yes",
+			"Value":0,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pDebug",
+			"Prompt":"OPTIONAL: Debug: 0",
+			"Value":0,
+			"Type":"Numeric"
+		}
+	],
+	"Variables":[]
+}

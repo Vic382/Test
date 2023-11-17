@@ -1,0 +1,196 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#***********************************************************************************************
+# CREATEUR : VRT
+# DATE DE CREATION : 21/09/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : MAJ de la dimension Poste_Budgetaire à l'aide du cube Param_Poste_Budgetaire
+#************************************************************************************************
+
+###############################   MONITORING   #################################
+
+### 0.Définition des variables du monitoring
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+sCubeParamS	             = 'ParametresSources' ;
+sCubeParamT	             = 'ParametrageT' ;
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+sSource = '' ;
+sNomFichier =  '' ;
+nErrors = 0 ;
+nErrorsSource = 0 ; 
+zLogNumero         = 1 ;
+nErrors          = 0;
+vMessage              = '';
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+### 1. Déclaration des variables
+
+# Pour suppression des vues et ss ensemble temporaire
+nDebug = 1 ; 
+
+#**Fichier Debug
+sFichierRepDebug = CellGetS ( sCubeParamT , 'Txt_RepertoireDebug' , 'ValeurS' );
+sDebug = sFichierRepDebug | 'test'|cMainProcName|'.txt' ;
+
+
+###############################   FIN MONITORING   #################################
+
+
+
+###########################################
+## Creation vue SOURCE sur Param_Poste_Budgetaire
+###########################################
+
+### Déclaration des variables
+sCubeCible = 'Param_Poste_Budgetaire';
+sDimCible1 = 'Poste_Budgetaire_N';
+sDimCible = 'm_Param_Poste_Budgetaire';
+
+
+# Le nom de la vue du cube :
+sVueSource = 'SOURCE_vue_' | cMainProcName ; 
+
+# Le nom des sous-ensembles
+sSubsetSource = 'SOURCE_Subset_' | cMainProcName ; 
+
+# Création de la vue cible
+IF( ViewExists( sCubeCible, sVueSource ) = 1 );
+  ViewDestroy( sCubeCible, sVueSource );
+ENDIF;
+ViewCreate( sCubeCible, sVueSource , nDebug );
+
+# Poste_Budgetaire_N
+SubsetDestroy ( sDimCible1 , sSubsetSource ) ;
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible1 | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetSource , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueSource , sDimCible1 , sSubsetSource ) ; 
+
+# m_Param_Poste_Budgetaire
+SubsetDestroy ( sDimCible , sSubsetSource ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetSource , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueSource , sDimCible , sSubsetSource ) ;
+
+ViewExtractSkipCalcsSet( sCubeCible , sVueSource , 1 );
+ViewExtractSkipRuleValuesSet( sCubeCible , sVueSource , 1 );
+ViewExtractSkipZeroesSet( sCubeCible , sVueSource , 1 );
+
+# Définition de la source
+DatasourceCubeview = sVueSource ;
+DatasourceNameForServer = sCubeCible ;
+
+
+# Variabilisation de la dim cible
+sDim = 'Poste_Budgetaire' ;
+
+# Si la dim n'existe pas on l'a créée
+# Sinon on supprime tous les éléments ( l'historique n'est pas supprimé car conservé dans la dim Poste_Budgetaire_N )
+IF ( DimensionExists( sDim ) = 0 );
+  DimensionCreate( sDim );
+ELSE ;
+  DimensionDeleteAllElements( sDim );
+ENDIF ;
+
+# Création des attributs
+AttrDelete( sDim , 'Description' );
+AttrInsert( sDim , '' , 'Description', 'A' );
+
+AttrDelete( sDim , 'Description Longue' );
+AttrInsert( sDim , '' , 'Description Longue', 'A' );
+
+# Création d'un élément Total
+sTotal = 'Total_Poste_Budgetaire' ;
+DimensionElementInsertDirect( sDim , '' , sTotal , 'C' );
+AttrPutS( 'Total Poste Budgetaire', sDim , sTotal , 'Description' );
+AttrPutS( 'Total Poste Budgetaire', sDim , sTotal , 'Description Longue' );
+
+# Trie de la dimension
+DimensionSortOrder( sDim , 'ByInput', 'Ascending', 'ByHierarchy', 'Ascending' );
+
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# Controle sur la mesure pour variabiliser les éléments
+If ( m_Param_Poste_Budgetaire @= 'Nom_Poste_Budgetaire') ;
+  sLibCompte = TRIM ( Value ) ;
+ELSEIF ( m_Param_Poste_Budgetaire @= 'Code_Regroupement') ;
+  sCodeRegroup = TRIM ( Value ) ;
+ELSEIF ( m_Param_Poste_Budgetaire @= 'Nom_Regroupement') ;
+  sLibRegroup = TRIM ( Value ) ;
+ENDIF ;
+
+DimensionElementInsertDirect( sDim, '' , Poste_Budgetaire_N , 'N' );
+DimensionElementInsertDirect( sDim, '' , sCodeRegroup , 'C' );
+
+DimensionElementComponentAddDirect( sDim , sCodeRegroup , Poste_Budgetaire_N , 1 );
+DimensionElementComponentAddDirect( sDim , sTotal , sCodeRegroup , 1 );
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# Controle sur la mesure pour variabiliser les éléments
+If ( m_Param_Poste_Budgetaire @= 'Nom_Poste_Budgetaire') ;
+  sLibCompte = Value ;
+ELSEIF ( m_Param_Poste_Budgetaire @= 'Code_Regroupement') ;
+  sCodeRegroup = Value ;
+ELSEIF ( m_Param_Poste_Budgetaire @= 'Nom_Regroupement') ;
+  sLibRegroup = Value ;
+ENDIF ;
+
+sLibLongCompte = Poste_Budgetaire_N | ' - ' | sLibCompte ;
+
+# Alimentation des attributs
+#AttrPutS( sLibCompte , sDim , Poste_Budgetaire_N , 'Description');
+AttrPutS( sLibRegroup , sDim , sCodeRegroup , 'Description Longue');
+AttrPutS( sLibLongCompte , sDim , Poste_Budgetaire_N , 'Description Longue');
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+# Declaration variables et constantes
+
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+# HEURE D'EXECUTION
+nNewFormatId  =  NewDateFormatter ( 'fr-FR' , 'Europe/Paris' , 'serial' , 'medium' , 'datetime' );
+Z_LOCAL_TIME = FormatDate ( NOW () , 'yyyy-MM-dd H:mm' , nNewFormatId );
+Z_UTILISATEUR = TM1User;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+CELLPUTS( Z_STATUS , sCubeParamS , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamS ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamS , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamS , cMainProcName ,'txt_Utilisateur' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+#endregion

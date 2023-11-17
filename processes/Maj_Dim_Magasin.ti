@@ -1,0 +1,254 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#***********************************************************************************************
+# CREATEUR : VRT
+# DATE DE CREATION : 21/09/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : MAJ de la dimension Magasin à l'aide du cube Param_Magasin
+#************************************************************************************************
+
+###############################   MONITORING   #################################
+
+### 0.Définition des variables du monitoring
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+sCubeParamS	             = 'ParametresSources' ;
+sCubeParamT	             = 'ParametrageT' ;
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+sSource = '' ;
+sNomFichier =  '' ;
+nErrors = 0 ;
+nErrorsSource = 0 ; 
+zLogNumero         = 1 ;
+nErrors          = 0;
+vMessage              = '';
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+### 1. Déclaration des variables
+
+# Pour suppression des vues et ss ensemble temporaire
+nDebug = 1 ; 
+
+#**Fichier Debug
+sFichierRepDebug = CellGetS ( sCubeParamT , 'Txt_RepertoireDebug' , 'ValeurS' );
+sDebug = sFichierRepDebug | 'test'|cMainProcName|'.txt' ;
+
+
+###############################   FIN MONITORING   #################################
+
+
+
+###########################################
+## Creation vue SOURCE sur Param_Poste_Budgetaire
+###########################################
+
+### Déclaration des variables
+sCubeCible = 'Param_Magasin';
+sDimCible1 = 'Magasin_N';
+sDimCible = 'm_Param_Magasin';
+
+
+# Le nom de la vue du cube :
+sVueSource = 'SOURCE_vue_' | cMainProcName ; 
+
+# Le nom des sous-ensembles
+sSubsetSource = 'SOURCE_Subset_' | cMainProcName ; 
+
+# Création de la vue cible
+IF( ViewExists( sCubeCible, sVueSource ) = 1 );
+  ViewDestroy( sCubeCible, sVueSource );
+ENDIF;
+ViewCreate( sCubeCible, sVueSource , nDebug );
+
+# Magasin_N
+SubsetDestroy ( sDimCible1 , sSubsetSource ) ;
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible1 | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetSource , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueSource , sDimCible1 , sSubsetSource ) ; 
+
+# m_Param_Magasin
+SubsetDestroy ( sDimCible , sSubsetSource ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetSource , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueSource , sDimCible , sSubsetSource ) ;
+
+ViewExtractSkipCalcsSet( sCubeCible , sVueSource , 1 );
+ViewExtractSkipRuleValuesSet( sCubeCible , sVueSource , 1 );
+ViewExtractSkipZeroesSet( sCubeCible , sVueSource , 1 );
+
+
+
+
+# Définition de la source
+DatasourceCubeview = sVueSource ;
+DatasourceNameForServer = sCubeCible ;
+
+
+# Variabilisation de la dim cible
+sDim = 'Magasin' ;
+
+# Si la dim n'existe pas on l'a créée
+# Sinon on supprime tous les éléments ( l'historique n'est pas supprimé car conservé dans la dim Poste_Budgetaire_N )
+IF ( DimensionExists( sDim ) = 0 );
+  DimensionCreate( sDim );
+ELSE ;
+  DimensionDeleteAllElements( sDim );
+ENDIF ;
+
+# Création des attributs
+AttrDelete( sDim , 'Description' );
+AttrDelete( sDim , 'Chef_Secteur' );
+AttrDelete( sDim , 'Date_Ouverture' );
+AttrDelete( sDim , 'Nbre_Caisse' );
+AttrDelete( sDim , 'Ouverture_Dimanche' );
+AttrDelete( sDim , 'Segmentation' );
+AttrDelete( sDim , 'Groupe_RGIE' );
+AttrDelete( sDim , 'Pays' );
+AttrDelete( sDim , 'Type_Magasin') ;
+AttrDelete( sDim , 'Directeur_Region');
+AttrDelete( sDim , 'Exercice_Ouverture');
+
+
+AttrInsert( sDim , '' , 'Description', 'A' );
+AttrInsert( sDim , '' , 'Chef_Secteur', 'S' );
+AttrInsert( sDim , '' , 'Date_Ouverture', 'S' );
+AttrInsert( sDim , '' , 'Nbre_Caisse', 'N' );
+AttrInsert( sDim , '' , 'Ouverture_Dimanche', 'S' );
+AttrInsert( sDim , '' , 'Segmentation', 'S' );
+AttrInsert( sDim , '' , 'Groupe_RGIE', 'S' );
+AttrInsert( sDim , '' , 'Pays', 'S' );
+AttrInsert( sDim , '' , 'Type_Magasin', 'S' );
+AttrInsert( sDim , '' , 'Directeur_Region', 'S' );
+AttrInsert( sDim , '' , 'Exercice_Ouverture', 'S' );
+
+# Création d'un élément Total
+sTotal = 'Total_Magasin' ;
+DimensionElementInsertDirect( sDim , '' , sTotal , 'C' );
+AttrPutS( 'Total Magasin', sDim , sTotal , 'Description' );
+
+# Trie de la dimension
+DimensionSortOrder( sDim , 'ByInput', 'Ascending', 'ByHierarchy', 'Ascending' );
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# Récupération des infos dans le cube
+sLibGIE = CellGetS( sCubeCible , Magasin_N , 'Nom_GIE') ;
+sRegion = CellGetS( sCubeCible , Magasin_N , 'Region') ;
+sLibSecteur = CellGetS( sCubeCible , Magasin_N , 'Nom_Secteur') ;
+sChefSecteur = CellGetS( sCubeCible , Magasin_N , 'Chef_Secteur') ;
+sDateOuv = CellGetS( sCubeCible , Magasin_N , 'Date_Ouverture') ;
+nNbCaisse = CellGetN( sCubeCible , Magasin_N , 'Nbre_Caisse') ;
+sOuvDimanche = CellGetS( sCubeCible , Magasin_N , 'Ouverture_Dimanche') ;
+sSegmentation = CellGetS( sCubeCible , Magasin_N , 'Segmentation') ;
+sRGIE = CellGetS( sCubeCible , Magasin_N , 'Groupe_RGIE') ;
+sZone = CellGetS( sCubeCible , Magasin_N , 'Code_Zone') ;
+sCodeSecteur = CellGetS( sCubeCible , Magasin_N , 'Code_Secteur') ;
+sPays = CellGetS( sCubeCible , Magasin_N , 'Pays') ;
+sType = CellGetS( sCubeCible , Magasin_N , 'Type_Magasin') ;
+sDirRegion = CellGetS( sCubeCible , Magasin_N , 'Directeur_Region') ;
+
+DimensionElementInsertDirect( sDim, '' , Magasin_N , 'N' );
+DimensionElementInsertDirect( sDim, '' , sCodeSecteur , 'C' );
+DimensionElementInsertDirect( sDim, '' , sZone , 'C' );
+
+DimensionElementComponentAddDirect( sDim , sCodeSecteur , Magasin_N , 1 );
+DimensionElementComponentAddDirect( sDim , sZone , sCodeSecteur , 1 );
+DimensionElementComponentAddDirect( sDim , sTotal , sZone , 1 );
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# Récupération des infos dans le cube
+sLibGIE = CellGetS( sCubeCible , Magasin_N , 'Nom_GIE') ;
+sRegion = CellGetS( sCubeCible , Magasin_N , 'Region') ;
+sLibSecteur = CellGetS( sCubeCible , Magasin_N , 'Nom_Secteur') ;
+sChefSecteur = CellGetS( sCubeCible , Magasin_N , 'Chef_Secteur') ;
+sDateOuv = CellGetS( sCubeCible , Magasin_N , 'Date_Ouverture') ;
+nNbCaisse = CellGetN( sCubeCible , Magasin_N , 'Nbre_Caisse') ;
+sOuvDimanche = CellGetS( sCubeCible , Magasin_N , 'Ouverture_Dimanche') ;
+sSegmentation = CellGetS( sCubeCible , Magasin_N , 'Segmentation') ;
+sRGIE = CellGetS( sCubeCible , Magasin_N , 'Groupe_RGIE') ;
+sZone = CellGetS( sCubeCible , Magasin_N , 'Code_Zone') ;
+sCodeSecteur = CellGetS( sCubeCible , Magasin_N , 'Code_Secteur') ;
+sPays = CellGetS( sCubeCible , Magasin_N , 'Pays') ;
+sType = CellGetS( sCubeCible , Magasin_N , 'Type_Magasin') ;
+sDirRegion = CellGetS( sCubeCible , Magasin_N , 'Directeur_Region') ;
+
+# Alimentation des attributs
+AttrPutS( sLibGIE , sDim , Magasin_N , 'Description');
+AttrPutS( sRegion , sDim , sZone , 'Description');
+AttrPutS( sLibSecteur , sDim , sCodeSecteur , 'Description');
+AttrPutS( sChefSecteur , sDim , Magasin_N , 'Chef_Secteur');
+AttrPutS( sDateOuv , sDim , Magasin_N , 'Date_Ouverture');
+AttrPutN( nNbCaisse , sDim , Magasin_N , 'Nbre_Caisse');
+AttrPutS( sOuvDimanche , sDim , Magasin_N , 'Ouverture_Dimanche');
+AttrPutS( sSegmentation , sDim , Magasin_N , 'Segmentation');
+AttrPutS( sRGIE , sDim , Magasin_N , 'Groupe_RGIE');
+AttrPutS( sPays , sDim , Magasin_N , 'Pays');
+AttrPutS( sType , sDim , Magasin_N , 'Type_Magasin');
+AttrPutS( sDirRegion , sDim , Magasin_N , 'Directeur_Region');
+
+# Décomposition de la date d'ouverture
+sMoisOuv = SUBST( sDateOuv , 4 , 2 );
+nMoisOuv = StringToNumber( sMoisOuv );
+sAnneeOuv = SUBST( sDateOuv , 7 , 4 );
+nAnneeOuv = StringToNumber( sAnneeOuv );
+
+# Définition de l'exercice d'ouverture
+# Si le mois d'ouverture est entre janvier et mars alors exercice précédent
+If ( nMoisOuv < 4 ) ;
+  nAnneeOuv = nAnneeOuv - 1 ;
+  sExeOuv = NumberToString( nAnneeOuv ) | '_' | sAnneeOuv ;
+ELSE ;
+  nAnneeOuv = nAnneeOuv + 1 ;
+  sExeOuv = sAnneeOuv | '_' | NumberToString( nAnneeOuv ) ;
+ENDIF ;
+
+AttrPutS( sExeOuv , sDim , Magasin_N , 'Exercice_Ouverture');
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+# Declaration variables et constantes
+
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+# HEURE D'EXECUTION
+nNewFormatId  =  NewDateFormatter ( 'fr-FR' , 'Europe/Paris' , 'serial' , 'medium' , 'datetime' );
+Z_LOCAL_TIME = FormatDate ( NOW () , 'yyyy-MM-dd H:mm' , nNewFormatId );
+Z_UTILISATEUR = TM1User;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+CELLPUTS( Z_STATUS , sCubeParamS , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamS ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamS , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamS , cMainProcName ,'txt_Utilisateur' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+#endregion
