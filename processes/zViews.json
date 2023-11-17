@@ -1,0 +1,21 @@
+{
+	"@type":"Process",
+	"Name":"zViews",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"zViews.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€_ParameterConstraints=e30=€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pApplication",
+			"Prompt":"Application ? (* = tout / sCube)",
+			"Value":"*",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}
