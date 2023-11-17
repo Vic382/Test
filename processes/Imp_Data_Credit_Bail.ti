@@ -162,6 +162,10 @@ ViewZeroOut( sCubeCible, sVueZero );
 #****End: Generated Statements****
 
 
+# Test livraison GitHub
+IF ( 1 = 2 ) ;
+  ItemSkip;
+ENDIF ;
 #endregion
 #region Epilog
 
