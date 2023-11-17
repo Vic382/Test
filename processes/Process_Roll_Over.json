@@ -1,0 +1,21 @@
+{
+	"@type":"Process",
+	"Name":"Process_Roll_Over",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Process_Roll_Over.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pTemps",
+			"Prompt":"Quelle est la dimension de temps comprenant les années ? ",
+			"Value":"Annee",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

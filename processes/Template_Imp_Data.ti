@@ -1,0 +1,146 @@
+#region Prolog
+
+#*****************************************************************************
+# CREATEUR : Charles THIERRY - DIMO Software
+# DATE DE CREATION : 30/06/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : ../../2018
+# DESCRIPTION DU PROCESSUS : 
+# Processus d'exemple pour l'import de données dans un cube
+# Exemple : Import des données du fichier "Cout_REEL.csv" vers le cube "Ventes"
+#*****************************************************************************
+
+### 0.Définition des variables du monitoring
+
+sCubeParamT	             = 'ParametrageT' ;
+sCubeParamP              = 'ParametresSources' ;
+
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+
+### 1.Définition du cube sur lequel travailler et de ses dimensions.
+sCubeCible = '' ; 
+
+sDimCible1 ='' ;
+sDimCible2 ='' ;
+sDimCible3 ='' ; 
+sDimCible4 ='' ;
+sDimCible5 ='' ;
+sDimCible = 'm_' ;
+
+
+### 2.Remise à zéro des données du cube.
+# Pour ce faire, on créé une vue temporaire de ce cube qu'on remet à zéro.
+# On crée donc une vue pour le cube et des sous ensembles pour les dimensions de ce cube.
+# On assigne ensuite les sous-ensembles des dimensions à la vue du cube.
+
+# Le nom de la vue du cube :
+sVue = 'RàZ_vue_' | Today (0) | '_' | GetProcessName () ; 
+# Le nom des sous-ensembles
+sSubset = 'RàZ_Subset_' | Today (0) | '_' | GetProcessName () ; 
+
+# Destruction pour recréation de la vue
+ViewDestroy ( sCubeCible , sVue ) ;
+ViewCreate ( sCubeCible , sVue ) ; 
+
+# Création des sous-ensembles des dimensions du cube
+
+# Version : un seul element: réel
+SubsetDestroy ( sDimCible1 , sSubset ) ;
+SubsetCreate ( sDimCible1 , sSubset ) ; 
+SubsetElementInsert ( sDimCible1 , sSubset , 'REEL' , 1 ) ;
+
+# Société, tous les éléments
+SubsetDestroy ( sDimCible2 , sSubset ) ; 
+SubsetCreateByMDX ( sSubset , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible2 | ' ] ) } , 0 ) }' ) ;
+
+# Compte : tous les éléments
+SubsetDestroy ( sDimCible3 , sSubset ) ; 
+SubsetCreateByMDX ( sSubset , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible3 | ' ] ) } , 0 ) }' ) ;
+
+# Année : un seul element: N
+SubsetDestroy ( sDimCible4 , sSubset ) ;
+SubsetCreate ( sDimCible4 , sSubset ) ; 
+SubsetElementInsert ( sDimCible4 , sSubset , 'N' , 1 ) ;
+
+# Mois : tous les éléments
+SubsetDestroy ( sDimCible5 , sSubset ) ; 
+SubsetCreateByMDX ( sSubset , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible5 | ' ] ) } , 0 ) }' ) ;
+
+# Dimension mesure : tous les indicateurs
+SubsetDestroy ( sDimCible , sSubset ) ; 
+SubsetCreateByMDX ( sSubset , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible | ' ] ) } , 0 ) }' ) ;
+
+# On assigne tous les sous-ensembles créés à la vue de cube
+ViewSubsetAssign ( sCubeCible , sVue , sDimCible1 , sSubset ) ; 
+ViewSubsetAssign ( sCubeCible , sVue , sDimCible2 , sSubset ) ; 
+ViewSubsetAssign ( sCubeCible , sVue , sDimCible3 , sSubset ) ; 
+ViewSubsetAssign ( sCubeCible , sVue , sDimCible4 , sSubset ) ; 
+ViewSubsetAssign ( sCubeCible , sVue , sDimCible5 , sSubset ) ; 
+ViewSubsetAssign ( sCubeCible , sVue , sDimCible , sSubset ) ; 
+
+# Suppression des données qui sont dans la vue sVue
+ViewZeroOut ( sCubeCible , sVue ) ; 
+
+# La vue étant désormais vide, nous pouvons la détruire
+ViewDestroy ( sCubeCible , sVue ) ;
+
+# On détruit les sous-ensembles des dimensions
+SubsetDestroy ( sDimCible1 , sSubset ) ;
+SubsetDestroy ( sDimCible2 , sSubset ) ;
+SubsetDestroy ( sDimCible3 , sSubset ) ;
+SubsetDestroy ( sDimCible4 , sSubset ) ;
+SubsetDestroy ( sDimCible5 , sSubset ) ;
+SubsetDestroy ( sDimCible , sSubset ) ;
+
+### 3. Définition de la source du processus
+# Définition du chemin du dossier dans lequel le fichier source se situe
+sCheminDossier = '..\SOURCES\' ;
+# Définition du nom du fichier source
+sNomFichier = 'FichierSource.csv' ;
+# Le fichier à récupérer est la concatenation du chemin du fichier et du fichier :
+sFichier = sCheminDossier | sNomFichier ; 
+# Définition de la source du processus
+DataSourceNameForServer  = sFichier ; 
+#endregion
+#region Data
+
+# Insertion de la donnée dans le cube
+# La quantité
+CellIncrementN ( MONTANT , sCubeCible , VERSION , Compte , Annee , Mois , Societe , 'Montant' ) ; 
+#endregion
+#region Epilog
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+# Declaration variables et constantes
+
+Z_FIN_EXE = StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE = Subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS = IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION = Z_FIN_EXE - Z_DEBUT_EXE;
+Z_LOCAL_TIME =   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+Z_UTILISATEUR = TM1User;
+
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+CELLPUTS( Z_STATUS , sCubeParamP , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamP ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamP , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamP , cMainProcName ,'txt_Utilisateur' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+#endregion

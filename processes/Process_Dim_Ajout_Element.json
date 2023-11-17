@@ -1,0 +1,51 @@
+{
+	"@type":"Process",
+	"Name":"Process_Dim_Ajout_Element",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Process_Dim_Ajout_Element.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pElement",
+			"Prompt":"OBLIGATOIRE : Element à ajouter",
+			"Value":"Test",
+			"Type":"String"
+		},
+		{
+			"Name":"pDim",
+			"Prompt":"OBLIGATOIRE : Dimension dans laquelle ajouter l'élément",
+			"Value":"Achat",
+			"Type":"String"
+		},
+		{
+			"Name":"pConso",
+			"Prompt":"OPTIONNEL : Element consolidés auquel ajouter l'élément",
+			"Value":"Total_Achat",
+			"Type":"String"
+		},
+		{
+			"Name":"pType",
+			"Prompt":"OBLIGATOIRE : Type de l'élément à créer ( S , N ou C )",
+			"Value":"N",
+			"Type":"String"
+		},
+		{
+			"Name":"pPosition",
+			"Prompt":"OPTIONNEL : Intersection d'ajout d'élément ( si vide, ajouté à la fin sinon ajouté avant l'élément en paramètre )",
+			"Value":"Contrat2",
+			"Type":"String"
+		},
+		{
+			"Name":"pPonderation",
+			"Prompt":"OBLIGATOIRE : Si un conso est renseigné",
+			"Value":0,
+			"Type":"Numeric"
+		}
+	],
+	"Variables":[]
+}

@@ -1,0 +1,148 @@
+#region Prolog
+
+#*****************************************************************************
+# CREATEUR : Charles THIERRY
+# DATE DE CREATION : 30/06/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : ../../2023
+# DESCRIPTION DU PROCESSUS : 
+# Processus d'exemple pour la création/mise à jour d'une dimension
+# Exemple : création d'une dimension Matricule alimentée par un fichier .csv
+#*****************************************************************************
+
+### 0.Définition des variables du monitoring
+
+sCubeParamT	             = 'ParametrageT' ;
+sCubeParamP              = 'ParametresSources' ;
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+
+### 1. Test de l'existence de la dimension "?????" 
+sDim = 'A compléter' ;
+
+# Si elle n'existe pas, on la créé.
+# Si elle existe, on la remet la vide pour la réalimenter.
+# Les données stockées sur des éléments qui n'existeront pas après l'alimentation de la dimension seront perdues.
+If ( DimensionExists ( sDim ) = 0 ) ;
+	DimensionCreate ( sDim ) ; 
+Else ; 
+	DimensionDeleteAllElements ( sDim ) ; 
+EndIf ; 
+
+### 2. Création de l'élément consolidé "Total_Client"; 
+DimensionElementInsert ( sDim , '' , 'Total_'|sDim , 'C' ) ; 
+
+### 3. Remise à 0 par suppression/création des attributs
+# A = Alias / S = String / N = Numerique
+
+# Le libellé long
+AttrDelete ( sDim , 'LibelleLong' ) ;
+AttrInsert ( sDim , '' , 'LibelleLong' , 'A' ) ; 
+# Le libellé court
+AttrDelete ( sDim , 'LibelleCourt' ) ;
+AttrInsert ( sDim , '' , 'LibelleCourt' , 'A' ) ; 
+# Le prenom
+AttrDelete ( sDim , 'Prenom' ) ;
+AttrInsert ( sDim , '' , 'Prenom' , 'S' ) ; 
+# Le nom
+AttrDelete ( sDim , 'Nom' ) ;
+AttrInsert ( sDim , '' , 'Nom' , 'S' ) ; 
+# La date de naissance
+AttrDelete ( sDim , 'DateDeNaissance' ) ;
+AttrInsert ( sDim , '' , 'DateDeNaissance' , 'S' ) ;
+# La rue
+AttrDelete ( sDim , 'Rue' ) ;
+AttrInsert ( sDim , '' , 'Rue' , 'S' ) ; 
+# La ville
+AttrDelete ( sDim , 'Ville') ;
+AttrInsert ( sDim , '' , 'Ville', 'S' ) ; 
+# La société
+AttrDelete ( sDim , 'Societe' ) ;
+AttrInsert ( sDim , '' , 'Societe' , 'S' ) ; 
+
+### 4. Création d'un ordre de tri par défaut pour la dimension :
+DimensionSortOrder ( sDim , 'ByInput' , 'Ascending' , 'ByHierarchy' , 'Ascending' ) ; 
+
+### 5. Définition de la source du processus
+
+# Définition du chemin du dossier dans lequel le fichier source se situe
+sCheminDossier = '..\SOURCES\' ;
+# Définition du nom du fichier source
+sNomFichier = 'Matricule.csv' ;
+# Le fichier à récupérer est la concatenation du chemin du fichier et du fichier :
+sFichier = sCheminDossier | sNomFichier ; 
+# Définition de la source du processus
+DataSourceNameForServer  = sFichier ; 
+#endregion
+#region Metadata
+
+
+### 1. Ajout des éléments dans la dimension :
+# Le code matricule de type numérique et niveau fin
+DimensionElementInsert ( sDim , '' , Matricule, 'N' ) ; 
+
+# Le code parent (si besoin)
+# DimensionElementInsert ( sDim , '' , CodeParent , 'C' ) ;
+
+
+### 2. Mise à jour des consolidations : rattachements parents-enfants
+# Rattachement enfants -> total
+DimensionElementComponentAdd ( sDim , 'Total_'|sDim , Matricule , 1)  ;
+
+# Rattachement enfants -> parents (si besoin)
+# DimensionElementComponentAdd ( sDim , CodeParent , CodeEnfant , 1)  ;
+#endregion
+#region Data
+
+### 1. Création d'attributs composés
+sLibelleCourt = Prenom | ' ' | Nom ; 
+sLibelleLong = Matricule | ' - ' | sLibelleCourt  ;
+
+### 2. Alimentation des attributs 
+# AttrPutS pour les attributs texte / AttrPutN pour les attributs nums
+AttrPutS ( sLibelleCourt , sDim , Matricule, 'LibelleCourt' ) ; 
+AttrPutS ( sLibelleLong , sDim , Matricule , 'LibelleLong' ) ;
+AttrPutS ( Prenom , sDim , Matricule , 'Prenom' ) ; 
+AttrPutS ( Nom  , sDim , Matricule , 'Nom' ) ; 
+AttrPutS ( DateNaissance, sDim , Matricule , 'DateDeNaissance' ) ; 
+AttrPutS ( AdresseRue, sDim , Matricule , 'Rue') ; 
+AttrPutS ( AdresseVille  , sDim , Matricule , 'Ville') ; 
+AttrPutS ( Societe , sDim , Matricule , 'Societe' ) ; 
+
+#endregion
+#region Epilog
+
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+# Declaration variables et constantes
+
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+Z_LOCAL_TIME=   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+Z_UTILISATEUR = TM1User;
+
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+CELLPUTS( Z_STATUS , sCubeParamP , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamP ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamP , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamP , cMainProcName ,'txt_Utilisateur' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+#endregion

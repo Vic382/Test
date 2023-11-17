@@ -1,0 +1,13 @@
+{
+	"@type":"Process",
+	"Name":"Securite_Master",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Securite_Master.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€_ParameterConstraints=e30€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

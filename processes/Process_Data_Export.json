@@ -1,0 +1,63 @@
+{
+	"@type":"Process",
+	"Name":"Process_Data_Export",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"Process_Data_Export.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pLogoutput",
+			"Prompt":"OPTIONNEL : Souhaitez vous activer les logs  ( 1 = oui ) ?",
+			"Value":0,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pCube",
+			"Prompt":"OBLIGATOIRE : Quel cube ? ( ' * ' = tous les cubes ) ",
+			"Value":"Achat",
+			"Type":"String"
+		},
+		{
+			"Name":"pSuppressZero",
+			"Prompt":"OPTIONNEL : Voulez vous Exportez ou pas les croisement à zéro ?",
+			"Value":1,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pSuppressConsol",
+			"Prompt":"OPTIONNEL : Voulez vous Exportez ou pas les élements consolidés ?",
+			"Value":1,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"PSuppressRules",
+			"Prompt":"OPTIONNEL : Voulez vous Exportez ou pas les élements calculés ?",
+			"Value":1,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pDelim",
+			"Prompt":"OBLIGATOIRE : Veuillez indiquer le caractère délimiteur ?",
+			"Value":";",
+			"Type":"String"
+		},
+		{
+			"Name":"pQuote",
+			"Prompt":"OBLIGATOIRE : Veuillez indiquer le caractère Quote ?",
+			"Value":"\"",
+			"Type":"String"
+		},
+		{
+			"Name":"pTitleRecord",
+			"Prompt":"OPTIONNEL : Voulez vous mettre un titre à votre export? ( 1=Oui et 0=Non ) ",
+			"Value":1,
+			"Type":"Numeric"
+		}
+	],
+	"Variables":[]
+}
