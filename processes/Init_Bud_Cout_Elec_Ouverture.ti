@@ -45,6 +45,7 @@ sUser = SUBST ( sUser , 20 , nLong - 19 ) ;
 nMontant = 0 ;
 nDiviseur = 0 ;
 
+
 # Pour suppression des vues et ss ensemble temporaire
 nDebug = 1 ; 
 
