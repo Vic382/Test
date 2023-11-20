@@ -1,0 +1,14 @@
+{
+	"@type":"Dimension",
+	"Name":"Magasin",
+	"AllLeavesHierarchyName":"Leaves",
+	"Hierarchies@Code.links":
+	[
+		"Magasin.hierarchies/Magasin.json",
+		"Magasin.hierarchies/Exercice_Ouverture.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Magasin')/Hierarchies('Magasin')"
+	}
+}

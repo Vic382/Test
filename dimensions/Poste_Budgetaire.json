@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"Poste_Budgetaire",
+	"Hierarchies@Code.links":
+	[
+		"Poste_Budgetaire.hierarchies/Poste_Budgetaire.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Poste_Budgetaire')/Hierarchies('Poste_Budgetaire')"
+	}
+}

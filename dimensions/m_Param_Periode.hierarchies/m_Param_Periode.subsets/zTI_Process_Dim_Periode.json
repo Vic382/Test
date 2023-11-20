@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"zTI_Process_Dim_Periode",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('m_Param_Periode')/Hierarchies('m_Param_Periode')/Elements('Num_Semaine')"
+		}
+	]
+}

@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"ParametrageT",
+	"Hierarchies@Code.links":
+	[
+		"ParametrageT.hierarchies/ParametrageT.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('ParametrageT')/Hierarchies('ParametrageT')"
+	}
+}

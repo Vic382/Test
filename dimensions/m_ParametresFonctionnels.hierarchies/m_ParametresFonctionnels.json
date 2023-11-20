@@ -1,0 +1,22 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_ParametresFonctionnels",
+	"Elements":
+	[
+		{
+			"Name":"ValeurN",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"ValeurS",
+			"Type":"String"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_ParametresFonctionnels.subsets/All Members.json",
+		"m_ParametresFonctionnels.subsets/Niv0.json",
+		"m_ParametresFonctionnels.subsets/Par Défaut.json",
+		"m_ParametresFonctionnels.subsets/Par Défaut auto.json"
+	]
+}
