@@ -1,0 +1,38 @@
+{
+	"@type":"Cube",
+	"Name":"Cout_Elec",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Exercice')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Mois')"
+		},
+		{
+			"@id":"Dimensions('Magasin')"
+		},
+		{
+			"@id":"Dimensions('m_Cout_Elec')"
+		}
+	],
+	"Rules@Code.link":"Cout_Elec.rules",
+	"MeasuresDimension":
+	{
+		"@id":"Dimensions('m_Cout_Elec')"
+	},
+	"TimeDimension":
+	{
+		"@id":"Dimensions('Mois')"
+	},
+	"Views@Code.links":
+	[
+		"Cout_Elec.views/Par Défaut.json"
+	]
+}

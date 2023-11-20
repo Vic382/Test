@@ -15,15 +15,7 @@
 		"dataSourceNameForServer":"Mois:Mois",
 		"subset":"All"
 	},
-	"Parameters":
-	[
-		{
-			"Name":"pMois",
-			"Prompt":"Quel mois voulez vous charger ? ( * = tous les mois )",
-			"Value":"M01",
-			"Type":"String"
-		}
-	],
+	"Parameters":[],
 	"Variables":
 	[
 		{

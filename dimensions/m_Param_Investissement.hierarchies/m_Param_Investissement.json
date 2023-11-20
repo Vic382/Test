@@ -1,0 +1,20 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_Param_Investissement",
+	"Elements":
+	[
+		{
+			"Name":"Montant",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Duree",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_Param_Investissement.subsets/Niv0.json",
+		"m_Param_Investissement.subsets/Par Défaut.json"
+	]
+}

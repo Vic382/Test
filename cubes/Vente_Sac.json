@@ -1,0 +1,41 @@
+{
+	"@type":"Cube",
+	"Name":"Vente_Sac",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Exercice')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Mois')"
+		},
+		{
+			"@id":"Dimensions('Type_Sac')"
+		},
+		{
+			"@id":"Dimensions('Magasin')"
+		},
+		{
+			"@id":"Dimensions('m_Vente_Sac')"
+		}
+	],
+	"Rules@Code.link":"Vente_Sac.rules",
+	"MeasuresDimension":
+	{
+		"@id":"Dimensions('m_Vente_Sac')"
+	},
+	"TimeDimension":
+	{
+		"@id":"Dimensions('Mois')"
+	},
+	"Views@Code.links":
+	[
+		"Vente_Sac.views/Par Défaut.json"
+	]
+}

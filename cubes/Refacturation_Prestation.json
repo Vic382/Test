@@ -1,0 +1,37 @@
+{
+	"@type":"Cube",
+	"Name":"Refacturation_Prestation",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Exercice')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Mois')"
+		},
+		{
+			"@id":"Dimensions('Type_Prestation')"
+		},
+		{
+			"@id":"Dimensions('m_Refacturation_Prestation')"
+		}
+	],
+	"MeasuresDimension":
+	{
+		"@id":"Dimensions('m_Refacturation_Prestation')"
+	},
+	"TimeDimension":
+	{
+		"@id":"Dimensions('Mois')"
+	},
+	"Views@Code.links":
+	[
+		"Refacturation_Prestation.views/Par Défaut.json"
+	]
+}

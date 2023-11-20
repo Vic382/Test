@@ -1,0 +1,41 @@
+{
+	"@type":"Cube",
+	"Name":"Param_Tarif_Elec",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Exercice')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Mois')"
+		},
+		{
+			"@id":"Dimensions('Prestataire_Elec')"
+		},
+		{
+			"@id":"Dimensions('Magasin')"
+		},
+		{
+			"@id":"Dimensions('m_Param_Tarif_Elec')"
+		}
+	],
+	"Rules@Code.link":"Param_Tarif_Elec.rules",
+	"MeasuresDimension":
+	{
+		"@id":"Dimensions('m_Param_Tarif_Elec')"
+	},
+	"TimeDimension":
+	{
+		"@id":"Dimensions('Mois')"
+	},
+	"Views@Code.links":
+	[
+		"Param_Tarif_Elec.views/Par Défaut.json"
+	]
+}

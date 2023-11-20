@@ -122,6 +122,7 @@ AttrDelete( sDim , 'Exercice_Ouverture');
 
 
 AttrInsert( sDim , '' , 'Description', 'A' );
+AttrInsert( sDim , '' , 'Description Longue', 'A' );
 AttrInsert( sDim , '' , 'Chef_Secteur', 'S' );
 AttrInsert( sDim , '' , 'Date_Ouverture', 'S' );
 AttrInsert( sDim , '' , 'Nbre_Caisse', 'N' );
@@ -192,10 +193,22 @@ sPays = CellGetS( sCubeCible , Magasin_N , 'Pays') ;
 sType = CellGetS( sCubeCible , Magasin_N , 'Type_Magasin') ;
 sDirRegion = CellGetS( sCubeCible , Magasin_N , 'Directeur_Region') ;
 
+
+
 # Alimentation des attributs
 AttrPutS( sLibGIE , sDim , Magasin_N , 'Description');
 AttrPutS( sRegion , sDim , sZone , 'Description');
 AttrPutS( sLibSecteur , sDim , sCodeSecteur , 'Description');
+
+# Description Longue
+sLibLongGIE = Magasin_N | ' - ' | sLibGIE ;
+sLibLongRegion = sZone | ' - ' | sRegion ;
+sLibLongSecteur = sCodeSecteur | ' - ' | sLibSecteur ;
+
+AttrPutS( sLibLongGIE , sDim , Magasin_N , 'Description Longue');
+AttrPutS( sLibLongRegion , sDim , sZone , 'Description Longue');
+AttrPutS( sLibLongSecteur , sDim , sCodeSecteur , 'Description Longue');
+
 AttrPutS( sChefSecteur , sDim , Magasin_N , 'Chef_Secteur');
 AttrPutS( sDateOuv , sDim , Magasin_N , 'Date_Ouverture');
 AttrPutN( nNbCaisse , sDim , Magasin_N , 'Nbre_Caisse');

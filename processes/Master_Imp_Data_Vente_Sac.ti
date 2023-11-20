@@ -52,15 +52,23 @@ sSubsetSource = 'zTI_Source_' | cMainProcName ;
 
 # Création d'un subset dynamique avec tous les éléments fins si paramètre *
 # Sinon juste le mois voulu
-IF ( pMois @= '*') ;
-  SubsetDestroy ( sDim , sSubsetSource ) ; 
-  StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim | ' ] ) } , 0 ) }' ;
-  SubsetCreateByMDX ( sSubsetSource , StringMDX , nDebug  ) ;
-ELSE ;
-  SubsetDestroy ( sDim , sSubsetSource ) ; 
-  SubsetCreate( sDim , sSubsetSource , nDebug );
-  SubsetElementInsert( sDim , sSubsetSource , pMois , 1 );
-ENDIF ;
+# IF ( pMois @= '*') ;
+#   SubsetDestroy ( sDim , sSubsetSource ) ; 
+#   StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim | ' ] ) } , 0 ) }' ;
+#   SubsetCreateByMDX ( sSubsetSource , StringMDX , nDebug  ) ;
+# ELSE ;
+#   SubsetDestroy ( sDim , sSubsetSource ) ; 
+#   SubsetCreate( sDim , sSubsetSource , nDebug );
+#   SubsetElementInsert( sDim , sSubsetSource , pMois , 1 );
+# ENDIF ;
+
+# Récupération du mois en cours dans le cube param fonctionnel
+
+sMois = CellGetS( 'ParametresFonctionnels', 'MoisEnCours' , 'ValeurS' );
+
+SubsetDestroy ( sDim , sSubsetSource ) ; 
+SubsetCreate( sDim , sSubsetSource , nDebug );
+SubsetElementInsert( sDim , sSubsetSource , sMois , 1 );
 
 DatasourceDimensionSubset = sSubsetSource ;
 DatasourceNameForServer = sDim ;

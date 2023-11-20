@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Niv0_Desc.",
+	"Expression":"{TM1FILTERBYLEVEL ( {TM1SubsetAll ( [Magasin] ) } , 0 )}"
+}

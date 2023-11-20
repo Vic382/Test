@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"m_Achat_Sac",
+	"Hierarchies@Code.links":
+	[
+		"m_Achat_Sac.hierarchies/m_Achat_Sac.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_Achat_Sac')/Hierarchies('m_Achat_Sac')"
+	}
+}

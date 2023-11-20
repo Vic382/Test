@@ -1,0 +1,21 @@
+{
+	"@type":"Cube",
+	"Name":"ParametresFonctionnels",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('ParametresFonctionnels')"
+		},
+		{
+			"@id":"Dimensions('m_ParametresFonctionnels')"
+		}
+	],
+	"Rules@Code.link":"ParametresFonctionnels.rules",
+	"Views@Code.links":
+	[
+		"ParametresFonctionnels.views/All.json",
+		"ParametresFonctionnels.views/ParametresFonctionnels.json",
+		"ParametresFonctionnels.views/Par Défaut.json",
+		"ParametresFonctionnels.views/Par Défaut auto.json"
+	]
+}

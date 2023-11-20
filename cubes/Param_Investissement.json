@@ -1,0 +1,26 @@
+{
+	"@type":"Cube",
+	"Name":"Param_Investissement",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Exercice')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Type_Immobilisation')"
+		},
+		{
+			"@id":"Dimensions('m_Param_Investissement')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"Param_Investissement.views/Par Défaut.json"
+	]
+}

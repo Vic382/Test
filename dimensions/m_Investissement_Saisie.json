@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"m_Investissement_Saisie",
+	"Hierarchies@Code.links":
+	[
+		"m_Investissement_Saisie.hierarchies/m_Investissement_Saisie.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_Investissement_Saisie')/Hierarchies('m_Investissement_Saisie')"
+	}
+}
