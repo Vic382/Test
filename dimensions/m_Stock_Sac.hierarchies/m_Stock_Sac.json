@@ -18,10 +18,12 @@
 		{
 			"Name":"Stock_Final",
 			"Type":"Numeric"
+
 		},
 		{
 			"Name":"Variation_Stock",
 			"Type":"Numeric"
+
 		}
 	],
 	"Subsets@Code.links":

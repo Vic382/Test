@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"2022_2023",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Exercice')/Hierarchies('Exercice')/Elements('2022_2023')"
+		}
+	]
+}

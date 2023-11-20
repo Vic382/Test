@@ -12,6 +12,7 @@ SKIPCHECK;
 # Calcul stock final
 ['Stock_Final'] = N : ['Stock_Initial'] - ['Vente_Sac'] + ['Achat_Sac'] ;
 
+
 # Calcul variation de stock
 ['Variation_Stock'] = N : ['Stock_Initial'] - ['Stock_Final'] ;
 
@@ -23,7 +24,9 @@ FEEDERS;
 # Feeders Calcul stock final
 ['Stock_Initial'] => ['Stock_Final'] ;
 ['Vente_Sac'] => ['Stock_Final'] ;
+
 ['Achat_Sac'] => ['Stock_Final'] ;
 
 # Feeders variation de stock
 ['Stock_Initial'] => ['Variation_Stock'] ;
+

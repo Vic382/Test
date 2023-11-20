@@ -3,7 +3,7 @@
 	"Name":"Imp_Data_Credit_Bail",
 	"HasSecurityAccess":false,
 	"Code@Code.link":"Imp_Data_Credit_Bail.ti",
-	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€_ParameterConstraints=e30=€",
+	"UIData":"_ParameterConstraints=e30=€",
 	"VariablesUIData":
 	[
 		"VarType=32€ColType=827€",

@@ -1,14 +1,11 @@
 {
 	"@type":"Hierarchy",
 	"Name":"Type_Credit_Bail",
-	"ElementsSortType":"ByHierarchy",
+
 	"Elements":
 	[
 		{
-			"Name":"Total_Type_Credit_Bail",
-			"Type":"Consolidated"
-		},
-		{
+
 			"Name":"Divers",
 			"Type":"Numeric"
 		},
@@ -41,49 +38,7 @@
 			"Type":"Numeric"
 		}
 	],
-	"Edges":
-	[
-		{
-			"ParentName":"Total_Type_Credit_Bail",
-			"ComponentName":"Divers",
-			"Weight":1
-		},
-		{
-			"ParentName":"Total_Type_Credit_Bail",
-			"ComponentName":"Eurostore",
-			"Weight":1
-		},
-		{
-			"ParentName":"Total_Type_Credit_Bail",
-			"ComponentName":"Eurostore_Lot_2",
-			"Weight":1
-		},
-		{
-			"ParentName":"Total_Type_Credit_Bail",
-			"ComponentName":"Ouverture",
-			"Weight":1
-		},
-		{
-			"ParentName":"Total_Type_Credit_Bail",
-			"ComponentName":"Remodeling",
-			"Weight":1
-		},
-		{
-			"ParentName":"Total_Type_Credit_Bail",
-			"ComponentName":"Renouvellement_Materiel_Caisse",
-			"Weight":1
-		},
-		{
-			"ParentName":"Total_Type_Credit_Bail",
-			"ComponentName":"Renouvellement_Serveur",
-			"Weight":1
-		},
-		{
-			"ParentName":"Total_Type_Credit_Bail",
-			"ComponentName":"Renouvellement_TPE",
-			"Weight":1
-		}
-	],
+
 	"Subsets@Code.links":
 	[
 		"Type_Credit_Bail.subsets/Niv0.json",

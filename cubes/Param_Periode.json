@@ -20,7 +20,8 @@
 	},
 	"Views@Code.links":
 	[
-		"Param_Periode.views/Par Défaut.json",
-		"Param_Periode.views/zTI_Process_Dim_Periode.json"
+
+		"Param_Periode.views/Par Défaut.json"
+
 	]
 }
