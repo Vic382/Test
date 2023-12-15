@@ -1,0 +1,33 @@
+{
+	"@type":"Cube",
+	"Name":"Ventes",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Annee')"
+		},
+		{
+			"@id":"Dimensions('Clients')"
+		},
+		{
+			"@id":"Dimensions('Mois')"
+		},
+		{
+			"@id":"Dimensions('Produit')"
+		},
+		{
+			"@id":"Dimensions('Societe')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('m_Ventes')"
+		}
+	],
+	"Rules@Code.link":"Ventes.rules",
+	"Views@Code.links":
+	[
+		"Ventes.views/Test.json"
+	]
+}

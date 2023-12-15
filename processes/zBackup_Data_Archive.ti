@@ -1,0 +1,108 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#***********************************************************************************************************
+#
+# CREATEUR : VRT
+# DATE DE CREATION : 09/11/2020
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : ../../201.
+# DESCRIPTION DU PROCESSUS : Archive le répertoire DATA dans une archive.zip
+#
+# Vérifier les paramètres. De base, ceux-ci sont incomplets. LAISSEZ LES DOUBLES QUOTES.
+#
+# Voir le fichier 7zip_archive_backup.bat pour plus d'informations
+#
+# Le chemin indiqué ci-dessous pour le .bat peut être modifié.
+#
+#***********************************************************************************************************
+
+#***********************************************************************************************************
+#                                  Définition des cubes
+#***********************************************************************************************************
+                                                                                                                                                                                                                                                                                                                                           
+sCubeParamT = 'ParametrageT' ;
+
+#**********************************************************************************************************
+#                                  Définition des constantes
+#***********************************************************************************************************
+
+cMainProcName = GetProcessName();
+cRepertoireRacine = GetProcessErrorFileDirectory;
+cTimeStamp = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess = cTimeStamp | '_' | cRandomInt;
+
+# Gestion du lancement par tâche planifié
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+cLenASCIICode = 3 ;
+
+#**********************************************************************************************************
+#                                  Définition des variables
+#**********************************************************************************************************
+
+StringGlobalVariable('sProcessReturnCode');
+NumericGlobalVariable('nProcessReturnCode');
+
+# Pour échanger avec Process.Log.Create
+NumericGlobalVariable ('zLogNumero') ; 
+         
+#**********************************************************************************************************
+#                                  Initialisation des variables
+#**********************************************************************************************************
+
+nErrors = 0 ;
+
+sRepertoireExe = CellGetS ( sCubeParamT , 'txt_RepertoireExe' , 'ValeurS' ) ;
+sBackup = CellGetS ( sCubeParamT , 'BackupBat' , 'ValeurS' ) ;
+
+sDelimiter = CHAR ( 34 ) ;
+
+sTM1Data = CellGetS ( sCubeParamT , 'txt_RepertoireData' , 'ValeurS' ) ;
+sTM1Data = sDelimiter | sTM1Data | sDelimiter  ;
+
+s7zExe = CellGetS ( sCubeParamT , 'txt_repertoire7zExe' , 'ValeurS' ) ;
+s7zExe = sDelimiter | s7zExe | sDelimiter  ;
+
+sRepBackup = CellGetS ( sCubeParamT , 'txt_RepertoireBackup' , 'ValeurS' ) ;
+sRepBackup = sDelimiter | sRepBackup | sDelimiter  ;
+
+
+#**********************************************************************************************************
+#                                  Log start time
+#**********************************************************************************************************
+
+
+sCommandBat = '"' | sRepertoireExe | sBackup | '"' ;
+
+#**********************************************************************************************************
+#                                  DEBUT DE zBACKUP_Data_Archive
+#**********************************************************************************************************
+
+ExecuteCommand( sCommandBat  | ' ' | pNomArchive | ' ' | pNbJours | ' ' | sTM1Data | ' ' | s7zExe | ' ' | sRepBackup , 1 );
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+#endregion

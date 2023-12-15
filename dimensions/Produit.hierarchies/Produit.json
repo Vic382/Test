@@ -1,0 +1,1064 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Produit",
+	"Elements":
+	[
+		{
+			"Name":"P0014",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Delorean DMC12",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0015",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Ecto-1",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0016",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"KIT",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0017",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"308 GTS Magnum",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0018",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"GMC Vandura V8 tous risques",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0012",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"DB9 007",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0013",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Cox n°53",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0019",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"General Lee",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0002",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Landspeeder",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0004",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Millenium Falcon",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0007",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Tie",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0001",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"C3PO",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0005",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"R2D2",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0006",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Endor",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0003",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Mustafar",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0010",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Mygeeto",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0011",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"X Wing",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0008",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Y Wing",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0009",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"U Wing",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0028",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Tumbler",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0029",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Burton 89",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0027",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Burton 93",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0036",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Shumacher 95",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0037",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Shumacher 97",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0038",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"JL 2016",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0030",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Lincoln Ventura 66",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0032",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Batwing",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0034",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Batpod",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0035",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Quinjet",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0039",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Fantasticar",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0031",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"BlackBird",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0033",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Pinguin Limo",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0040",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Logan",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0022",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Mario",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0020",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Link",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0021",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Bandicot",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0024",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Peach",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0023",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Pacman",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0025",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Simpson",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0026",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Blender",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0101",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Citroën C1",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0102",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Dacia Sandero",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0103",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Fiat Panda",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0104",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Fiat 500",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0105",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Honda Jazz",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0106",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Hyundai i10",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0107",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Kia Rio",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0108",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Mazda 2",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0109",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Nissan Micra ",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0110",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Opel Adam",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0111",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Opel Karl",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0112",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Opel Corsa",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0113",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Renault Twingo ",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0114",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Renault Zoe",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0115",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Renault Clio IV",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0116",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Skoda Citigo",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0117",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Skoda Fabia",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0118",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Suzuki Swift",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0119",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Toyota Yaris",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0120",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"BMW Série 3",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0121",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Citroën C5",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0122",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"DS 5",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0123",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Ford Mondeo",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0124",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Jaguar X-type",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0125",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Jaguar XE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0126",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Lexus IS",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0127",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Mazda 6",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0128",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Mercedes Classe C",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0129",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Opel Insignia",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0130",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Renault Laguna",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0131",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Skoda Octavia",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0132",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Skoda Superb",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0133",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Toyota Avensis",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0134",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Volvo V60",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0135",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Volkswagen",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0136",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Mazda CX-3",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0137",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Mercedes GLC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0138",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Mitsubishi ASX",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0139",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Peugeot 2008",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0140",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Peugeot 3008",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"P0141",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"Renault Captur",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"P0014",
+			"ComponentName":"Delorean DMC12",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0015",
+			"ComponentName":"Ecto-1",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0016",
+			"ComponentName":"KIT",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0017",
+			"ComponentName":"308 GTS Magnum",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0018",
+			"ComponentName":"GMC Vandura V8 tous risques",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0012",
+			"ComponentName":"DB9 007",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0013",
+			"ComponentName":"Cox n°53",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0019",
+			"ComponentName":"General Lee",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0002",
+			"ComponentName":"Landspeeder",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0004",
+			"ComponentName":"Millenium Falcon",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0007",
+			"ComponentName":"Tie",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0001",
+			"ComponentName":"C3PO",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0005",
+			"ComponentName":"R2D2",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0006",
+			"ComponentName":"Endor",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0003",
+			"ComponentName":"Mustafar",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0010",
+			"ComponentName":"Mygeeto",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0011",
+			"ComponentName":"X Wing",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0008",
+			"ComponentName":"Y Wing",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0009",
+			"ComponentName":"U Wing",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0028",
+			"ComponentName":"Tumbler",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0029",
+			"ComponentName":"Burton 89",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0027",
+			"ComponentName":"Burton 93",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0036",
+			"ComponentName":"Shumacher 95",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0037",
+			"ComponentName":"Shumacher 97",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0038",
+			"ComponentName":"JL 2016",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0030",
+			"ComponentName":"Lincoln Ventura 66",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0032",
+			"ComponentName":"Batwing",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0034",
+			"ComponentName":"Batpod",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0035",
+			"ComponentName":"Quinjet",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0039",
+			"ComponentName":"Fantasticar",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0031",
+			"ComponentName":"BlackBird",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0033",
+			"ComponentName":"Pinguin Limo",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0040",
+			"ComponentName":"Logan",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0022",
+			"ComponentName":"Mario",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0020",
+			"ComponentName":"Link",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0021",
+			"ComponentName":"Bandicot",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0024",
+			"ComponentName":"Peach",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0023",
+			"ComponentName":"Pacman",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0025",
+			"ComponentName":"Simpson",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0026",
+			"ComponentName":"Blender",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0101",
+			"ComponentName":"Citroën C1",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0102",
+			"ComponentName":"Dacia Sandero",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0103",
+			"ComponentName":"Fiat Panda",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0104",
+			"ComponentName":"Fiat 500",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0105",
+			"ComponentName":"Honda Jazz",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0106",
+			"ComponentName":"Hyundai i10",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0107",
+			"ComponentName":"Kia Rio",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0108",
+			"ComponentName":"Mazda 2",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0109",
+			"ComponentName":"Nissan Micra ",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0110",
+			"ComponentName":"Opel Adam",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0111",
+			"ComponentName":"Opel Karl",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0112",
+			"ComponentName":"Opel Corsa",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0113",
+			"ComponentName":"Renault Twingo ",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0114",
+			"ComponentName":"Renault Zoe",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0115",
+			"ComponentName":"Renault Clio IV",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0116",
+			"ComponentName":"Skoda Citigo",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0117",
+			"ComponentName":"Skoda Fabia",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0118",
+			"ComponentName":"Suzuki Swift",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0119",
+			"ComponentName":"Toyota Yaris",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0120",
+			"ComponentName":"BMW Série 3",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0121",
+			"ComponentName":"Citroën C5",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0122",
+			"ComponentName":"DS 5",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0123",
+			"ComponentName":"Ford Mondeo",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0124",
+			"ComponentName":"Jaguar X-type",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0125",
+			"ComponentName":"Jaguar XE",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0126",
+			"ComponentName":"Lexus IS",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0127",
+			"ComponentName":"Mazda 6",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0128",
+			"ComponentName":"Mercedes Classe C",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0129",
+			"ComponentName":"Opel Insignia",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0130",
+			"ComponentName":"Renault Laguna",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0131",
+			"ComponentName":"Skoda Octavia",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0132",
+			"ComponentName":"Skoda Superb",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0133",
+			"ComponentName":"Toyota Avensis",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0134",
+			"ComponentName":"Volvo V60",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0135",
+			"ComponentName":"Volkswagen",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0136",
+			"ComponentName":"Mazda CX-3",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0137",
+			"ComponentName":"Mercedes GLC",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0138",
+			"ComponentName":"Mitsubishi ASX",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0139",
+			"ComponentName":"Peugeot 2008",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0140",
+			"ComponentName":"Peugeot 3008",
+			"Weight":1
+		},
+		{
+			"ParentName":"P0141",
+			"ComponentName":"Renault Captur",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":[]
+}

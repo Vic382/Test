@@ -1,0 +1,62 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#*****************************************************************************
+# CREATEUR : VRT
+# DATE DE CREATION : 12/11/2020
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION :
+# DESCRIPTION DU PROCESSUS : Ce process permet d'enregistrer les données
+# Une tache est associée afin de le lancer régulièrement
+#*****************************************************************************
+
+#************************************************************************************************
+# Définition des cubes
+#************************************************************************************************
+
+sCubeParamT = 'ParametrageT' ;
+sCubeParamP = 'ParametresSources' ;
+
+#************************************************************************************************
+# Définition des constantes
+#************************************************************************************************
+
+NumericGlobalVariable ('zLogNumero') ; 
+
+cMainProcName	= GetProcessName();
+cRepertoireRacine	= GetProcessErrorFileDirectory;
+cTimeStamp	= TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt	= NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess	= cTimeStamp | '_' | cRandomInt;
+cUtilisateur	= TM1User();
+
+#************************************************************************************************
+# Définition des variables
+#************************************************************************************************
+
+
+
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+SaveDataAll;
+
+#endregion

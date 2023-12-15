@@ -1,0 +1,20 @@
+{
+	"@type":"Hierarchy",
+	"Name":"Version",
+	"Elements":
+	[
+		{
+			"Name":"Reel",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Budget",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Atterrissage",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":[]
+}
