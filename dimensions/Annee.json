@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"Annee",
+	"Hierarchies@Code.links":
+	[
+		"Annee.hierarchies/Annee.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Annee')/Hierarchies('Annee')"
+	}
+}

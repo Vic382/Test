@@ -1,0 +1,216 @@
+#region Prolog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+    #*****************************************************************************
+    # CREATEUR : Timothée MARTIN - DIMO Software (n???)????.*
+    # DATE DE CREATION : 16/11/2018
+    # DERNIERE MODIFICATION EFFECTUEE PAR : 
+    # DATE DE DERNIERE MODIFICATION : ../../2018
+    # DESCRIPTION DU PROCESSUS : 
+    # Import des données du fichier "VENTE_REEL.csv" vers le cube "Ventes"
+    #*****************************************************************************
+    
+    # Définition du cube sur lequel travailler et de ses dimensions. None 
+    # Remise à zéro des données du cube "Ventes" sur la version "Reel" et l'année "N".
+    # Pour ce faire, on créé une vue temporaire de ce cube qu'on remet à zéro.
+    # On crée donc une vue pour le cube et des sous ensembles pour les dimensions de ce cube.
+    # On assigne ensuite les sous-ensembles des dimensions à la vue du cube.
+    
+    # Le nom de la vue du cube :
+    sVue = 'RàZ_vue_' | Today (0) | '_' | GetProcessName () ; 
+    # Le nom des sous-ensembles
+    sSubset = 'RàZ_Subset_' | Today (0) | '_' | GetProcessName () ; 
+    
+    
+    # Destruction pour recréation de la vue
+    ViewDestroy ( sCube , sVue ) ;
+    ViewCreate ( sCube , sVue ) ; 
+    
+    # Création des sous-ensembles des dimensions du cube
+    
+    # Version : réel
+    SubsetDestroy ( sDim1 , sSubset ) ;
+    SubsetCreate ( sDim1 , sSubset ) ; 
+    SubsetElementInsert ( sDim1 , sSubset , 'REEL' , 1 ) ;
+    
+    # Société, tous les éléments, on créé un sous-ensemble MDX pour récupérer tous les éléments "Feuille"
+    SubsetDestroy ( sDim2 , sSubset ) ; 
+    SubsetCreateByMDX ( sSubset , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim2 | ' ] ) } , 0 ) }' ) ;
+    
+    # Client : tous les éléments
+    SubsetDestroy ( sDim3 , sSubset ) ; 
+    SubsetCreateByMDX ( sSubset , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim3 | ' ] ) } , 0 ) }' ) ;
+    
+    # Produit : tous les éléments
+    SubsetDestroy ( sDim4 , sSubset ) ; 
+    SubsetCreateByMDX ( sSubset , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim4 | ' ] ) } , 0 ) }' ) ;
+    
+    # Année : l'élément "N"
+    SubsetDestroy ( sDim5 , sSubset ) ;
+    SubsetCreate ( sDim5 , sSubset ) ; 
+    SubsetElementInsert ( sDim5 , sSubset , 'N' , 1 ) ;
+    
+    # Mois : tous les mois
+    SubsetDestroy ( sDim6 , sSubset ) ; 
+    SubsetCreateByMDX ( sSubset , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim6 | ' ] ) } , 0 ) }' ) ;
+    
+    # Dimension mesure : tous les indicateurs
+    SubsetDestroy ( sDim , sSubset ) ; 
+    SubsetCreateByMDX ( sSubset , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim | ' ] ) } , 0 ) }' ) ;
+    
+    # On assigne tous les sous-ensembles créés à la vue de cube
+    ViewSubsetAssign ( sCube , sVue , sDim1 , sSubset ) ; 
+    ViewSubsetAssign ( sCube , sVue , sDim2 , sSubset ) ; 
+    ViewSubsetAssign ( sCube , sVue , sDim3 , sSubset ) ; 
+    ViewSubsetAssign ( sCube , sVue , sDim4 , sSubset ) ; 
+    ViewSubsetAssign ( sCube , sVue , sDim5 , sSubset ) ; 
+    ViewSubsetAssign ( sCube , sVue , sDim6 , sSubset ) ; 
+    ViewSubsetAssign ( sCube , sVue , sDim , sSubset ) ; 
+    
+    # Suppression des données qui sont dans la vue sVue
+    ViewZeroOut ( sCube , sVue ) ; 
+    
+    # La vue étant désormais vide, nous pouvons la détruire
+    ViewDestroy ( sCube , sVue ) ;
+    # On détruit les sous-ensembles des dimensions
+    SubsetDestroy ( sDim1 , sSubset ) ;
+    SubsetDestroy ( sDim2 , sSubset ) ;
+    SubsetDestroy ( sDim3 , sSubset ) ;
+    SubsetDestroy ( sDim4 , sSubset ) ;
+    SubsetDestroy ( sDim5 , sSubset ) ;
+    SubsetDestroy ( sDim6 , sSubset ) ;
+    SubsetDestroy ( sDim , sSubset ) ;
+    
+    # Définition de la source du processus
+    # 1 - Définition du chemin du dossier dans lequel le fichier source se situe
+    sCheminDossier = 'D:\IBM\Instances\FORMATION\SOURCES' ;
+    # 2 - Définition du nom du fichier source
+    sNomFichier = 'VENTE_REE.csv' ;
+    # 3 - Le fichier à récupérer est la concatenation du chemin du fichier et du fichier :
+    sFichier = sCheminDossier | sNomFichier ; 
+    
+    # Définition de la source du processu : il s'agit du # 3 : la variable sFichier
+    DataSourceNameForServer  = sFichier ; 
+    
+    
+#endregion
+#region Metadata
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+    #______________________________________________________
+    
+    # METADONNEES
+    
+    #______________________________________________________
+    
+    #*****************************************************************************
+    # CREATEUR : Timothée MARTIN - DIMO Software 
+    # DATE DE CREATION : 16/11/2018
+    # DERNIERE MODIFICATION EFFECTUEE PAR : 
+    # DATE DE DERNIERE MODIFICATION : ../../2018
+    # DESCRIPTION DU PROCESSUS : 
+    # Import des données du fichier "VENTE_REEL.csv" vers le cube "Ventes"
+    #*****************************************************************************
+    
+    # Définition du cube sur lequel travailler et de ses dimensions.
+    sCube = 'Ventes' ; 
+    sDim1 ='Version' ;
+    sDim2 = 'Societe' ;
+    sDim3 = 'Client' ; 
+    sDim4 = 'Produit' ; 
+    sDim5 ='Annee' ;
+    sDim6 ='Mois' ;
+    sDim = 'm_Ventes' ;
+    
+    # Remise à zéro des données du cube "Ventes" sur la version "Reel" et l'année "N".
+    # Pour ce faire, on créé une vue temporaire de ce cube qu'on remet à zéro.
+    # On crée donc une vue pour le cube et des sous ensembles pour les dimensions de ce cube.
+    # On assigne ensuite les sous-ensembles des dimensions à la vue du cube.
+    
+    # Le nom de la vue du cube :
+    sVue = 'RàZ_vue_' | Today (0) | '_' | GetProcessName () ; 
+    # Le nom des sous-ensembles
+    sSubset = 'RàZ_Subset_' | Today (0) | '_' | GetProcessName () ; 
+    
+    
+    # Destruction pour recréation de la vue
+    ViewDestroy ( sCube , sVue ) ;
+    ViewCreate ( sCube , sVue ) ; 
+    
+    # Création des sous-ensembles des dimensions du cube
+    
+    # Version : réel
+    SubsetDestroy ( sDim1 , sSubset ) ;
+    SubsetCreate ( sDim1 , sSubset ) ; 
+    SubsetElementInsert ( sDim1 , sSubset , 'BUDGET' , 1 ) ;
+    
+    # Société, tous les éléments, on créé un sous-ensemble MDX pour récupérer tous les éléments "Feuille"
+    SubsetDestroy ( sDim2 , sSubset ) ; 
+    SubsetCreateByMDX ( sSubset , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim2 | ' ] ) } , 0 ) }' ) ;
+    
+    # Client : tous les éléments
+    SubsetDestroy ( sDim3 , sSubset ) ; 
+    SubsetCreateByMDX ( sSubset , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim3 | ' ] ) } , 0 ) }' ) ;
+    
+    # Produit : tous les éléments
+    SubsetDestroy ( sDim4 , sSubset ) ; 
+    SubsetCreateByMDX ( sSubset , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim4 | ' ] ) } , 0 ) }' ) ;
+    
+    # Année : l'élément "N"
+    SubsetDestroy ( sDim5 , sSubset ) ;
+    SubsetCreate ( sDim5 , sSubset ) ; 
+    SubsetElementInsert ( sDim5 , sSubset , 'N+1' , 1 ) ;
+    
+    # Mois : tous les mois
+    SubsetDestroy ( sDim6 , sSubset ) ; 
+    SubsetCreateByMDX ( sSubset , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim6 | ' ] ) } , 0 ) }' ) ;
+    
+    # Dimension mesure : tous les indicateurs
+    SubsetDestroy ( sDim , sSubset ) ; 
+    SubsetCreateByMDX ( sSubset , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim | ' ] ) } , 0 ) }' ) ;
+    
+    # On assigne tous les sous-ensembles créés à la vue de cube
+    ViewSubsetAssign ( sCube , sVue , sDim1 , sSubset ) ; 
+    ViewSubsetAssign ( sCube , sVue , sDim2 , sSubset ) ; 
+    ViewSubsetAssign ( sCube , sVue , sDim3 , sSubset ) ; 
+    ViewSubsetAssign ( sCube , sVue , sDim4 , sSubset ) ; 
+    ViewSubsetAssign ( sCube , sVue , sDim5 , sSubset ) ; 
+    ViewSubsetAssign ( sCube , sVue , sDim6 , sSubset ) ; 
+    ViewSubsetAssign ( sCube , sVue , sDim , sSubset ) ; 
+    
+    # Suppression des données qui sont dans la vue sVue
+    ViewZeroOut ( sCube , sVue ) ; 
+    
+    # La vue étant désormais vide, nous pouvons la détruire
+    ViewDestroy ( sCube , sVue ) ;
+    # On détruit les sous-ensembles des dimensions
+    SubsetDestroy ( sDim1 , sSubset ) ;
+    SubsetDestroy ( sDim2 , sSubset ) ;
+    SubsetDestroy ( sDim3 , sSubset ) ;
+    SubsetDestroy ( sDim4 , sSubset ) ;
+    SubsetDestroy ( sDim5 , sSubset ) ;
+    SubsetDestroy ( sDim6 , sSubset ) ;
+    SubsetDestroy ( sDim , sSubset ) ;
+    
+    # Définition de la source du processus
+    # 1 - Définition du chemin du dossier dans lequel le fichier source se situe
+    sCheminDossier = 'D:\IBM\Instances\FORMATION\SOURCES' ;
+    # 2 - Définition du nom du fichier source
+    sNomFichier = 'VENTE_BUDGET.csv' ;
+    # 3 - Le fichier à récupérer est la concatenation du chemin du fichier et du fichier :
+    sFichier = sCheminDossier | sNomFichier ; 
+    
+    # Définition de la source du processu : il s'agit du # 3 : la variable sFichier
+    DataSourceNameForServer  = sFichier ; 
+
+    
+#endregion
+#region Data
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion

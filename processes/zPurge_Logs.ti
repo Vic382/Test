@@ -1,0 +1,128 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#*****************************************************************************
+# CREATEUR : VRT
+# DATE DE CREATION : 26/10/2020
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION :
+# DESCRIPTION DU PROCESSUS : Purge des fichiers dans les dossiers de sauvegarde des cubes.
+# Possibilité de choisir le nombre de jours à garder et le type de fichier à supprimer (Préfixe)
+#*****************************************************************************
+
+#***********************************************************************************************************
+#                                  Définition des cubes
+#***********************************************************************************************************
+
+sCubeParamT	             = 'ParametrageT' ;
+
+#***********************************************************************************************************
+#                                  Définition des constantes
+#***********************************************************************************************************
+
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+#***********************************************************************************************************
+#                                  Définition des variables
+#***********************************************************************************************************
+
+# Pour échanger avec Process_Log_Create
+NumericGlobalVariable ('zLogNumero') ;
+
+nErrors = 0 ;
+sNbHisto = NumberToString ( pNbJoursHisto ) ;
+
+#***********************************************************************************************************
+#                                  Initialisation des variables
+#***********************************************************************************************************
+zLogNumero        = 1 ;
+nCountFichier      = 0 ;
+nErrors                  = 0 ;
+
+#***********************************************************************************************************
+#                                  Log start time
+#***********************************************************************************************************
+
+
+
+#***********************************************************************************************************
+#                                  Contrôle des paramètres
+#***********************************************************************************************************
+
+
+
+###########################
+# INITIALISATION DES VARIABLES #
+###########################
+
+
+sPath = CellGetS( sCubeParamT , 'txt_RepertoireLog' , 'ValeurS' ) ;
+
+### On préfixe les fichiers à supprimer
+sPrefixFichier = pPrefixNomFichier ;
+
+
+# On définit le nombre de jours  d'historisation (ici, 3).
+sDateMax = Date (  DayNo ( Today ) - pNbJoursHisto , 1 ) ;
+
+
+# Boucle sur 100 jours avant la date d'historisation, à savoir aujourd'hui - " jours. 
+vCompteurDate = 100 ; 
+While ( vCompteurDate >=  0 ) ;
+	
+  # Je créé une date de fichier : date d'historisation - compteur
+  sDateFichier = DATE ( DAYNO ( sDateMax ) - vCompteurDate , 0 ) ;
+  sAnneeFichier = Subst ( sDateFichier , 1 , 2 ) ;
+  sMoisFIchier = Subst ( sDateFichier , 4 , 2 ) ;
+  sJourFichier = SubSt ( sDateFichier , 7 , 2 ) ;
+  sDateMajFichier = '20' | sAnneeFichier | sMoisFIchier | sJourFichier ;
+
+  # Recherche d'un fichier avec la date créée
+  # On recherche le nom de fichier avec le préfixe en paramètre
+  IF ( pPrefixNomFichier @= 'Tous' ) ;
+    sNomFichier =  sPath | '*'  | sDateMajFichier | '*';
+  ELSE ;
+    sNomFichier =  sPath | '*'  | sPrefixFichier | '*'| sDateMajFichier | '*';
+  ENDIF ;
+  
+  sFile  = WildCardFileSearch (  sNomFichier , ' ' ) ; 
+
+  #S'il y a une correspondance, suppression du fichier
+  While ( sFile @<> '' ) ;
+    ASCIIDelete( sPath | sFile ) ;
+    sFile  = WildCardFileSearch ( sNomFichier , ' ' ) ; 
+    nCountFichier = nCountFichier +1 ;
+  End ;
+
+  vCompteurDate = vCompteurDate - 1 ;
+	
+End ;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion

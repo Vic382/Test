@@ -1,0 +1,14 @@
+{
+	"@type":"Cube",
+	"Name":"ParametrageT",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('ParametrageT')"
+		},
+		{
+			"@id":"Dimensions('m_ParametrageT')"
+		}
+	],
+	"Views@Code.links":[]
+}

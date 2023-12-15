@@ -1,0 +1,27 @@
+{
+	"@type":"Process",
+	"Name":"zPurge_Logs",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"zPurge_Logs.ti",
+	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pNbJoursHisto",
+			"Prompt":"Nombre de jours d'historique à conserver ?",
+			"Value":3,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pPrefixNomFichier",
+			"Prompt":"Quel fichier supprimer ? (Prefixe : TM1s, TM1ProcessError...) ou Tous",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

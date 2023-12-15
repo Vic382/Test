@@ -1,0 +1,16 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_ParametrageT",
+	"Elements":
+	[
+		{
+			"Name":"ValeurS",
+			"Type":"String"
+		},
+		{
+			"Name":"ValeurN",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":[]
+}

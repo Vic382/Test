@@ -1,0 +1,13 @@
+{
+	"@type":"Subset",
+	"Name":"Test",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Annee')/Hierarchies('Annee')/Elements('2019')"
+		},
+		{
+			"@id":"Dimensions('Annee')/Hierarchies('Annee')/Elements('2020')"
+		}
+	]
+}

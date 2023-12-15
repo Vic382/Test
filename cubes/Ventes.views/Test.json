@@ -1,0 +1,58 @@
+{
+	"@type":"MDXView",
+	"Name":"Test",
+	"MDX@Code.link":"Test.mdx",
+	"Meta" : 
+	{
+		"Aliases" : 
+		{
+			"[Annee].[Annee]" : "MEMBER_NAME"
+		},
+		"CalculatedMembers" : 
+		{
+			"[Annee].[Annee]" : 
+			[
+				
+				{
+					"Caption" : "Test(Somme)",
+					"InsertionPosition" : "AFTER",
+					"MemberID" : "[Annee].[Annee].[Test(Somme)]"
+				}
+			]
+		},
+		"ContextSets" : 
+		{
+			"[Annee].[Annee]" : 
+			{
+				"IsPublic" : true,
+				"SubsetName" : "Test"
+			},
+			"[Clients].[Clients]" : 
+			{
+				"Expression" : "{[Clients].[Clients].MEMBERS}"
+			},
+			"[Mois].[Mois]" : 
+			{
+				"Expression" : "{[Mois].[Mois].MEMBERS}"
+			},
+			"[Produit].[Produit]" : 
+			{
+				"Expression" : "{[Produit].[Produit].MEMBERS}"
+			},
+			"[Societe].[Societe]" : 
+			{
+				"Expression" : "{[Societe].[Societe].MEMBERS}"
+			}
+		},
+		"ExpandAboves" : 
+		{
+			"[Annee].[Annee]" : false,
+			"[Clients].[Clients]" : false,
+			"[Mois].[Mois]" : false,
+			"[Produit].[Produit]" : false,
+			"[Societe].[Societe]" : false,
+			"[Version].[Version]" : false,
+			"[m_Ventes].[m_Ventes]" : false
+		}
+	}
+}
