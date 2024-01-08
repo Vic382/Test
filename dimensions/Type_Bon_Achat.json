@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"Type_Bon_Achat",
+	"Hierarchies@Code.links":
+	[
+		"Type_Bon_Achat.hierarchies/Type_Bon_Achat.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Type_Bon_Achat')/Hierarchies('Type_Bon_Achat')"
+	}
+}

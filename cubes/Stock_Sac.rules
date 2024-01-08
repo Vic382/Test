@@ -1,0 +1,29 @@
+SKIPCHECK;
+
+# Récupération du stock final du mois précédent
+['Stock_Initial'] = N : IF ( !Mois @<> 'M04' , DB( 'Stock_Sac', !Exercice, !Version, !Scenario, DB( '}ElementAttributes_Mois', !Mois, 'Mois_Precedent' ), !Type_Sac, !Magasin, 'Stock_Final' ) , STET ) ;
+
+# Récupération des ventes dans le cube Vente_Sac
+['Vente_Sac'] = N : DB( 'Vente_Sac', !Exercice, !Version, !Scenario, !Mois, !Type_Sac, !Magasin, 'Quantite'  ) * DB ( 'Param_Tarif_Sac', !Exercice, !Version, !Scenario, !Mois, !Type_Sac, 'Tarif_Achat' ) ;
+
+# Récupération des achats dans le cube Achat_Sac
+['Achat_Sac'] = N : DB( 'Achat_Sac', !Exercice, !Version, !Scenario, !Mois, !Type_Sac, !Magasin, 'Montant'  ) ;
+
+# Calcul stock final
+['Stock_Final'] = N : ['Stock_Initial'] - ['Vente_Sac'] + ['Achat_Sac'] ;
+
+# Calcul variation de stock
+['Variation_Stock'] = N : ['Stock_Initial'] - ['Stock_Final'] ;
+
+FEEDERS;
+
+# Feeders Récupération du stock final du mois précédent
+['Stock_Initial'] => DB( 'Stock_Sac', !Exercice, !Version, !Scenario, DB( '}ElementAttributes_Mois', !Mois, 'Mois_Suivant' ) , !Type_Sac, !Magasin, !m_Stock_Sac  ) ;
+
+# Feeders Calcul stock final
+['Stock_Initial'] => ['Stock_Final'] ;
+['Vente_Sac'] => ['Stock_Final'] ;
+['Achat_Sac'] => ['Stock_Final'] ;
+
+# Feeders variation de stock
+['Stock_Initial'] => ['Variation_Stock'] ;

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Tous_Desc.",
+	"Expression":"{TM1SubsetAll ( [Mois] ) }"
+}

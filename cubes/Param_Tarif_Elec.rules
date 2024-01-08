@@ -1,0 +1,17 @@
+SkipCheck ;
+
+
+
+Feeders;
+
+# Feeders du cube Cout_Elec
+
+
+
+['Prix_Conso'] => DB( 'Cout_Elec', !Exercice, !Version, !Scenario, !Mois, !Magasin, 'Prix_Conso'  ) ;
+['Acheminement'] => DB( 'Cout_Elec', !Exercice, !Version, !Scenario, !Mois, !Magasin, 'Acheminement'  ) ;
+['Mecanisme_Capacite'] => DB( 'Cout_Elec', !Exercice, !Version, !Scenario, !Mois, !Magasin, 'Mecanisme_Capacite'  ) ;
+['CSPE'] => DB( 'Cout_Elec', !Exercice, !Version, !Scenario, !Mois, !Magasin, 'CSPE'  ) ;
+['CTA'] => DB( 'Cout_Elec', !Exercice, !Version, !Scenario, !Mois, !Magasin, 'CTA'  ) ;
+['TCCFE'] => DB( 'Cout_Elec', !Exercice, !Version, !Scenario, !Mois, !Magasin, 'TCCFE'  ) ;
+['Abonnement'] => DB( 'Cout_Elec', !Exercice, !Version, !Scenario, !Mois, !Magasin, 'Abonnement'  ) ;

@@ -1,0 +1,23 @@
+UNDEFVALS;
+
+# Parametrage des éléments "Chaine"
+[ 'ParametresFonctionnels' : 'AnneeBudget',  'm_ParametresFonctionnels' :  'ValeurS'] =S: STR  ( Numbr ( DB('ParametresFonctionnels','AnneeEnCours','ValeurS') ) + 1 , 4 , 0 ) ;
+[ 'ParametresFonctionnels' : 'Annee+2' ,  'm_ParametresFonctionnels' :   'ValeurS' ] =S : STR  ( Numbr ( DB('ParametresFonctionnels','AnneeEnCours','ValeurS') ) + 2 , 4 , 0 ) ;
+[ 'ParametresFonctionnels' : 'Annee+3' ,  'm_ParametresFonctionnels' :  'ValeurS' ] =S : STR  ( Numbr ( DB('ParametresFonctionnels','AnneeEnCours','ValeurS') ) + 3 , 4 , 0 ) ;
+[ 'ParametresFonctionnels' : 'AnneePrecedente', 'm_ParametresFonctionnels' :  'ValeurS'] =S: STR  ( Numbr ( DB('ParametresFonctionnels','AnneeEnCours','ValeurS') ) - 1 , 4 , 0 ) ;
+# [ 'ParametresFonctionnels' :  'BudgetEnCours' ,  'm_ParametresFonctionnels' : 'ValeurS' ] =S : 'Budget_' | DB('ParametresFonctionnels','AnneeBudget','ValeurS') ;
+[ 'ParametresFonctionnels' : 'MoisEnCours' , 'm_ParametresFonctionnels' : 'ValeurN' ] =N : DB ( '}ElementAttributes_Mois' , Db ( 'ParametresFonctionnels' , 'MoisEnCours' , 'ValeurS' ) , 'NumMois' ) ;
+[ 'ParametresFonctionnels' : 'YTD' , 'm_ParametresFonctionnels' : 'ValeurS' ] = S: Db ( '}ElementAttributes_Mois' , DB ( 'ParametresFonctionnels' , 'MoisEnCours' , 'ValeurS' ) , 'YTD' ) ;
+[ 'ParametresFonctionnels' : 'Tech_BudComparaison' , 'm_ParametresFonctionnels' : 'ValeurS' ] =S : 'Budget_' | Db ( 'ParametresFonctionnels' , 'AnneeEnCours' , 'ValeurS' ) ;
+[ 'ParametresFonctionnels' : 'Tech_N_N-1' , 'm_ParametresFonctionnels' : 'ValeurS' ] =S : DB('ParametresFonctionnels','AnneeEnCours','ValeurS') | ' - ' | DB('ParametresFonctionnels','AnneePrecedente','ValeurS') ;
+
+# Parametrage des éléments "Numérique"
+[ 'ParametresFonctionnels' : 'AnneeEnCours',  'm_ParametresFonctionnels' :  'ValeurN'] =N: Numbr ( DB('ParametresFonctionnels','AnneeEnCours','ValeurS'));
+[ 'ParametresFonctionnels' : 'AnneeBudget',  'm_ParametresFonctionnels' :  'ValeurN'] =N: Numbr ( DB('ParametresFonctionnels','AnneeEnCours','ValeurS')) + 1 ;
+[ 'ParametresFonctionnels' : 'Annee+2' ,  'm_ParametresFonctionnels' :   'ValeurN' ] =N: Numbr ( DB('ParametresFonctionnels','AnneeEnCours','ValeurS')) + 2 ;
+[ 'ParametresFonctionnels' : 'Annee+3' ,  'm_ParametresFonctionnels' :  'ValeurN' ] =N: Numbr ( DB('ParametresFonctionnels','AnneeEnCours','ValeurS')) + 3 ;
+[ 'ParametresFonctionnels' : 'AnneePrecedente', 'm_ParametresFonctionnels' :  'ValeurN'] =N: Numbr ( DB('ParametresFonctionnels','AnneeEnCours','ValeurS')) - 1 ;
+# [ 'ParametresFonctionnels' :  'BudgetEnCours' ,  'm_ParametresFonctionnels' : 'ValeurN' ] =N: 4.94066e-324;
+[ 'ParametresFonctionnels' : 'YTD' , 'm_ParametresFonctionnels' : 'ValeurN' ] = N: 4.94066e-324;
+[ 'ParametresFonctionnels' : 'Tech_BudComparaison' , 'm_ParametresFonctionnels' : 'ValeurN' ] =N :4.94066e-324;
+[ 'ParametresFonctionnels' : 'Tech_N_N-1' , 'm_ParametresFonctionnels' : 'ValeurN' ] =N : 4.94066e-324;

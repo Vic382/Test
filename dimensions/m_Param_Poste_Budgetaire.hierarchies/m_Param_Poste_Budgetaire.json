@@ -1,0 +1,25 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_Param_Poste_Budgetaire",
+	"Elements":
+	[
+		{
+			"Name":"Nom_Poste_Budgetaire",
+			"Type":"String"
+		},
+		{
+			"Name":"Code_Regroupement",
+			"Type":"String"
+		},
+		{
+			"Name":"Nom_Regroupement",
+			"Type":"String"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_Param_Poste_Budgetaire.subsets/Niv0.json",
+		"m_Param_Poste_Budgetaire.subsets/Niv0_Desc..json",
+		"m_Param_Poste_Budgetaire.subsets/Par Défaut.json"
+	]
+}

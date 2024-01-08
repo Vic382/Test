@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"RAZ_Subset_Maj_Data_Investissement_Investissement_Saisie",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Scenario')/Hierarchies('Scenario')/Elements('Reel')"
+		}
+	]
+}

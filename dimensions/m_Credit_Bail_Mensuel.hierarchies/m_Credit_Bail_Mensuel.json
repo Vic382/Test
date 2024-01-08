@@ -1,0 +1,16 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_Credit_Bail_Mensuel",
+	"Elements":
+	[
+		{
+			"Name":"Montant",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_Credit_Bail_Mensuel.subsets/Niv0.json",
+		"m_Credit_Bail_Mensuel.subsets/Par Défaut.json"
+	]
+}

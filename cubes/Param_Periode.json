@@ -1,0 +1,26 @@
+{
+	"@type":"Cube",
+	"Name":"Param_Periode",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Annee_Calendaire')"
+		},
+		{
+			"@id":"Dimensions('m_Param_Periode')"
+		}
+	],
+	"MeasuresDimension":
+	{
+		"@id":"Dimensions('m_Param_Periode')"
+	},
+	"TimeDimension":
+	{
+		"@id":"Dimensions('Annee_Calendaire')"
+	},
+	"Views@Code.links":
+	[
+		"Param_Periode.views/Par Défaut.json",
+		"Param_Periode.views/zTI_Process_Dim_Periode.json"
+	]
+}

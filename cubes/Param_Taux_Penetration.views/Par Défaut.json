@@ -1,0 +1,74 @@
+{
+	"@type":"NativeView",
+	"Name":"Par Défaut",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Mois')/Hierarchies('Mois')/Subsets('Par Défaut')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('m_Param_Taux_Penetration')/Hierarchies('m_Param_Taux_Penetration')/Subsets('Par Défaut')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Magasin')/Hierarchies('Magasin')/Subsets('Par Défaut')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Exercice')/Hierarchies('Exercice')/Subsets('Par Défaut')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Exercice')/Hierarchies('Exercice')/Elements('Total_Exercice')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Version')/Hierarchies('Version')/Subsets('Par Défaut')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Version')/Hierarchies('Version')/Elements('V0')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Scenario')/Hierarchies('Scenario')/Subsets('Par Défaut')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Scenario')/Hierarchies('Scenario')/Elements('Reel')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Type_Sac')/Hierarchies('Type_Sac')/Subsets('Par Défaut')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Type_Sac')/Hierarchies('Type_Sac')/Elements('Total_Type_Sac')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":true,
+	"SuppressEmptyRows":true,
+	"FormatString":"0.00"
+}

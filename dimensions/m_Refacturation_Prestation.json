@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"m_Refacturation_Prestation",
+	"Hierarchies@Code.links":
+	[
+		"m_Refacturation_Prestation.hierarchies/m_Refacturation_Prestation.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_Refacturation_Prestation')/Hierarchies('m_Refacturation_Prestation')"
+	}
+}

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Par Défaut auto",
+	"Expression":"{TM1SubsetAll ( [m_ParametrageT] ) }"
+}

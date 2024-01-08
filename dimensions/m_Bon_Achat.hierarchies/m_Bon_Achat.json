@@ -1,0 +1,16 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_Bon_Achat",
+	"Elements":
+	[
+		{
+			"Name":"Montant",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_Bon_Achat.subsets/Niv0.json",
+		"m_Bon_Achat.subsets/Par Défaut.json"
+	]
+}

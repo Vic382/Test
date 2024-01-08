@@ -1,0 +1,452 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#***********************************************************************************************
+# CREATEUR : VRT
+# DATE DE CREATION : 30/10/2020
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : MAJ des données du cube Param_Periode
+# /!\ Mettre à jour la dimension Mois au préalable
+# Le processus alimente pour chaque jour les différents éléments ( jours fériés, trimestre, type de jour...)
+# Il est possible de définir le mois de début et de fin d'exercice en cas d'exercice décaler de l'année civile
+### /!\ Si mois de fin est Février (nombre de jours) 
+#************************************************************************************************
+
+#***********************************************************************************************************
+#                                  Définition des cubes
+#***********************************************************************************************************
+
+sCubeParamP	             = 'ParametresSources' ;
+sCubeParamT	             = 'ParametrageT' ;
+
+#***********************************************************************************************************
+#                                  Définition des constantes
+#***********************************************************************************************************
+
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+#***********************************************************************************************************
+#                                  Définition des variables
+#***********************************************************************************************************
+
+# Pour échanger avec Process_Log_Create
+NumericGlobalVariable ('zLogNumero') ;
+
+sSource = '' ;
+sNomFichier =  '' ;
+nErrors = 0 ;
+nErrorsSource = 0 ; 
+
+
+#***********************************************************************************************************
+#                                  Initialisation des variables
+#***********************************************************************************************************
+zLogNumero         = 1 ;
+nErrors          = 0;
+vMessage              = '';
+
+sCubeAttrMois = '}ElementAttributes_Mois' ;
+sDimMois = 'Mois' ;
+
+sAnnee_Debut = pAnneeDebut ;
+sAnnee_Fin = pAnneeFin ;
+
+sMoisDebut = SUBST ( DimensionElementPrincipalName ( sDimMois , pMoisDebut ) , 2 , 2 ) ;
+sMoisFin = SUBST ( DimensionElementPrincipalName ( sDimMois , pMoisFin ) , 2 , 2 ) ;
+
+
+IF ( pAnneeDebut @= '' % pAnneeFin @= '' % pMoisDebut @= '' % pMoisFin @= '' ) ;
+  ProcessBreak;
+ENDIF ;
+
+IF ( StringToNumber( sAnnee_Fin ) < StringToNumber( sAnnee_Debut));
+  ProcessBreak;
+ENDIF;
+
+
+
+###########################################
+## Creation vue zero sur MON CUBE
+###########################################
+
+###****Déclaration des variables
+
+sCubeCible = 'Param_Periode';
+
+# Désactivation du logging -> Réactivation en Epilog
+sLogChanges = CubeGetLogChanges( sCubeCible );
+CubeSetLogChanges( sCubeCible , 0 );
+
+sDim1 = 'Annee_Calendaire';
+sDim = 'm_Param_Periode';
+
+# On reconstruit la dimension annee_Calendaire
+DimensionDeleteAllElements ( sDim1 ) ;
+
+sVueZero = 'zTI_' | GetProcessName();
+
+IF( ViewExists( sCubeCible , sVueZero ) = 1 );
+  ViewDestroy( sCubeCible , sVueZero );
+ENDIF; 
+ViewCreate( sCubeCible , sVueZero );
+
+# ANNEE_CALENDAIRE
+IF( SubsetExists( sDim1 , sVueZero ) = 1 );
+  SubsetDestroy( sDim1 , sVueZero );
+ENDIF;
+SubsetCreate( sDim1 , sVueZero );
+vNbMois = ELCOMPN( sDim1 , sAnnee_Debut ) ;
+
+IF( vNbMois = 0 )  ;
+ELSE ;
+
+  # Parcours des mois
+  WHILE ( vNbMois > 0 )   ;
+    sMois = ELCOMP( sDim1 , sAnnee_Debut, vNbMois );
+    vNbJours = ELCOMPN( sDim1 , sMois ) ;
+     IF( vNbJours = 0 )  ;
+    ELSE ;
+   
+# Parcours des jours
+      WHILE ( vNbJours > 0 )   ;
+        sJour = ELCOMP( sDim1 , sMois, vNbJours );
+        SubsetElementInsert( sDim1 , sVueZero , sJour , 1 ) ;
+        vNbJours = vNbJours - 1 ;
+      END;
+    ENDIF;
+    vNbMois = vNbMois - 1 ;
+  END ;
+ENDIF ;
+ViewSubsetAssign( sCubeCible , sVueZero , sDim1 , sVueZero );
+
+# M_PARAM_PERIODE
+IF( SubsetExists( sDim , sVueZero ) = 1 );
+  SubsetDestroy( sDim , sVueZero );
+ENDIF;
+SubsetCreate( sDim , sVueZero );
+SubsetIsAllSet( sDim , sVueZero , 1 );
+ViewSubsetAssign( sCubeCible , sVueZero , sDim , sVueZero );
+
+# Mode annule et remplace
+ViewZeroOut( sCubeCible , sVueZero );
+
+
+### Etape 1 : Suppression des données
+# suppression des données du cube Calendrier sur l'année passée en paramètre
+
+# Suppression des vues et sous-ensembles
+ViewDestroy( sCubeCible , sVueZero ) ;
+SubsetDestroy( sDim1 , sVueZero ) ;
+SubsetDestroy( sDim , sVueZero ) ;
+
+#### Uniquement pour une vue source ####
+#ViewExtractSkipCalcsSet( sCubeCible , sVueZero ,0 );
+#ViewExtractSkipZeroesSet( sCubeCible , sVueZero , 0 );
+#ViewExtractSkipRuleValuesSet( sCubeCible , sVueZero , 0 );
+
+
+### Etape 2 : Alimentation de la dimension Jour_Liste 
+# Réalisation de la boucle pour insérer la ou les années supplémentaires
+
+
+nNbJours = CellGetN ( sCubeAttrMois , pMoisFin , 'NB_DAYS' ) ;
+sNbJours = NumberToString ( nNbJours ) ;
+sAnneeMax = sAnnee_Fin | '-' | sMoisFin | '-' | sNbJours  ;  
+sAnneeMin = sAnnee_Debut | '-' | sMoisDebut | '-01'  ;    
+
+nAnneeMax = DayNo ( sAnneeMax ) ; 
+nAnneeMin = DayNo ( sAnneeMin ) ; 
+
+nDateCompteur = nAnneeMin ;
+
+
+While ( nDateCompteur <= nAnneeMax ) ; 
+               sDateEn = Date ( nDateCompteur , 1 ) ;
+               sJour = SubSt ( sDateEn , 9 , 2 ) ; 
+               sMois = SubSt ( sDateEn , 6 , 2 ) ;
+               sAnnee = SubSt ( sDateEn , 1,  4 ) ; 
+
+               sElement = sAnnee | '-' | sMois | '-' | sJour ;
+               sMoisEl = sAnnee | '-' | sMois ;
+
+               DimensionElementInsert ( sDim1 , '' , sMoisEl , 'C' ) ;
+               DimensionElementInsert ( sDim1 , '' , sElement , 'N' ) ;
+
+               IF ( SUBST ( sMoisEl , 6 , 2 ) @= sMois ) ;
+                  DIMENSIONELEMENTCOMPONENTADD( sDim1 , sMoisEl , sElement ,1);
+               ENDIF;
+
+               nDateCompteur = nDateCompteur + 1 ; 
+End ;
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+nDateCompteur = nAnneeMin ;
+
+## On definit l'année de l'exercice avec de début
+nExercice =StringToNumber ( sAnnee_Debut ) ;
+
+iSemaine  = 1 ;
+While ( nDateCompteur <= nAnneeMax ) ; 
+
+  IF ( nDateCompteur = nAnneeMin );
+     iSemaine  = 1 ;
+  ENDIF;
+
+
+  ## Definition de la date
+  vDate = DATE(  nDateCompteur , 1 );
+
+  ## Traitement des semaines	 ##
+  # Pour obtenir le jour de la semaine.
+  # Détermination du type de jour
+  # La fonction DAYNO commence au 01/01/1960 qui est un vendredi,
+  # donc avec un modulo 7 on aura : 0 = vendredi -> 6 = jeudi
+  # 0 = Dimanche, 1 = Lundi to 6 = Samedi.
+  vTypeJour = Mod ( DayNo( vDate ) + 21915, 7);
+  ## Definition de la semaine 
+  Semaine =  FILL( 'Se0' , 4 - LONG ( NumberToString ( iSemaine ) )  ) | NumberToString ( iSemaine ) ;
+
+
+  sDateEn = Date ( nDateCompteur , 1 ) ;
+  sJour = SubSt ( sDateEn , 9 , 2 ) ; 
+  sMois = SubSt ( sDateEn , 6 , 2 ) ;
+  sMoisLib = 'M' | sMois ; 
+  sAnnee = SubSt ( sDateEn , 1,  4 ) ; 
+
+   sElement = sAnnee | '-' | sMois | '-' | sJour ;
+
+  CELLPUTS ( sAnnee , sCubeCible , sElement , 'Annee' ) ;
+  CellPutS( Semaine , sCubeCible, sElement, 'Num_Semaine' );
+
+  ## Traitement de l'Exercice ##
+  IF ( pMoisDebut @= 'M01' ) ;
+    IF ( SUBST ( sElement , 6, 5 ) @= sMoisDebut | '-01'  & sAnnee @<> pAnneeDebut ) ;
+       nExercice = StringToNumber ( sAnnee ) ;
+    ENDIF ;
+  ELSE ;
+      IF ( SUBST ( sElement, 6, 5 ) @= sMoisDebut | '-01' ) ;
+      nExercice = StringToNumber ( sAnnee ) + 1 ;
+    ENDIF ;
+  ENDIF;
+
+  CellPutS ( NumberToString( nExercice ) , sCubeCible, sElement, 'Exercice' );
+
+  ## Traitement des trimestres et semestres ##
+  # quarter 'T1' to 'T4'
+  sQuarter = ATTRS( 'Mois' , sMoisLib , 'QUARTER' ) ;
+  CellPutS( sQuarter , sCubeCible , sElement, 'Trimestre' );
+  #Semester  'S1' and 'S2'
+  sSemester = ATTRS( 'Mois' , sMoisLib , 'SEMESTER' ) ;
+  CellPutS( sSemester , sCubeCible, sElement, 'Semestre' );
+
+  IF( vTypeJour = 1 );
+    CellPutN( 1, sCubeCible, sElement, 'Type_Jour' );
+    CellPutS( 'Lundi' , sCubeCible, sElement, 'Nom_Jour' );
+    CellPutN( 1, sCubeCible, sElement, 'Nb_Lundis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Mardis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Mercredis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Jeudis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Vendredis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Samedis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Dimanches' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+  ELSEIF( vTypeJour = 2 );
+    CellPutN( 2, sCubeCible, sElement, 'Type_Jour' );
+    CellPutS( 'Mardi' , sCubeCible, sElement, 'Nom_Jour' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Lundis' );
+    CellPutN( 1, sCubeCible, sElement, 'Nb_Mardis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Mercredis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Jeudis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Vendredis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Samedis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Dimanches' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+  ELSEIF( vTypeJour = 3 );
+    CellPutN( 3, sCubeCible, sElement, 'Type_Jour' );
+    CellPutS( 'Mercredi' , sCubeCible, sElement, 'Nom_Jour' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Lundis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Mardis' );
+    CellPutN( 1, sCubeCible, sElement, 'Nb_Mercredis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Jeudis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Vendredis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Samedis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Dimanches' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+  ELSEIF( vTypeJour = 4 );
+    CellPutN( 4, sCubeCible, sElement, 'Type_Jour' );
+    CellPutS( 'Jeudi' , sCubeCible, sElement, 'Nom_Jour' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Lundis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Mardis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Mercredis' );
+    CellPutN( 1, sCubeCible, sElement, 'Nb_Jeudis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Vendredis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Samedis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Dimanches' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+  ELSEIF( vTypeJour = 5 );
+    CellPutN( 5, sCubeCible, sElement, 'Type_Jour' );
+    CellPutS( 'Vendredi' , sCubeCible, sElement, 'Nom_Jour' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Lundis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Mardis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Mercredis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Jeudis' );
+    CellPutN( 1, sCubeCible, sElement, 'Nb_Vendredis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Samedis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Dimanches' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+  ELSEIF( vTypeJour = 6 );
+    CellPutN( 6, sCubeCible, sElement, 'Type_Jour' );
+    CellPutS( 'Samedi' , sCubeCible, sElement, 'Nom_Jour' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Lundis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Mardis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Mercredis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Jeudis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Vendredis' );
+    CellPutN( 1, sCubeCible, sElement, 'Nb_Samedis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Dimanches' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+  ELSEIF( vTypeJour = 0 );
+    CellPutN( 7, sCubeCible, sElement, 'Type_Jour' );
+    CellPutS( 'Dimanche' , sCubeCible, sElement, 'Nom_Jour' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Lundis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Mardis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Mercredis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Jeudis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Vendredis' );
+    CellPutN( 0, sCubeCible, sElement, 'Nb_Samedis' );
+    CellPutN( 1, sCubeCible, sElement, 'Nb_Dimanches' );
+    CellPutN( 1, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+  ENDIF;
+   # Traitement des jours fériées
+   # Calcul du dimanche de Pâque (formule valide pour une année entre 1900 et 2099)
+  vD = MOD( ( ( 255 - 11 * MOD( NUMBR( sAnnee ), 19 ) ) - 21 ), 30 ) + 21;
+  IF( vD > 48 ); vAjust = 1; ELSE; vAjust = 0; ENDIF;
+  vPaque = DAYNO( DATES( NUMBR( sAnnee ), 3, 1 ) ) + vD + vAjust + 6 - MOD( ( NUMBR( sAnnee ) + INT( NUMBR( sAnnee ) / 4 ) + vD + vAjust + 1 ) , 7 );
+   sElement = sAnnee | '-01-01' ;
+  sLibelle = 'Nouvel an';
+  CellPutN( 1, sCubeCible, sElement, 'Jour_Ferie' );
+  CellPutS( sLibelle, sCubeCible, sElement, 'Libelle_Jour_Ferie' );
+  CellPutN( 1, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+   sElement = TIMST( vPaque + 1,  ' \Y-\m-\d ', 1 );
+  sLibelle = 'Lundi de Pâques';
+  CellPutN( 1, sCubeCible, sElement, 'Jour_Ferie' );
+  CellPutS( sLibelle, sCubeCible, sElement, 'Libelle_Jour_Ferie' );
+  CellPutN( 1, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+   sElement = sAnnee | '-05-01' ;
+  sLibelle = 'Fête du travail';
+  CellPutN( 1, sCubeCible, sElement, 'Jour_Ferie' );
+  CellPutS( sLibelle, sCubeCible, sElement, 'Libelle_Jour_Ferie' );
+  CellPutN( 1, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+   sElement =sAnnee | '-05-08' ;
+  sLibelle = 'Armistice 1945';
+  CellPutN( 1, sCubeCible, sElement, 'Jour_Ferie' );
+  CellPutS( sLibelle, sCubeCible, sElement, 'Libelle_Jour_Ferie' );
+  CellPutN( 1, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+   sElement = TIMST( vPaque + 39, ' \Y-\m-\d ', 1 );
+  sLibelle = 'Ascension';
+  CellPutN( 1, sCubeCible, sElement, 'Jour_Ferie' );
+  CellPutS( sLibelle, sCubeCible, sElement, 'Libelle_Jour_Ferie' );
+  CellPutN( 1, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+   sElement = TIMST( vPaque + 50, ' \Y-\m-\d ', 1 );
+  sLibelle = 'Lundi de Pentecôte';
+  CellPutN( 1, sCubeCible, sElement, 'Jour_Ferie' );
+  CellPutS( sLibelle, sCubeCible, sElement, 'Libelle_Jour_Ferie' );
+  CellPutN( 1, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+   sElement = sAnnee | '-07-14' ;
+  sLibelle = 'Fête nationale';
+  CellPutN( 1, sCubeCible, sElement, 'Jour_Ferie' );
+  CellPutS( sLibelle, sCubeCible, sElement, 'Libelle_Jour_Ferie' );
+  CellPutN( 1, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+   sElement = sAnnee | '-08-15' ;
+  sLibelle = 'Assomption';
+  CellPutN( 1, sCubeCible, sElement, 'Jour_Ferie' );
+  CellPutS( sLibelle, sCubeCible, sElement, 'Libelle_Jour_Ferie' );
+  CellPutN( 1, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+   sElement = sAnnee | '-11-01' ;
+  sLibelle = 'Toussaint';
+  CellPutN( 1, sCubeCible, sElement, 'Jour_Ferie' );
+  CellPutS( sLibelle, sCubeCible, sElement, 'Libelle_Jour_Ferie' );
+  CellPutN( 1, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+   sElement = sAnnee | '-11-11' ;
+  sLibelle = 'Armistice 1918';
+  CellPutN( 1, sCubeCible, sElement, 'Jour_Ferie' );
+  CellPutS( sLibelle, sCubeCible, sElement, 'Libelle_Jour_Ferie' );
+  CellPutN( 1, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+   sElement = sAnnee | '-12-25';
+  # Attention Noel n'exsite pas encore pour le dernier excercice crée, il sera présent pour le prochin exercice
+  IF (DIMIX(sDim, sElement) > 0);
+  sLibelle = 'Noël';
+     CellPutN( 1, sCubeCible, sElement, 'Jour_Ferie' );
+     CellPutS( sLibelle, sCubeCible, sElement, 'Libelle_Jour_Ferie' );
+     CellPutN( 1, sCubeCible, sElement, 'Nb_Dimanches_Fetes' );
+  ENDIF;
+   ## Traitement des semaines	 ##
+  IF ( vTypeJour = 0 );
+     IF ( sAnnee @= '2020' % sAnnee @= '2026' % sAnnee @= '2032' &  sAnnee @= '2038' &  sAnnee @= '2044'  );
+        IF ( iSemaine < 53 ); 
+           iSemaine = iSemaine + 1 ;
+        ENDIF;
+     ELSE;
+        IF ( iSemaine < 52 ); 
+           iSemaine = iSemaine + 1 ;
+        ELSE; 
+           iSemaine =  1 ;
+        ENDIF;
+     ENDIF;
+  ENDIF;
+    nDateCompteur = nDateCompteur + 1 ; 
+End ;
+
+
+#################################
+# Destruction des elements techniques
+#################################
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------
+#### Suppression de vue Zero
+IF( ViewExists( sCubeCible , sVueZero ) = 1 ) ;
+  ViewDestroy( sCubeCible , sVueZero ) ;
+ENDIF ;
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------
+#### Suppression des sous-ensembles sources
+i = 1 ;
+# Boucle pour récupérer tous les éléments Niveau 0 des dimensions
+WHILE( TabDim( sCubeCible , i ) @<> '' ) ;
+  ThisDim = TabDim( sCubeCible , i ) ;
+  IF( SubSetExists( ThisDim , sVueZero ) = 1 ) ;
+    SubsetDestroy( ThisDim , sVueZero ) ;
+  ENDIF ;
+  i = i + 1 ;
+END ;
+
+
+#endregion
