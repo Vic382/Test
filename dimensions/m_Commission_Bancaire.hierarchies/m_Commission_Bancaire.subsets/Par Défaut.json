@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Par Défaut",
-	"Expression":"{TM1SubsetAll ( [m_Commission_Bancaire] ) }"
-}

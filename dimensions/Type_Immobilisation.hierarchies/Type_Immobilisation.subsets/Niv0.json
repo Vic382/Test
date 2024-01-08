@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Niv0",
-	"Expression":"{TM1FILTERBYLEVEL ( {TM1SubsetAll ( [Type_Immobilisation] ) } , 0 )}"
-}

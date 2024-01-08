@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Vue_Source_23-11-29_Maj_Data_Investissement_Saisie_Ouverture_Magasin",
-	"Expression":"{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ Type_Immobilisation ] ) } , 0 ) }"
-}

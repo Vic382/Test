@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Niv0",
-	"Expression":"{TM1FILTERBYLEVEL ( {TM1SubsetAll ( [m_Param_Taux_Penetration_Moyen_Transac] ) } , 0 )}"
-}

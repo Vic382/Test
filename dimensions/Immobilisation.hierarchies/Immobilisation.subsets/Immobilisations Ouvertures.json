@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Immobilisations Ouvertures",
-	"Expression":"{FILTER(TM1SUBSETALL([Immobilisation]) , [Immobilisation].[Creation] = \"Ouverture\")}"
-}
