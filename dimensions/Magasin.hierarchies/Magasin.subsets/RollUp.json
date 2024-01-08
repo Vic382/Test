@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"RollUp",
-	"Expression":"{FILTER(TM1FILTERBYLEVEL(FILTER(TM1SUBSETALL([Magasin].[Magasin]) , ([Magasin].[Magasin].CURRENTMEMBER.PROPERTIES(\"Exercice_Ouverture\") <> \"2024_2025\")) , 0) , ([Magasin].[Magasin].CURRENTMEMBER.PROPERTIES(\"Exercice_Ouverture\") <> \"2024_2025\"))}"
-}

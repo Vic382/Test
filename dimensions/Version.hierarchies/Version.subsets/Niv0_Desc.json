@@ -1,6 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Niv0_Desc",
-	"Alias":"FR",
-	"Expression":"{{[Version].[Version].MEMBERS}}"
-}

@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Ouvertures_2023_2024",
-	"Expression":"{FILTER( {TM1SUBSETALL( [Magasin] )}, [Magasin].[Exercice_Ouverture] = \"2023_2024\")}"
-}
