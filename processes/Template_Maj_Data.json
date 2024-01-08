@@ -1,0 +1,16 @@
+{
+	"@type":"Process",
+	"Name":"Template_Maj_Data",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Template_Maj_Data.ti",
+	"UIData":"_ParameterConstraints=e30=€",
+	"DataSource":
+	{
+		"Type":"TM1CubeView",
+		"dataSourceNameForClient":"ParametrageT",
+		"dataSourceNameForServer":"ParametrageT",
+		"view":"Par Défaut"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

@@ -1,0 +1,466 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#***********************************************************************************************
+# CREATEUR : VRT
+# DATE DE CREATION : 21/09/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : MAJ des données réel du cube Credit_Bail_Mensuel ET du cube Credit_Bail
+# /!\ 2 vues cibles sur 2 cubes différents /!\
+#************************************************************************************************
+
+###############################   MONITORING   #################################
+
+### 0.Définition des variables du monitoring
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+sCubeParamS	             = 'ParametresSources' ;
+sCubeParamT	             = 'ParametrageT' ;
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+sSource = '' ;
+sNomFichier =  '' ;
+nErrors = 0 ;
+nErrorsSource = 0 ; 
+zLogNumero         = 1 ;
+nErrors          = 0;
+vMessage              = '';
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Admin' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+sDate = TimSt( Now, '\Y\m\d' );
+
+sUser = ATTRS( '}Clients' , cUtilisateur , '}TM1_DefaultDisplayValue' );
+nLong = LONG ( sUser ) ;
+sUser = SUBST ( sUser , 20 , nLong - 19 ) ;
+
+### 1. Déclaration des variables
+
+# Pour suppression des vues et ss ensemble temporaire
+nDebug = 1 ; 
+
+#**Fichier Debug
+sFichierRepDebug = CellGetS ( sCubeParamT , 'Txt_RepertoireDebug' , 'ValeurS' );
+sDebug = sFichierRepDebug | 'test'|cMainProcName|'.txt' ;
+
+#**Fichier Rejet Magasin
+sFichierRepRejet = CellGetS ( sCubeParamT , 'Txt_RepertoireRejet' , 'ValeurS' );
+sRejetMag = sFichierRepRejet | 'Rejet_Magasin'| '_' | sUser | '_' | sDate | '_' | cMainProcName|'.csv' ;
+
+# Suppression du fichier de rejet si Existant
+IF ( FileExists( sRejetMag ) = 1 ) ;
+  ASCIIDelete( sRejetMag );
+ENDIF ;
+
+#**Fichier Rejet Contrat
+sFichierRepRejet = CellGetS ( sCubeParamT , 'Txt_RepertoireRejet' , 'ValeurS' );
+sRejetContrat = sFichierRepRejet | 'Rejet_Contrat'| '_' | sUser | '_' | sDate | '_' | cMainProcName|'.csv' ;
+
+# Suppression du fichier de rejet si Existant
+IF ( FileExists( sRejetContrat ) = 1 ) ;
+  ASCIIDelete( sRejetContrat );
+ENDIF ;
+
+#**Fichier Rejet Motif
+sFichierRepRejet = CellGetS ( sCubeParamT , 'Txt_RepertoireRejet' , 'ValeurS' );
+sRejetMotif = sFichierRepRejet | 'Rejet_Motif'| '_' | sUser | '_' | sDate | '_' | cMainProcName|'.csv' ;
+
+# Suppression du fichier de rejet si Existant
+IF ( FileExists( sRejetMotif ) = 1 ) ;
+  ASCIIDelete( sRejetMotif );
+ENDIF ;
+
+
+
+###############################   FIN MONITORING   #################################
+
+### Déclaration des variables
+
+# Variable
+nEnteteMag = 0 ;
+nEnteteContrat = 0 ;
+nEnteteMotif = 0 ;
+nError = 0 ;
+
+# Cubes
+sCubeAttrMois = '}elementAttributes_Mois' ;
+
+# Définition du périmètre
+# Ce processus ne gère que du réel
+sExercice = CellGetS( 'ParametresFonctionnels', 'ExerciceEnCours', 'ValeurS' );
+sExercice = DimensionElementPrincipalName( 'Exercice', sExercice );
+sScenario = 'REEL' ;
+sVersion = 'VF' ;
+
+
+###########################################
+## Définition du fichier source
+###########################################
+
+# Répertoire fichier source
+sRepertoire = CellGetS ( sCubeParamS , cMainProcName , 'Txt_RepertoireSource' ) ;
+sNomFichier = CellGetS ( sCubeParamS , cMainProcName , 'txt_NomFichier' ) ;
+
+# Contrôle du répertoire
+
+IF ( sRepertoire @= '' % sNomFichier @= '' ) ;
+  ItemReject( 'Le répertoire ou le nom du fichier n'| CHAR(39)|'est pas renseigné dans le cube ParamètreSources' );
+  ProcessBreak;
+ENDIF ;
+
+# Renommage du fichier source selon les paramètres utilisateur
+sNomFichier = sNomFichier | '_' | sExercice | '_' | sScenario | '.csv'  ;
+sNomComplet = sRepertoire | sNomFichier ;
+
+# Controle de la présence du fichier source dans le répertoire
+IF ( FileExists( sNomComplet ) = 0 ) ;
+  ItemReject( 'Le fichier source ' | sNomFichier | ' n' | CHAR ( 39) | 'est pas présent dans le répertoire ' | sRepertoire );
+  ProcessBreak;
+ENDIF ;
+
+# Définition du fichier comme source
+DatasourceNameForServer = sNomComplet ;
+DataSourceASCIIDelimiter = ';' ;
+
+
+###########################################
+## Creation vue CIBLE sur Credit_Bail_Mensuel
+###########################################
+
+### Déclaration des variables
+sCubeCible = 'Credit_Bail_Mensuel';
+sDimCible1 = 'Exercice';
+sDimCible2 = 'Version' ; 
+sDimCible3 = 'Scenario' ; 
+sDimCible4 = 'Type_Credit_Bail' ;
+sDimCible5 = 'Mois' ;
+sDimCible6 = 'Magasin' ; 
+sDimCible = 'm_Credit_Bail_Mensuel';
+
+
+# Le nom de la vue du cube :
+sVueZero = 'RAZ_vue_' | cMainProcName ; 
+
+# Le nom des sous-ensembles
+sSubsetZero = 'RAZ_Subset_' | cMainProcName ; 
+
+# Création de la vue cible
+IF( ViewExists( sCubeCible, sVueZero ) = 1 );
+  ViewDestroy( sCubeCible, sVueZero );
+ENDIF;
+ViewCreate( sCubeCible, sVueZero , nDebug );
+
+# Exercice
+SubsetDestroy ( sDimCible1 , sSubsetZero ) ;
+SubsetCreate ( sDimCible1 , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible1 , sSubsetZero , sExercice , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible1 , sSubsetZero ) ; 
+
+# Version
+SubsetDestroy ( sDimCible2 , sSubsetZero ) ;
+SubsetCreate ( sDimCible2 , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible2 , sSubsetZero , sVersion , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible2 , sSubsetZero ) ; 
+
+# Scenario
+SubsetDestroy ( sDimCible3 , sSubsetZero ) ;
+SubsetCreate ( sDimCible3 , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible3 , sSubsetZero , sScenario , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible3 , sSubsetZero ) ; 
+
+# Type_Credit_Bail
+SubsetDestroy ( sDimCible4 , sSubsetZero ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible4 | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetZero , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible4 , sSubsetZero ) ; 
+
+# Mois
+SubsetDestroy ( sDimCible5 , sSubsetZero ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible5 | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetZero , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible5 , sSubsetZero ) ; 
+
+# Magasin
+SubsetDestroy ( sDimCible6 , sSubsetZero ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible6 | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetZero , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible6 , sSubsetZero ) ; 
+
+# m_Credit_Bail
+SubsetDestroy ( sDimCible , sSubsetZero ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetZero , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible , sSubsetZero ) ;
+
+# RAZ de la vue zero
+ViewZeroOut( sCubeCible, sVueZero );
+
+###########################################
+## Creation vue CIBLE sur Credit_Bail
+###########################################
+
+### Déclaration des variables
+sCubeCibleBis = 'Credit_Bail';
+sDimCibleBis1 = 'Exercice';
+sDimCibleBis2 = 'Version' ; 
+sDimCibleBis3 = 'Scenario' ; 
+sDimCibleBis4 = 'Type_Credit_Bail' ;
+sDimCibleBis5 = 'Magasin' ; 
+sDimCibleBis = 'm_Credit_Bail';
+
+
+# Le nom de la vue du cube :
+sVueZeroBis = 'RAZ_vueBis_' | cMainProcName ; 
+
+# Le nom des sous-ensembles
+sSubsetZeroBis = 'RAZ_SubsetBis_' | cMainProcName ; 
+
+# Création de la vue cible
+IF( ViewExists( sCubeCibleBis, sVueZeroBis ) = 1 );
+  ViewDestroy( sCubeCibleBis, sVueZeroBis );
+ENDIF;
+ViewCreate( sCubeCibleBis, sVueZeroBis , nDebug );
+
+# Exercice
+SubsetDestroy ( sDimCibleBis1 , sSubsetZeroBis ) ;
+SubsetCreate ( sDimCibleBis1 , sSubsetZeroBis , nDebug ) ; 
+SubsetElementInsert ( sDimCibleBis1 , sSubsetZeroBis , sExercice , nDebug ) ;
+ViewSubsetAssign ( sCubeCibleBis , sVueZeroBis , sDimCibleBis1 , sSubsetZeroBis ) ; 
+
+# Version
+SubsetDestroy ( sDimCibleBis2 , sSubsetZeroBis ) ;
+SubsetCreate ( sDimCibleBis2 , sSubsetZeroBis , nDebug ) ; 
+SubsetElementInsert ( sDimCibleBis2 , sSubsetZeroBis , sVersion , nDebug ) ;
+ViewSubsetAssign ( sCubeCibleBis , sVueZeroBis , sDimCibleBis2 , sSubsetZeroBis ) ; 
+
+# Scenario
+SubsetDestroy ( sDimCibleBis3 , sSubsetZeroBis ) ;
+SubsetCreate ( sDimCibleBis3 , sSubsetZeroBis , nDebug ) ; 
+SubsetElementInsert ( sDimCibleBis3 , sSubsetZeroBis , sScenario , nDebug ) ;
+ViewSubsetAssign ( sCubeCibleBis , sVueZeroBis , sDimCibleBis3 , sSubsetZeroBis ) ; 
+
+# Type_Credit_Bail
+SubsetDestroy ( sDimCibleBis4 , sSubsetZeroBis ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCibleBis4 | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetZeroBis , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCibleBis , sVueZeroBis , sDimCibleBis4 , sSubsetZeroBis ) ; 
+
+# Magasin
+SubsetDestroy ( sDimCibleBis5 , sSubsetZeroBis ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCibleBis5 | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetZeroBis , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCibleBis , sVueZeroBis , sDimCibleBis5 , sSubsetZeroBis ) ; 
+
+# m_Credit_Bail
+SubsetDestroy ( sDimCibleBis , sSubsetZeroBis ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCibleBis | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetZeroBis , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCibleBis , sVueZeroBis , sDimCibleBis , sSubsetZeroBis ) ;
+
+# RAZ de la vue zero
+ViewZeroOut( sCubeCibleBis, sVueZeroBis );
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# Controle du nombre de caractère code magasin ( doit être sur 3 caractère )
+nLong = LONG( CODE_GIE );
+
+IF ( nLong = 1 ) ;
+  sMagasin = '00' | CODE_GIE ;
+ELSEIF ( nLong = 2 ) ;
+  sMagasin = '0' | CODE_GIE ;
+ELSEIF ( nLong = 3 ) ;
+  sMagasin = CODE_GIE ;
+ENDIF ;
+
+# Mise en place d'un fichier de rejet si des magasins n'existent pas dans la dimension magasin
+IF ( nEnteteMag = 0 ) ;
+  ASCIIOutput ( sRejetMag , 'Code_Magasin' , 'Motif_Rejet' ) ;
+  nEntete = 1 ;
+ENDIF ;
+
+IF ( DIMIX ( 'Magasin' , sMagasin ) =0 ) ;
+  ASCIIOutput ( sRejetMag , sMagasin , 'Le magasin n' | CHAR ( 39 ) | 'est pas présent dans la dimension Magasin' ) ;
+  nError = nError + 1 ;
+  ItemSkip ;
+ENDIF ;
+
+# Mise en place d'un fichier de rejet si des n° de contrat ne sont pas renseignés dans le fichier
+IF ( nEnteteContrat = 0 ) ;
+  ASCIIOutput ( sRejetContrat , 'Code_Magasin' , 'Date_Debut' , 'Date_Fin', 'Montant_Total', 'Motif_Credit_Bail','Motif_Rejet' ) ;
+  nEnteteContrat = 1 ;
+ENDIF ;
+
+IF ( CONTRAT @= ''  ) ;
+  ASCIIOutput ( sRejetContrat , sMagasin , Dbut , Fin , NumberToString ( Montant ) , Motif , 'Le contrat n' | CHAR ( 39 ) | 'est pas renseigné pour la combinaison.' ) ;
+  nError = nError + 1 ;
+  ItemSkip ;
+ENDIF ;
+
+# Mise en place d'un fichier de rejet si des motifs n'existent pas dans la dimension Type_Credit_Bail
+IF ( nEnteteMotif = 0 ) ;
+  ASCIIOutput ( sRejetMotif , 'Motif_Credit_Bail','Motif_Rejet' ) ;
+  nEnteteMotif = 1 ;
+ENDIF ;
+
+IF ( DIMIX ( 'Type_Credit_Bail' , Motif ) = 0 ) ;
+  ASCIIOutput ( sRejetMotif , Motif , 'Le motif ' | Motif | ' n' | CHAR ( 39 ) | 'est pas présent dans la dimension Type_Credit_Bail.' ) ;
+  nError = nError + 1 ;
+  ItemSkip ;
+ENDIF ;
+
+
+
+# Découpage des dates de début
+sJourDeb = SUBST ( Dbut , 1 , 2 ) ;
+sMoisDeb = SUBST ( Dbut , 4 , 2 ) ;
+sAnneeDeb = SUBST ( Dbut , 7 , 4 ) ;
+
+# Découpage des dates de fin
+sJourFin = SUBST ( Fin , 1 , 2 ) ;
+sMoisFin = SUBST ( Fin , 4 , 2 ) ;
+sAnneeFin = SUBST ( Fin , 7 , 4 ) ;
+
+# Reconstruction des dates au format AAAA-MM-JJ pour fonction DayNo
+sDateDeb = sAnneeDeb | '-' | sMoisDeb | '-' | sJourDeb ;
+nDateDeb = DayNo( sDateDeb );
+
+sDateFin = sAnneeFin | '-' | sMoisFin | '-' | sJourFin ;
+nDateFin = DayNo( sDateFin );
+
+# Définition de la date de début de l'exercice
+sDateDebExercice = SUBST ( sExercice , 1 , 4 ) | '-04-01' ;
+nDateDebExercice = DayNo( sDateDebExercice );
+
+# Définition de la date de fin de l'exercice
+sDateFinExercice = SUBST ( sExercice , 6 , 4 ) | '-03-31' ;
+nDateFinExercice = DayNo( sDateFinExercice );
+
+# Neutralisation des lignes ayant une date de début postérieur à l'exercice en cours
+IF ( nDateDeb > nDateFinExercice ) ;
+  ItemSkip ;
+ENDIF ;
+
+# Neutralisation des lignes ayant une date de fin antérieure à l'exercice en cours
+IF ( nDateFin < nDateDebExercice ) ;
+  ItemSkip ;
+ENDIF ;
+
+
+
+
+
+############# Alimentation du cube Credit_Bail #############
+
+# Calcul de la durée
+nDuree = StringToNumber ( sAnneeFin ) - StringToNumber ( sAnneeDeb ) ;
+
+CellPutS ( Dbut , sCubeCibleBis , sExercice , sVersion , sScenario , Motif , sMagasin , 'Date_Debut' ) ;
+CellPutS ( Fin , sCubeCibleBis , sExercice , sVersion , sScenario , Motif , sMagasin , 'Date_Fin' ) ;
+CellPutN ( Loyer_mensuel , sCubeCibleBis , sExercice , sVersion , sScenario , Motif , sMagasin , 'Mensualite' ) ;
+CellPutN ( nDuree , sCubeCibleBis , sExercice , sVersion , sScenario , Motif , sMagasin , 'Duree' ) ;
+
+
+
+
+
+
+############# Alimentation du cube Credit_Bail_Mensuel #############
+
+# Initialisation d'ube boucle sur la dimension Mois
+
+nTailleBoucle = DIMSIZ( 'Mois' );
+i = 1 ;
+
+while( i <= nTailleBoucle );
+
+  sMois = DIMNM( 'Mois' , i );
+  
+  IF ( ELLEV ( 'Mois' , sMois ) =0 ) ;
+  
+    # Proratisation si la date de début est sur le mois parcouru
+    IF ( nDateDeb > nDateDebExercice & nDateDeb < nDateFinExercice ) ;
+    
+      nJourMois = CellGetN ( sCubeAttrMois , sMois , 'NB_DAYS' ) ;
+      nProrata = ( nDateDeb - nDateDebExercice ) \ nJourMois ;
+      nMontant = Loyer_mensuel * nProrata ;
+      
+      CellPutN ( nMontant , sCubeCible , sExercice , sVersion , sScenario , Motif , sMois , sMagasin , 'Montant' ) ;
+    
+    # Proratisation si la date de fin est sur le mois parcouru
+    ELSEIF ( nDateFin > nDateDebExercice & nDateFin < nDateFinExercice ) ;
+    
+      nJourMois = CellGetN ( sCubeAttrMois , sMois , 'NB_DAYS' ) ;
+      nProrata = ( nDateFinExercice - nDateFin ) \ nJourMois ;
+      nMontant = Loyer_mensuel * nProrata ;
+      
+      CellPutN ( nMontant , sCubeCible , sExercice , sVersion , sScenario , Motif , sMois , sMagasin , 'Montant' ) ;
+    
+    # Les autres cas sont des mois complets
+    ELSE ;
+      
+      CellPutN ( Loyer_mensuel , sCubeCible , sExercice , sVersion , sScenario , Motif , sMois , sMagasin , 'Montant' ) ;
+    
+    ENDIF ;
+  
+  ENDIF ;
+
+  i = i + 1 ;
+ 
+end;
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+# Declaration variables et constantes
+
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+# HEURE D'EXECUTION
+nNewFormatId  =  NewDateFormatter ( 'fr-FR' , 'Europe/Paris' , 'serial' , 'medium' , 'datetime' );
+Z_LOCAL_TIME = FormatDate ( NOW () , 'yyyy-MM-dd H:mm' , nNewFormatId );
+Z_UTILISATEUR = TM1User;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+nDebut= SCAN( 'pans:u:', Z_UTILISATEUR );
+nDebutLong = LONG('pans:u:');
+nStart = nDebut + nDebutLong ;
+nTotal = LONG(Z_UTILISATEUR) ;
+Z_UTILISATEUR = SUBST(Z_UTILISATEUR, nStart, nTotal - nStart - 1) ;
+
+CELLPUTS( Z_STATUS , sCubeParamS , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamS ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamS , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamS , cMainProcName ,'txt_Utilisateur' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+#endregion

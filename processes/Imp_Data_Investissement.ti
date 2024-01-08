@@ -1,0 +1,478 @@
+#region Prolog
+
+#***********************************************************************************************
+# CREATEUR : CTY
+# DATE DE CREATION : 17/11/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : 
+# Import détail l'amortissement par mois et par magasin de chaque immobilisation
+# Maj de la dimension Immobilisation au passage
+#************************************************************************************************
+
+###############################   MONITORING   #################################
+
+### 0.Définition des variables du monitoring
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+sCubeParamS	             = 'ParametresSources' ;
+sCubeParamT	             = 'ParametrageT' ;
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+sSource = '' ;
+sNomFichier =  '' ;
+nErrors = 0 ;
+nErrorsSource = 0 ; 
+zLogNumero         = 1 ;
+nErrors          = 0;
+vMessage              = '';
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Admin' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+sDate = TimSt( Now, '\Y\m\d' );
+
+sUser = ATTRS( '}Clients' , cUtilisateur , '}TM1_DefaultDisplayValue' );
+nLong = LONG ( sUser ) ;
+sUser = SUBST ( sUser , 20 , nLong - 19 ) ;
+
+### 1. Déclaration des variables
+
+# Pour suppression des vues et ss ensemble temporaire
+nDebug = 1 ;
+
+# Pour entête dans le fichier de rejet
+nEntete = 0 ;
+
+# Compteur d'erreur
+nError = 0 ; 
+
+#**Fichier Debug
+sFichierRepDebug = CellGetS ( sCubeParamT , 'Txt_RepertoireDebug' , 'ValeurS' );
+sDebug = sFichierRepDebug | 'test'|cMainProcName|'.csv' ;
+
+#**Fichier Rejet
+sFichierRepRejet = CellGetS ( sCubeParamT , 'Txt_RepertoireRejet' , 'ValeurS' );
+sRejet = sFichierRepRejet | 'Rejet_'| sUser | '_' | sDate | '_' | cMainProcName|'.csv' ;
+
+# Suppression du fichier de rejet si Existant
+IF ( FileExists( sRejet ) = 1 ) ;
+  ASCIIDelete( sRejet );
+ENDIF ;
+
+###############################   FIN MONITORING   #################################
+
+# Définition du périmètre : import des données réelles uniquement sur la VF en scénario Réel
+sExerciceCible = DimensionElementPrincipalName ( 'Exercice' , CellGetS( 'ParametresFonctionnels', 'ExerciceEnCours' , 'ValeurS' ));
+sVersionCible = 'VF';
+sScenarioCible = 'Reel';
+
+
+# Création du Total_Immobilisation si inexistant
+IF ( DIMIX ( 'Immobilisation' , 'Total_Immobilisation') =0 ) ;
+   DimensionElementInsertDirect( 'Immobilisation' , '', 'Total_Immobilisation', 'C' );
+ENDIF;
+
+
+###########################################
+## Définition du fichier source
+###########################################
+
+# Répertoire fichier source
+sRepertoire = CellGetS ( sCubeParamS , cMainProcName , 'Txt_RepertoireSource' ) ;
+sNomFichier = CellGetS ( sCubeParamS , cMainProcName , 'txt_NomFichier' ) ;
+
+# Nommage du fichier source : 'Reel' à variabiliser en sScenarioCible au go live
+sNomFichier = sNomFichier | '_' | sExerciceCible | '_' | 'Reel' | '.csv'  ;
+sNomComplet = sRepertoire | sNomFichier ;
+
+# Contrôle du répertoire
+IF ( sRepertoire @= '' % sNomFichier @= '' ) ;
+  ItemReject( 'Le répertoire ou le nom du fichier n'| CHAR(39)|'est pas renseigné dans le cube ParamètreSources' );
+  ProcessBreak;
+ENDIF ;
+
+# Controle de la présence du fichier source dans le répertoire
+IF ( FileExists( sNomComplet ) = 0 ) ;
+  ItemReject( 'Le fichier source ' | sNomFichier | ' n' | CHAR ( 39) | 'est pas présent dans le répertoire ' | sRepertoire );
+  ProcessBreak;
+ENDIF ;
+
+# Définition du fichier comme source
+DatasourceNameForServer = sNomComplet ;
+DataSourceASCIIDelimiter = ';' ;
+
+###########################################
+## Creation vue CIBLE sur Investissement
+###########################################
+
+### Déclaration des variables
+sCubeCible = 'Investissement';
+sDimCible1 = 'Exercice';
+sDimCible2 = 'Version' ; 
+sDimCible3 = 'Scenario' ; 
+sDimCible4 = 'Mois' ; 
+sDimCible5 = 'Immobilisation' ;
+sDimCible6 = 'Magasin' ; 
+sDimCible  = 'm_Investissement';
+
+# Le nom de la vue du cube :
+sVueZero = 'RAZ_vue_' | cMainProcName ; 
+
+# Le nom des sous-ensembles
+sSubsetZero = 'RAZ_Subset_' | cMainProcName ; 
+
+# Création de la vue cible
+IF( ViewExists( sCubeCible, sVueZero ) = 1 );
+  ViewDestroy( sCubeCible, sVueZero );
+ENDIF;
+ViewCreate( sCubeCible, sVueZero , nDebug );
+
+# Exercice
+SubsetDestroy ( sDimCible1 , sSubsetZero ) ;
+SubsetCreate ( sDimCible1 , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible1 , sSubsetZero , sExerciceCible , 1 ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible1 , sSubsetZero ) ; 
+
+# Version
+SubsetDestroy ( sDimCible2 , sSubsetZero ) ;
+SubsetCreate ( sDimCible2 , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible2 , sSubsetZero , sVersionCible , 1 ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible2 , sSubsetZero ) ; 
+
+# Scenario
+SubsetDestroy ( sDimCible3 , sSubsetZero ) ;
+SubsetCreate ( sDimCible3 , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible3 , sSubsetZero , sScenarioCible , 1 ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible3 , sSubsetZero ) ; 
+
+# Dim 4 Mois : si le scénario est budget ou reel alors tous les mois sinon que les mois prev
+SubsetDestroy ( sDimCible4 , sVueZero ) ; 
+IF ( sScenarioCible @= 'BUDGET' % sScenarioCible @= 'Reel' ) ;
+  SubsetCreateByMDX ( sVueZero , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible4 | ' ] ) } , 0 ) }' ) ;
+ELSE ;
+  SubsetCreate ( sDimCible4 , sVueZero , nDebug) ; 
+
+  # Récupération du 1er mois de simulation dans les attributs
+  sFirstMoisPrev = CellGetS( '}ElementAttributes_Scenario', sScenarioCible , 'Premier_Mois_Prev'  );
+  nFirstMoisPrev = DIMIX( 'Mois' , sFirstMoisPrev );
+
+  # Boucle sur la dimension mois
+  nTailleBoucle = DIMSIZ( sDimCible4 );
+  i = 1 ;
+  WHILE ( i <= nTailleBoucle ) ;
+    sMois = DIMNM( sDimCible4 , i );
+    
+    # Contrôle avec l'index du 1er mois simulation
+    # Ex : dans Att1, on veux les données réelles uniquement d'avril soit < sMoisPrev(M05)
+    IF ( ELLEV ( sDimCible4 , sMois ) = 0 & i < nFirstMoisPrev ) ;
+      SubsetElementInsert( sDimCible4 , sVueZero , sMois , 1 );
+    ENDIF ;
+    i = i + 1 ;
+  END ;
+ENDIF ;
+
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible4 , sVueZero ) ; 
+
+# Immobilisation : que les immos réelles
+SubsetDestroy ( sDimCible5 , sSubsetZero ) ;
+SubsetCreate ( sDimCible5 , sSubsetZero , nDebug) ; 
+SubsetMDXSet( sDimCible5, sSubsetZero, '{FILTER( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Immobilisation] )}, 0)}, [Immobilisation].[Fictif] = "REEL")}');
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible5 , sSubsetZero ) ; 
+
+# Magasin
+SubsetDestroy ( sDimCible6 , sSubsetZero ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible6 | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetZero , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible6 , sSubsetZero ) ; 
+
+# m_Investissement : uniquement montant
+SubsetDestroy ( sDimCible , sSubsetZero ) ;
+SubsetCreate ( sDimCible , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible , sSubsetZero , 'Montant' , 1 ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible , sSubsetZero ) ;
+
+# RAZ de la vue zero
+ViewZeroOut( sCubeCible, sVueZero );
+
+#endregion
+#region Metadata
+
+# Controle du nombre de caractère code magasin ( doit être sur 3 caractère )
+nLong = LONG( Site );
+
+IF ( nLong = 1 ) ;
+  sMagasin = '00' | Site ;
+ELSEIF ( nLong = 2 ) ;
+  sMagasin = '0' | Site ;
+ELSEIF ( nLong = 3 ) ;
+  sMagasin = Site ;
+ENDIF ;
+
+# Mise en place d'un fichier de rejet si des magasins n'existent pas dans la dimension magasin
+IF ( nEntete = 0 ) ;
+  ASCIIOutput ( sRejet , 'Code_Magasin' , 'Motif_Rejet' ) ;
+  nEntete = 1 ;
+ENDIF ;
+
+IF ( DIMIX ( 'Magasin' , sMagasin ) =0 ) ;
+  ASCIIOutput ( sRejet, sMagasin , 'Le magasin n' | CHAR ( 39 ) | 'est pas présent dans la dimension Magasin' ) ;
+  nError = nError + 1 ;
+  ItemSkip ;
+ENDIF ;
+
+# 3 RETJETS MAGASINS au 05/12/2023 :
+# 008;"Le magasin n'est pas présent dans la dimension Magasin" - 008 - ARS - ARSENAL
+# 026;"Le magasin n'est pas présent dans la dimension Magasin" - 026 - AUD - AUDINFRAIS
+# 170;"Le magasin n'est pas présent dans la dimension Magasin" - 170 - BET - BETHUNE
+
+# Alimentation de la dimension Immobilisation si l'immobilisation est inconnue
+IF ( DIMIX ( sDimCible5 , 'Total_Immobilisation' ) =0 ) ;
+   DimensionElementInsertDirect( sDimCible5 , '', 'Total_Immobilisation', 'C' );
+ENDIF;
+
+IF ( DIMIX ( sDimCible5 , Immobilisation ) =0 ) ;
+   DimensionElementInsertDirect( sDimCible5 , '', Immobilisation, 'N' );
+   DimensionElementComponentAddDirect( sDimCible5, 'Total_Immobilisation' , Immobilisation, 1 );
+ENDIF;
+
+# Alimentation de la dimension Reparition_Immo si la répartition est inconnue
+IF ( DIMIX ( 'Repartition_Immo' , Taux ) = 0 ) ;
+   DimensionElementInsertDirect( 'Repartition_Immo' , '', Taux, 'N' );
+ENDIF;
+
+# Création des attributs 
+AttrInsert( 'Type_Immobilisation', '', 'Alias', 'A' );
+AttrInsert( 'Immobilisation', '', 'Libelle', 'S' );
+AttrInsert( 'Immobilisation', '', 'Date_Debut', 'S' );
+AttrInsert( 'Immobilisation', '', 'Date_Fin', 'S' );
+AttrInsert( 'Immobilisation', '', 'Alias', 'A' );
+AttrInsert( 'Immobilisation', '', 'Magasin', 'S' );
+AttrInsert( 'Immobilisation', '', 'Duree', 'N' );
+AttrInsert( 'Immobilisation', '', 'Montant_Initial', 'N' );
+#endregion
+#region Data
+
+### Variables
+
+# Controle du nombre de caractère code magasin ( doit être sur 3 caractère )
+nLong = LONG( Site );
+
+IF ( nLong = 1 ) ;
+  sMagasin = '00' | Site ;
+ELSEIF ( nLong = 2 ) ;
+  sMagasin = '0' | Site ;
+ELSEIF ( nLong = 3 ) ;
+  sMagasin = Site ;
+ENDIF ;
+
+# Retraitement des dates format DD/MM/YYYY -> YYYY-MM-DD
+sAnneeDebut= SUBST( Date_mise_en_service, 7, 4 );
+sAnneeFin  = SUBST( Date_fin, 7, 4 );
+sMoisDebut = SUBST( Date_mise_en_service, 4, 2 );
+sMoisFin   = SUBST( Date_fin, 4, 2 );
+sJourDebut = SUBST( Date_mise_en_service, 1, 2 );
+sJourFin   = SUBST( Date_fin, 1, 2 );
+
+sDateDebut = sAnneeDebut |'-'| sMoisDebut |'-'| sJourDebut  ;
+sDateFin   = sAnneeFin |'-'| sMoisFin |'-'| sJourFin  ;
+
+# Repartition GIE/LOYER
+IF (Taux @= '');
+  # Si rien renseigné, par défault = GIE
+  sRepartition = 'GIE';
+ELSE ; 
+  # On récupère le cube de mapping
+  sRepartition = CellGetS('Repartition_Immo', Taux, 'Taux' );
+ENDIF;
+
+# Périmètre
+
+# Skip si le magasin est inconnu dans la dimension magasin
+IF ( DIMIX ( 'Magasin' , sMagasin ) = 0 ) ;
+   ItemSkip; 
+ENDIF;
+
+# Skip si 0 en année d'amort et avant 2023
+if ( (Nb_dannes = 0) & (StringToNumber(sAnneeDebut) < 2023) ) ;  
+    ItemSkip; 
+endif;
+
+# Alimentation de la dimension Immobilisation
+AttrPutS( Libelle, sDimCible5, Immobilisation, 'Libelle' );
+AttrPutS( sDateDebut, sDimCible5, Immobilisation, 'Date_Debut' );
+AttrPutS( sDateFin, sDimCible5, Immobilisation, 'Date_Fin' );
+sAlias = sMagasin |' - '| Immobilisation |' - '| Libelle  ;
+AttrPutS( sAlias , sDimCible5, Immobilisation, 'Alias' );
+AttrPutS( sMagasin, sDimCible5, Immobilisation, 'Magasin');  
+AttrPutS( 'REEL', sDimCible5, Immobilisation, 'Fictif');
+AttrPutS( sRepartition, sDimCible5, Immobilisation, 'Repartition');
+AttrPutN( Nb_dannes, sDimCible5, Immobilisation, 'Duree');
+AttrPutN( Valeur_entre_HT, sDimCible5, Immobilisation, 'Montant_Initial');  
+
+# Alimentation du cube cible 'Investissement'
+# Variables sources
+nAmortComplet = Valeur_entre_HT / (Nb_dannes * 12) ;
+
+# Exercice Initial et Exercice Final
+sExerciceInitial = ELPAR( 'Periode', sDateDebut, 5 );
+sExerciceFinal = ELPAR( 'Periode', sDateFin, 5 );
+
+# 1ère date de l'immo
+nDateDebutImmo = DayNo( sDateDebut );
+
+# derniere date de l'immo
+nDateFinImmo = DayNo( sDateFin );
+
+# 1ère date de l'exercice
+sAnnee1 = SUBST(sExerciceCible, 1, 4 );
+sDateDebutExercice = sAnnee1 |'-04-01';
+nDateDebutExercice = DayNo( sDateDebutExercice ) ;
+
+# dernière date de l'exercice
+sAnnee2 = SUBST(sExerciceCible, 6, 4 );
+sDateFinExercice = sAnnee2 |'-03-31';
+nDateFinExercice = DayNo( sDateFinExercice ) ;
+
+# Alimentation d'un fichier de rejet
+# si le debut de l'immo commence après l'exercice en cours
+# si la fin de l'immo arrive avant l'exercice en cours
+IF (nDateDebutImmo > nDateFinExercice ) ;
+  sDetail = ( 'L'| CHAR(39)|'immobilisation : '|Immobilisation|' a une date de début posterieur à la fin de l'| CHAR(39)|'exercice en cours');
+  #ASCIIOutput( sRejet,' Immo pas commencée', Immobilisation, sDateDebut, sExerciceCible );
+ELSEIF ( nDateFinImmo < nDateDebutExercice ) ;
+  sDetail = ( 'L'| CHAR(39)|'immobilisation : '|Immobilisation|' a une date de fin antérieur au début de l'| CHAR(39)|'exercice en cours');
+  #ASCIIOutput( sRejet, 'Immo Terminée', Immobilisation, sDateFin, sExerciceCible );
+ENDIF;
+
+ 
+# Boucle sur les 12 mois de l'année
+nTailleBoucle = 12;
+i = 1;
+
+WHILE (i <= nTailleBoucle);
+     
+  # Reconstitution du mois à parcourir format 'M01'
+  sNum = NumberToString(i);
+  IF (LONG( sNum ) = 1);
+     sMois = 'M0' | sNum;
+  ELSE ; 
+     sMois = 'M' |sNum;
+  ENDIF;
+  
+   # Premier jour du mois format YYYY-MM-DD / DayNo
+  IF( i = 1 % i = 2 % i = 3);
+    sDate_PremierJourDuMois =  sAnnee2|'-'| SUBST(sMois,2,2) |'-01' ;
+  ELSE;
+    sDate_PremierJourDuMois =  sAnnee1|'-'| SUBST(sMois,2,2) |'-01' ;
+  ENDIF;  
+  nPremierJourDuMois = Dayno(sDate_PremierJourDuMois) ;
+  
+  # Dernier jour du mois format YYYY-MM-DD / DayNo
+  nJourMois = ATTRN( 'Mois', sMois, 'NB_DAYS');
+  sJourMois = NumberToString(nJourMois);
+  IF( i = 1 % i = 2 % i = 3);
+    sDate_DernierJourDuMois =  sAnnee2|'-'| SUBST(sMois,2,2) |'-'| sJourMois ;
+  ELSE;
+    sDate_DernierJourDuMois =  sAnnee1|'-'| SUBST(sMois,2,2) |'-'| sJourMois ;
+  ENDIF;  
+  nDernierJourDuMois = Dayno(sDate_DernierJourDuMois) ;
+  
+  ### Application d'un prorata en fonction des situations
+  # Si l'immo n'a pas commencée OU si elle est en fin d'amort. 
+  IF( (nDateDebutImmo > nDernierJourDuMois) % (nDateFinImmo < nPremierJourDuMois) ); 
+     nProrata = 0;
+
+  # Si achat pendant le mois 
+  ELSEIF( ( nDateDebutImmo >= nPremierJourDuMois ) & (nDateDebutImmo <= nDernierJourDuMois) );
+    # Prorata sur 1er mois
+    sMoisDebut = 'M' | SUBST(sDateDebut, 6, 2 );
+    nJourDebut = StringToNumber (SUBST(sDateDebut, 9, 2 )); 
+    nJourMoisDebut = ATTRN( 'Mois', sMoisDebut, 'NB_DAYS');
+    nProrata =  (nJourMoisDebut + 1 - nJourDebut) / nJourMoisDebut ;
+  
+  # Si fin amort pendant le mois
+  ELSEIF( (nDateFinImmo < nDernierJourDuMois) & (nDateFinImmo >= nPremierJourDuMois) );
+    # Prorata sur dernier mois
+    sMoisFin = 'M' | SUBST(sDateFin, 6, 2 );
+    nJourFin = StringToNumber (SUBST(sDateFin, 9, 2 )); 
+    nJourMoisFin = ATTRN( 'Mois', sMoisFin, 'NB_DAYS');
+    nProrata =  nJourFin / nJourMoisFin; 
+     
+  # Sinon 1  
+  ELSE; 
+     nProrata = 1;
+  ENDIF;
+  
+  ### Ecriture sur le cube cible Investissement sur le mois parcouru
+  # Gestion des scénarios
+  sMoisPrev = ATTRS( 'Scenario', sScenarioCible, 'Premier_Mois_Prev' );
+  iMoisPrev = DIMIX( 'Mois', sMoisPrev );
+  iMoisLu = DIMIX( 'Mois', sMois ); 
+  
+  ### Copie du réel en fonction des scénarios 
+  
+  # Si scénario prévisionnel
+  IF(SUBST(sScenarioCible,1, 3) @= 'Att');
+    
+    # Ex: dans Att1, on veux les données réelles uniquement d'avril soit < sMoisPrev(M05)
+    # iMoisLu Avril = 1 / iMoisPrev Mai = 2
+    IF ( iMoisLu < iMoisPrev );
+      CellPutN( nAmortComplet * nProrata , sCubeCible, sExerciceCible, sVersionCible, sScenarioCible, sMois, Immobilisation, sMagasin, 'Montant' );
+    ENDIF;
+  
+  # Sinon ecriture sur tous les mois pour les autres scénarios (Reel / Budget ou autres)
+  ELSE;
+    CellPutN( nAmortComplet * nProrata , sCubeCible, sExerciceCible, sVersionCible, sScenarioCible, sMois, Immobilisation, sMagasin, 'Montant' );
+  ENDIF;
+  
+  # DEBUG 
+  #ASCIIOutput( '..\DEBUG\Imp_Data_Investissement.txt', sMois, Immobilisation, Libelle, sDateDebut, sDateFin, sMagasin, sRepartition, NumberToString(Nb_dannes), NumberToString(Valeur_entre_HT), NumberToString( nAmortComplet * nProrata ), NumberToString(nProrata) ) ;
+  #ASCIIOutput( '..\DEBUG\Imp_Data_Investissement_Prorata.txt', sMois, sDate_PremierJourDuMois, sDate_DernierJourDuMois, Immobilisation, sDateDebut, sDateFin, sMagasin, NumberToString(Nb_dannes), NumberToString(Valeur_entre_HT), NumberToString( nAmortComplet * nProrata ), NumberToString(nProrata) ) ;
+ 
+  i = i + 1;
+END;
+#endregion
+#region Epilog
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+# Declaration variables et constantes
+
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+# HEURE D'EXECUTION
+nNewFormatId  =  NewDateFormatter ( 'fr-FR' , 'Europe/Paris' , 'serial' , 'medium' , 'datetime' );
+Z_LOCAL_TIME = FormatDate ( NOW () , 'yyyy-MM-dd H:mm' , nNewFormatId );
+Z_UTILISATEUR = TM1User;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+nDebut= SCAN( 'pans:u:', Z_UTILISATEUR );
+nDebutLong = LONG('pans:u:');
+nStart = nDebut + nDebutLong ;
+nTotal = LONG(Z_UTILISATEUR) ;
+Z_UTILISATEUR = SUBST(Z_UTILISATEUR, nStart, nTotal - nStart - 1) ;
+
+CELLPUTS( Z_STATUS , sCubeParamS , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamS ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamS , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamS , cMainProcName ,'txt_Utilisateur' );
+CELLPUTS( sVersionCible |'-'| sScenarioCible |'-'|sExerciceCible, sCubeParamS , cMainProcName ,'DernRef' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+
+# Message si erreur du processus
+IF ( nError > 0 ) ;
+  sMessage = 'La dimension magasin est incomplète, des rejets ont été générés, veuillez consulter le répertoire pour plus de détail' ;
+  ItemReject( sMessage );
+ENDIF ;
+#endregion

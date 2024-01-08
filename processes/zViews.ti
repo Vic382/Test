@@ -1,0 +1,199 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#***********************************************************************************************
+# CREATEUR : CTY
+# DATE DE CREATION : 07/08/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : Création de vues par défaut pour tous les cubes.
+#************************************************************************************************
+
+### 0.Définition des variables du monitoring
+
+sCubeParamT	             = 'ParametrageT' ;
+sCubeParamP              = 'ParametresSources' ;
+
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+nNbErrors = 0;
+nErrors = 0 ;
+nErrorsSource = 0 ; 
+zLogNumero         = 1 ;
+vFlagErreur           = 0;
+vMessage              = '';
+
+sProcessDateHeure = TimSt (Now(), '\d\m\Y_\hh\im\ss') ;
+nNumLigneMeta = 0 ;
+nNumLignData = 0 ;
+sMessage = '' ;
+
+
+If (pApplication @= '*') ; 
+
+### 1. Boucle sur la dimension "}Cubes"
+nTailleBoucle = DimSiz ( '}Cubes' ) ;
+While ( nTailleBoucle > 0 ) ;
+	sCube = DimNm ( '}Cubes' , nTailleBoucle ) ; 
+	sDimTemps = '' ;
+	sPremierCar = SubSt ( sCube , 1 ,1 ) ; 
+	# On choisit de ne pas créer de vue pour les éléments de contrôle
+	If ( sPremierCar @<> '}' ) ;
+		
+		sVue = 'Par Défaut' ;
+		
+		# Test de l'existence de la vue pour le cube lu
+		If ( ViewExists ( sCube , sVue  ) = 1 ) ; 
+			# Suppression de la vue
+			ViewDestroy ( sCube , sVue ) ;
+		EndIf ; 
+
+		ViewCreate ( sCube , sVue ) ;
+			
+		nCompteur = 1 ; 
+		While ( TabDim ( sCube , nCompteur ) @<> '' ) ; 
+			sDim = TabDim ( sCube , nCompteur ) ; 
+
+			If ( DimSiz ( sDim ) > 0 ) ; 
+				
+			   If ( SubsetExists ( sDim , sVue ) = 0 ) ; 
+			   	SubsetCreateByMdx ( sVue , '{TM1SubsetAll ( [' | sDim | '] ) }' ) ; 
+			   EndIf ; 
+				
+			   ViewSubsetAssign ( sCube , sVue , sDim , sVue ) ; 
+				
+			   If ( sDIm @= 'Temps' % sDim @= 'Annee' % sDim @= 'Mois' ) ;
+					sDimTemps = sDim ; 
+			   EndIf ;
+			
+			EndIf ;
+			nCompteur = nCompteur + 1 ; 
+		End ; 
+			
+		# Si la dimension "Temps existe dans le cube lu, on la place en dimension de colonne et la dimension "mesure" en ligne.
+		# Sinon, on place la dimension mesure en colonne.
+		If ( sDimTemps @<> '' ) ; 
+			ViewColumnDimensionSet ( sCube , sVue , sDimTemps , 1 );
+			ViewRowDimensionSet ( sCube ,sVue , sDim , 1 ) ; 
+		Else ; 
+			ViewColumnDimensionSet ( sCube , sVue , sDim , 1 ) ; 
+		EndIf ; 
+
+		ViewColumnSuppressZeroesSet ( sCube, sVue, 1) ;
+		ViewRowSuppressZeroesSet ( sCube, sVue, 1) ;
+
+	EndIf ; 
+	nTailleBoucle = nTailleBoucle - 1 ; 
+End ;
+
+Else ;
+
+sCube = pApplication ; 
+
+# Boucle sur la dimension "}Cubes"
+	sDimTemps = '' ;
+	sPremierCar = SubSt ( sCube , 1 ,1 ) ; 
+	# On choisit de ne pas créer de vue pour les éléments de contrôle
+	If ( sPremierCar @<> '}' ) ;
+		
+		sVue = 'Par Défaut' ;
+
+		# Test de l'existence de la vue pour le cube lu
+		If ( ViewExists ( sCube , sVue  ) = 1 ) ; 
+
+			# Suppression de la vue
+			ViewDestroy ( sCube , sVue ) ;
+
+		EndIf ; 
+
+		ViewCreate ( sCube , sVue ) ;
+			
+		nCompteur = 1 ; 
+		While ( TabDim ( sCube , nCompteur ) @<> '' ) ; 
+			sDim = TabDim ( sCube , nCompteur ) ; 
+
+			If ( DimSiz ( sDim ) > 0 ) ; 
+				
+			   If ( SubsetExists ( sDim , sVue ) = 0 ) ; 
+			   	SubsetCreateByMdx ( sVue , '{TM1SubsetAll ( [' | sDim | '] ) }' ) ; 
+			   EndIf ; 
+				
+			   ViewSubsetAssign ( sCube , sVue , sDim , sVue ) ; 
+				
+			   If ( sDIm @= 'Temps' % sDim @= 'Annee' % sDim @= 'Mois' ) ;
+					sDimTemps = sDim ; 
+			   EndIf ;
+			
+			EndIf ;
+	
+			nCompteur = nCompteur + 1 ; 
+		End ; 
+			
+		# Si la dimension "Temps existe dans le cube lu, on la place en dimension de colonne et la dimension "mesure" en ligne.
+		# Sinon, on place la dimension mesure en colonne.
+		If ( sDimTemps @<> '' ) ; 
+			ViewColumnDimensionSet ( sCube , sVue , sDimTemps , 1 );
+			ViewRowDimensionSet ( sCube ,sVue , sDim , 1 ) ; 
+		Else ; 
+			ViewColumnDimensionSet ( sCube , sVue , sDim , 1 ) ; 
+		EndIf ; 
+
+		ViewColumnSuppressZeroesSet ( sCube, sVue, 1) ;
+		ViewRowSuppressZeroesSet ( sCube, sVue, 1) ;
+
+	EndIf ; 
+
+endif;
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+# Declaration variables et constantes
+
+Z_FIN_EXE = StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE = Subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS = IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION = Z_FIN_EXE - Z_DEBUT_EXE;
+Z_LOCAL_TIME =   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+Z_UTILISATEUR = TM1User;
+
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+CELLPUTS( Z_STATUS , sCubeParamP , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamP ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamP , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamP , cMainProcName ,'txt_Utilisateur' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+#endregion

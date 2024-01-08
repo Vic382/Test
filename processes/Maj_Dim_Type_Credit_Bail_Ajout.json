@@ -1,0 +1,27 @@
+{
+	"@type":"Process",
+	"Name":"Maj_Dim_Type_Credit_Bail_Ajout",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Maj_Dim_Type_Credit_Bail_Ajout.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€_ParameterConstraints=e30=€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pType_Credit_Bail",
+			"Prompt":"Quel code pour le nouveau type crédit bail ? ( Pas de caractère spécial ni d'espace )",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pLibelle",
+			"Prompt":"Quel libellé pour le nouveau type crédit bail ?",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

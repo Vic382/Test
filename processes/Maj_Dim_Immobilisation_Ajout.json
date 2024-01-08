@@ -1,0 +1,51 @@
+{
+	"@type":"Process",
+	"Name":"Maj_Dim_Immobilisation_Ajout",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Maj_Dim_Immobilisation_Ajout.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€_ParameterConstraints=e30=€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pLibelle",
+			"Prompt":"Quel libelle pour cette immobilisation ? ",
+			"Value":"TEST CTY",
+			"Type":"String"
+		},
+		{
+			"Name":"pMagasin",
+			"Prompt":"Pour quel magasin ? ",
+			"Value":"004",
+			"Type":"String"
+		},
+		{
+			"Name":"pDateDebut",
+			"Prompt":"Date de début ",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDuree",
+			"Prompt":"Durée d'amortissement en année",
+			"Value":4,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pMontant",
+			"Prompt":"Montant initial",
+			"Value":999,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pRepartition",
+			"Prompt":"Repartition taux LOYER ou GIE ? ",
+			"Value":"GIE",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

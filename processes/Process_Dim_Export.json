@@ -1,0 +1,39 @@
+{
+	"@type":"Process",
+	"Name":"Process_Dim_Export",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"Process_Dim_Export.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pDimension",
+			"Prompt":"Obligatoire : Quelle la dimension que vous voulez exporter ?",
+			"Value":"}Processes",
+			"Type":"String"
+		},
+		{
+			"Name":"pTitleRecord",
+			"Prompt":"Optionnel : Boolean 1 = Yes - Include header row",
+			"Value":1,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pDebug",
+			"Prompt":"Optionnel : Voulez vous mettre en place le debug?",
+			"Value":0,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pExportFile",
+			"Prompt":"Optionnel : Quel est le nom du fichier d'export?",
+			"Value":"Dim_Processus.csv",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

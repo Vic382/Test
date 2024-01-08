@@ -1,0 +1,21 @@
+{
+	"@type":"Process",
+	"Name":"Maj_Dim_Type_Sac_Suppr",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Maj_Dim_Type_Sac_Suppr.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€_ParameterConstraints=e30=€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pType_Sac",
+			"Prompt":"Quel type sac voulez vous supprimer ? /!\\ Toute suppression entraine une perte des données /!\\",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}
