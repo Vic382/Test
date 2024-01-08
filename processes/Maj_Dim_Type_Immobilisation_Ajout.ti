@@ -1,0 +1,153 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#***********************************************************************************************
+# CREATEUR : CTY
+# DATE DE CREATION : 17/11/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : Ajout manuel d'un élément dans la dimension Type_Immobilisation
+# 
+#************************************************************************************************
+
+###############################   MONITORING   #################################
+
+### 0.Définition des variables du monitoring
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+sCubeParamS	             = 'ParametresSources' ;
+sCubeParamT	             = 'ParametrageT' ;
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+sSource = '' ;
+sNomFichier =  '' ;
+nErrors = 0 ;
+nErrorsSource = 0 ; 
+zLogNumero         = 1 ;
+nErrors          = 0;
+vMessage              = '';
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Admin' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+### 1. Déclaration des variables
+
+# Pour suppression des vues et ss ensemble temporaire
+nDebug = 1 ; 
+
+#**Fichier Debug
+sFichierRepDebug = CellGetS ( sCubeParamT , 'Txt_RepertoireDebug' , 'ValeurS' );
+sDebug = sFichierRepDebug | 'test'|cMainProcName|'.txt' ;
+
+###############################   FIN MONITORING   #################################
+
+sExercice = DimensionElementPrincipalName ( 'Exercice' , CellGetS( 'ParametresFonctionnels', 'ExerciceEnCours' , 'ValeurS' ));
+sVersion  = DimensionElementPrincipalName ( 'Version' , CellGetS( 'ParametresFonctionnels', 'VersionEnCours' , 'ValeurS' ));
+sScenario = DimensionElementPrincipalName ( 'Scenario' , CellGetS( 'ParametresFonctionnels', 'ScenarioEnCours' , 'ValeurS' ));
+
+
+### Controle des paramètres  ###
+
+# Les paramètres ne peuvent être vides
+IF ( pType_Immobilisation @= '' ) ;
+  sMessage = 'Les paramètres ne peuvent être vides' ;
+  ItemReject( sMessage );
+  ProcessBreak ;
+ENDIF ;
+
+# Le code de l'élément a créer ne peut avoir de caractère spéciaux
+IF ( SCAN( ' ' , pType_Immobilisation ) <> 0 % SCAN( '&' , pType_Immobilisation ) <> 0 % SCAN( '/' , pType_Immobilisation ) <> 0 % SCAN( '%' , pType_Immobilisation ) <> 0 % SCAN( CHAR ( 39 ) , pType_Immobilisation ) <> 0 % SCAN( '"' , pType_Immobilisation ) <> 0
+% SCAN( '\' , pType_Immobilisation ) <> 0 % SCAN( '(' , pType_Immobilisation ) <> 0 % SCAN( ')' , pType_Immobilisation ) <> 0 % SCAN( '@' , pType_Immobilisation ) <> 0 % SCAN( '{' , pType_Immobilisation ) <> 0 % SCAN( '}' , pType_Immobilisation ) <> 0 
+% SCAN( 'é' , pType_Immobilisation ) <> 0 % SCAN( '$' , pType_Immobilisation ) <> 0 % SCAN( '*' , pType_Immobilisation ) <> 0 % SCAN( '|' , pType_Immobilisation ) <> 0 % SCAN( ':' , pType_Immobilisation ) <> 0 % SCAN( ',' , pType_Immobilisation ) <> 0 
+% SCAN( '!' , pType_Immobilisation ) <> 0 % SCAN( '<' , pType_Immobilisation ) <> 0 % SCAN( '>' , pType_Immobilisation ) <> 0 % SCAN( '-' , pType_Immobilisation ) <> 0 % SCAN( '+' , pType_Immobilisation ) <> 0 % SCAN( '?' , pType_Immobilisation ) <> 0
+% SCAN( '~' , pType_Immobilisation ) <> 0 % SCAN( ';' , pType_Immobilisation ) <> 0 ) ;
+
+  sMessage = 'Le type immobilisation ' | pType_Immobilisation | ' contient des caractères spéciaux' ;
+  ItemReject( sMessage );
+  ProcessBreak ;
+ENDIF ;
+
+
+
+### Mise à jour de la dimension Type_Immobilisation
+# Variabilisation de la dim cible
+sDimType = 'Type_Immobilisation' ;
+# Définition de l'élément total de la dimension
+sTotalType = 'Total_Type_Immobilisation' ;
+
+# Trie de la dimension
+DimensionSortOrder( sDimType , 'ByInput', 'Ascending', 'ByHierarchy', 'Ascending' );
+
+# Alimentation de l'élément 
+DimensionElementInsertDirect( sDimType , '', pType_Immobilisation , 'N');
+DimensionElementComponentAddDirect( sDimType , sTotalType , pType_Immobilisation , 1 );
+
+
+### Mise à jour de la dimension Immobilisation
+# Variabilisation de la dim cible
+sDim = 'Immobilisation' ;
+
+# Définition de l'élément total de la dimension
+sTotal = 'Total_Immobilisation' ;
+
+# Trie de la dimension
+DimensionSortOrder( sDim , 'ByInput', 'Ascending', 'ByHierarchy', 'Ascending' );
+
+# Alimentation de l'élément 
+DimensionElementInsertDirect( sDim , '', pType_Immobilisation , 'N');
+DimensionElementComponentAddDirect( sDim , sTotal , pType_Immobilisation , 1 );
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# Mapping des immobilisation : LOYER / GIE dans Param_Investissement
+sRepartition = CellGetS( 'Param_Investissement', sExercice, sVersion, sScenario, pType_Immobilisation, 'Repartition'  );
+
+# Alimentation des attributs dans la dimension Type_Immobilisation
+AttrPutS( pLibelle, sDimType, pType_Immobilisation, 'Alias' );
+
+# Alimentation des attributs dans la dimension Immobilisation
+AttrPutS( pLibelle, sDim, pType_Immobilisation, 'Libelle' );
+AttrPutS( 'FICTIF', sDim, pType_Immobilisation, 'Fictif' );
+AttrPutS( sRepartition, sDim, pType_Immobilisation, 'Repartition' );
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+# Declaration variables et constantes
+
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+# HEURE D'EXECUTION
+nNewFormatId  =  NewDateFormatter ( 'fr-FR' , 'Europe/Paris' , 'serial' , 'medium' , 'datetime' );
+Z_LOCAL_TIME = FormatDate ( NOW () , 'yyyy-MM-dd H:mm' , nNewFormatId );
+Z_UTILISATEUR = TM1User;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+nDebut= SCAN( 'pans:u:', Z_UTILISATEUR );
+nDebutLong = LONG('pans:u:');
+nStart = nDebut + nDebutLong ;
+nTotal = LONG(Z_UTILISATEUR) ;
+Z_UTILISATEUR = SUBST(Z_UTILISATEUR, nStart, nTotal - nStart - 1) ;
+
+CELLPUTS( Z_STATUS , sCubeParamS , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamS ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamS , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamS , cMainProcName ,'txt_Utilisateur' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+#endregion

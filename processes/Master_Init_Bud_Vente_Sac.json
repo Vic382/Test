@@ -1,0 +1,13 @@
+{
+	"@type":"Process",
+	"Name":"Master_Init_Bud_Vente_Sac",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Master_Init_Bud_Vente_Sac.ti",
+	"UIData":"_ParameterConstraints=e30=€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

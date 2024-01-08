@@ -1,0 +1,77 @@
+{
+	"@type":"Process",
+	"Name":"Maj_Dim_Periode",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Maj_Dim_Periode.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€_ParameterConstraints=e30=€",
+	"VariablesUIData":
+	[
+		"VarType=32€ColType=827€",
+		"VarType=32€ColType=827€",
+		"VarType=32€ColType=827€"
+	],
+	"DataSource":
+	{
+		"Type":"TM1CubeView",
+		"dataSourceNameForClient":"Param_Periode",
+		"dataSourceNameForServer":"Param_Periode",
+		"view":"Par Défaut"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pAnneeDebut",
+			"Prompt":"Quelle est l'année de début ?",
+			"Value":"2021",
+			"Type":"String"
+		},
+		{
+			"Name":"pAnneeFin",
+			"Prompt":"Quelle est l'année de fin ?",
+			"Value":"2031",
+			"Type":"String"
+		},
+		{
+			"Name":"pMoisDebut",
+			"Prompt":"Quel est le mois de début ?",
+			"Value":"M04",
+			"Type":"String"
+		},
+		{
+			"Name":"pMoisFin",
+			"Prompt":"Quel est le mois de fin ?",
+			"Value":"M03",
+			"Type":"String"
+		},
+		{
+			"Name":"pDateMin",
+			"Prompt":"Date de début",
+			"Value":"2021-04-05",
+			"Type":"String"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"Annee_Calendaire",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"m_Param_Periode",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"Valeur",
+			"Type":"String",
+			"Position":3,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}
