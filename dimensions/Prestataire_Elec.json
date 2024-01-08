@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"Prestataire_Elec",
+	"Hierarchies@Code.links":
+	[
+		"Prestataire_Elec.hierarchies/Prestataire_Elec.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Prestataire_Elec')/Hierarchies('Prestataire_Elec')"
+	}
+}

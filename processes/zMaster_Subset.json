@@ -1,0 +1,27 @@
+{
+	"@type":"Process",
+	"Name":"zMaster_Subset",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"zMaster_Subset.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pDimension",
+			"Prompt":"",
+			"Value":"Test_Sub",
+			"Type":"String"
+		},
+		{
+			"Name":"pAllAlias",
+			"Prompt":"Optionnel pour activer ou pas les alias.",
+			"Value":0,
+			"Type":"Numeric"
+		}
+	],
+	"Variables":[]
+}

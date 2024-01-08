@@ -1,0 +1,28 @@
+{
+	"@type":"Subset",
+	"Name":"2039_2040_Se03",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Annee_Calendaire')/Hierarchies('Annee_Calendaire')/Elements('2039-04-24')"
+		},
+		{
+			"@id":"Dimensions('Annee_Calendaire')/Hierarchies('Annee_Calendaire')/Elements('2039-04-23')"
+		},
+		{
+			"@id":"Dimensions('Annee_Calendaire')/Hierarchies('Annee_Calendaire')/Elements('2039-04-22')"
+		},
+		{
+			"@id":"Dimensions('Annee_Calendaire')/Hierarchies('Annee_Calendaire')/Elements('2039-04-21')"
+		},
+		{
+			"@id":"Dimensions('Annee_Calendaire')/Hierarchies('Annee_Calendaire')/Elements('2039-04-20')"
+		},
+		{
+			"@id":"Dimensions('Annee_Calendaire')/Hierarchies('Annee_Calendaire')/Elements('2039-04-19')"
+		},
+		{
+			"@id":"Dimensions('Annee_Calendaire')/Hierarchies('Annee_Calendaire')/Elements('2039-04-18')"
+		}
+	]
+}

@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"m_Version_Livraison",
+	"Hierarchies@Code.links":
+	[
+		"m_Version_Livraison.hierarchies/m_Version_Livraison.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_Version_Livraison')/Hierarchies('m_Version_Livraison')"
+	}
+}

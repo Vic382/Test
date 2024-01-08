@@ -1,0 +1,28 @@
+{
+	"@type":"Subset",
+	"Name":"2031_2032_Se08",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Annee_Calendaire')/Hierarchies('Annee_Calendaire')/Elements('2031-06-01')"
+		},
+		{
+			"@id":"Dimensions('Annee_Calendaire')/Hierarchies('Annee_Calendaire')/Elements('2031-05-31')"
+		},
+		{
+			"@id":"Dimensions('Annee_Calendaire')/Hierarchies('Annee_Calendaire')/Elements('2031-05-30')"
+		},
+		{
+			"@id":"Dimensions('Annee_Calendaire')/Hierarchies('Annee_Calendaire')/Elements('2031-05-29')"
+		},
+		{
+			"@id":"Dimensions('Annee_Calendaire')/Hierarchies('Annee_Calendaire')/Elements('2031-05-28')"
+		},
+		{
+			"@id":"Dimensions('Annee_Calendaire')/Hierarchies('Annee_Calendaire')/Elements('2031-05-27')"
+		},
+		{
+			"@id":"Dimensions('Annee_Calendaire')/Hierarchies('Annee_Calendaire')/Elements('2031-05-26')"
+		}
+	]
+}

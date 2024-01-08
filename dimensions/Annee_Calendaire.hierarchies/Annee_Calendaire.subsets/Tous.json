@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Tous",
+	"Expression":"{TM1SubsetAll ( [Annee_Calendaire] ) }"
+}

@@ -1,0 +1,25 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_Param_Credit_Bail",
+	"Elements":
+	[
+		{
+			"Name":"Montant",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Duree",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Ouverture",
+			"Type":"String"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_Param_Credit_Bail.subsets/Niv0.json",
+		"m_Param_Credit_Bail.subsets/Niv0_Desc..json",
+		"m_Param_Credit_Bail.subsets/Par Défaut.json"
+	]
+}

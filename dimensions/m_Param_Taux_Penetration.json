@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"m_Param_Taux_Penetration",
+	"Hierarchies@Code.links":
+	[
+		"m_Param_Taux_Penetration.hierarchies/m_Param_Taux_Penetration.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_Param_Taux_Penetration')/Hierarchies('m_Param_Taux_Penetration')"
+	}
+}

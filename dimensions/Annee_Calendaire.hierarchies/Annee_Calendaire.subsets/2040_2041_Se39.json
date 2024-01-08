@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"2040_2041_Se39",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Annee_Calendaire')/Hierarchies('Annee_Calendaire')/Elements('2040-01-01')"
+		}
+	]
+}

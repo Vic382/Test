@@ -1,0 +1,13 @@
+{
+	"@type":"Process",
+	"Name":"Maj_Dim_Type_Immobilisation_Suppr",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Maj_Dim_Type_Immobilisation_Suppr.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€_ParameterConstraints=e30=€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

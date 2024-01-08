@@ -1,0 +1,21 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_Achat_Sac",
+	"Elements":
+	[
+		{
+			"Name":"Montant",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Quantite",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_Achat_Sac.subsets/Niv0.json",
+		"m_Achat_Sac.subsets/Niv0_Desc..json",
+		"m_Achat_Sac.subsets/Par Défaut.json"
+	]
+}

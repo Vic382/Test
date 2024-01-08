@@ -1,0 +1,294 @@
+#region Prolog
+
+#***********************************************************************************************
+# CREATEUR : VRT
+# DATE DE CREATION : 03/10/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : Initialisation des quantités budget dans le cube Cout_Elec pour les ouvertures prévisionnel
+# Moyenne consommation des ouvertures N-1
+#************************************************************************************************
+
+###############################   MONITORING   #################################
+
+### 0.Définition des variables du monitoring
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+sCubeParamS	             = 'ParametresSources' ;
+sCubeParamT	             = 'ParametrageT' ;
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+sSource = '' ;
+sNomFichier =  '' ;
+nErrors = 0 ;
+nErrorsSource = 0 ; 
+zLogNumero         = 1 ;
+nErrors          = 0;
+vMessage              = '';
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+sDate = TimSt( Now, '\Y\m\d' );
+
+sUser = ATTRS( '}Clients' , cUtilisateur , '}TM1_DefaultDisplayValue' );
+nLong = LONG ( sUser ) ;
+sUser = SUBST ( sUser , 20 , nLong - 19 ) ;
+
+
+# Pour suppression des vues et ss ensemble temporaire
+nDebug = 1 ; 
+
+#**Fichier Debug
+sFichierRepDebug = CellGetS ( sCubeParamT , 'Txt_RepertoireDebug' , 'ValeurS' );
+sDebug = sFichierRepDebug | 'test'|cMainProcName|'.csv' ;
+
+#**Fichier Rejet
+sFichierRepRejet = CellGetS ( sCubeParamT , 'Txt_RepertoireRejet' , 'ValeurS' );
+sRejet = sFichierRepRejet | 'Rejet_'| '_' | sUser | '_' | sDate | '_' | cMainProcName|'.csv' ;
+
+# Suppression du fichier de rejet si Existant
+IF ( FileExists( sRejet ) = 1 ) ;
+  ASCIIDelete( sRejet );
+ENDIF ;
+
+
+###############################   FIN MONITORING   #################################
+
+### 1. Déclaration des variables
+
+nMontant = 0 ;
+nDiviseur = 0 ;
+nCtrlBoucle = 0 ;
+
+# Définition du périmètre
+# La source est toujours le Réel N-1 et la cible est toujours le budget
+
+# On récupère l'exercice en cours dans le cube paramètrefonctionnel
+sExerciceSource = DimensionElementPrincipalName ( 'Exercice' , CellGetS( 'ParametresFonctionnels', 'ExerciceEnCours' , 'ValeurS' ));
+
+# On récupère l'index de l'exercice en cours pour récupérer l'exercice précédent dans la dimension
+nIndex = DIMIX( 'Exercice', sExerciceSource );
+sExerciceSource = DIMNM( 'Exercice', nIndex -1 );
+
+sScenarioSource = 'REEL' ;
+sVersionSource = 'VF' ;
+
+sExerciceCible = DimensionElementPrincipalName ( 'Exercice' , CellGetS( 'ParametresFonctionnels', 'ExerciceEnCours' , 'ValeurS' ));
+sScenarioCible = 'BUDGET' ;
+sVersionCible = DimensionElementPrincipalName ( 'Version' , CellGetS( 'ParametresFonctionnels', 'VersionEnCours' , 'ValeurS' ));
+
+###########################################
+## Creation vue SOURCE sur Cout_Elec
+###########################################
+
+### Déclaration des variables
+sCubeSource = 'Cout_Elec';
+sDimSource1 = 'Exercice';
+sDimSource2 = 'Version' ; 
+sDimSource3 = 'Scenario' ; 
+sDimSource4 = 'Mois' ; 
+sDimSource5 = 'Magasin' ; 
+sDimSource = 'm_Cout_Elec';
+
+# Le nom de la vue du cube :
+sVueSource = 'Source_vue_' | cMainProcName ; 
+
+# Le nom des sous-ensembles
+sSubsetSource = 'Source_Subset_' | cMainProcName ; 
+
+# Création de la vue cible
+IF( ViewExists( sCubeSource, sVueSource ) = 1 );
+  ViewDestroy( sCubeSource, sVueSource );
+ENDIF;
+ViewCreate( sCubeSource, sVueSource , nDebug );
+
+# Exercice
+SubsetDestroy ( sDimSource1 , sSubsetSource ) ;
+SubsetCreate ( sDimSource1 , sSubsetSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource1 , sSubsetSource , sExerciceSource , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource1 , sSubsetSource ) ; 
+
+# Version
+SubsetDestroy ( sDimSource2 , sSubsetSource ) ;
+SubsetCreate ( sDimSource2 , sSubsetSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource2 , sSubsetSource , sVersionSource , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource2 , sSubsetSource ) ; 
+
+# Scenario
+SubsetDestroy ( sDimSource3 , sSubsetSource ) ;
+SubsetCreate ( sDimSource3 , sSubsetSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource3 , sSubsetSource , sScenarioSource , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource3 , sSubsetSource ) ; 
+
+# Mois
+SubsetDestroy ( sDimSource4 , sSubsetSource ) ; 
+SubsetCreate ( sDimSource4 , sSubsetSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource4 , sSubsetSource , pMois , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource4 , sSubsetSource ) ; 
+
+# Magasin : Que les magasins ayant une ouverture sur l'exercice n-1
+SubsetDestroy ( sDimSource5 , sSubsetSource ) ; 
+StringMDX = '{FILTER( {TM1SUBSETALL( ['| sDimSource5 | '] )}, ['| sDimSource5 | '].[Exercice_Ouverture] = "'|sExerciceSource|'")}' ;
+SubsetCreateByMDX ( sSubsetSource , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource5 , sSubsetSource ) ; 
+
+# m_Cout_Elec
+SubsetDestroy ( sDimSource , sSubsetSource ) ; 
+SubsetCreate ( sDimSource , sSubsetSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource , sSubsetSource , 'Consommation' , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource , sSubsetSource ) ;
+
+ViewExtractSkipCalcsSet( sCubeSource , sVueSource , 1 );
+ViewExtractSkipRuleValuesSet( sCubeSource , sVueSource , 1 );
+ViewExtractSkipZeroesSet( sCubeSource , sVueSource , 1 );
+
+# Redéfinition de la source de donnée
+DatasourceCubeview = sVueSource ;
+DatasourceNameForServer = sCubeSource ;
+
+
+###########################################
+## Creation vue CIBLE sur Cout_Elec
+###########################################
+
+### Déclaration des variables
+sCubeCible = 'Cout_Elec';
+sDimCible1 = 'Exercice';
+sDimCible2 = 'Version' ; 
+sDimCible3 = 'Scenario' ; 
+sDimCible4 = 'Mois' ; 
+sDimCible5 = 'Magasin' ; 
+sDimCible = 'm_Cout_Elec';
+
+
+# Le nom de la vue du cube :
+sVueZero = 'RAZ_vue_' | cMainProcName ; 
+
+# Le nom des sous-ensembles
+sSubsetZero = 'RAZ_Subset_' | cMainProcName ; 
+
+# Création de la vue cible
+IF( ViewExists( sCubeCible, sVueZero ) = 1 );
+  ViewDestroy( sCubeCible, sVueZero );
+ENDIF;
+ViewCreate( sCubeCible, sVueZero , nDebug );
+
+# Exercice
+SubsetDestroy ( sDimCible1 , sSubsetZero ) ;
+SubsetCreate ( sDimCible1 , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible1 , sSubsetZero , sExerciceCible , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible1 , sSubsetZero ) ; 
+
+# Version
+SubsetDestroy ( sDimCible2 , sSubsetZero ) ;
+SubsetCreate ( sDimCible2 , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible2 , sSubsetZero , sVersionCible , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible2 , sSubsetZero ) ; 
+
+# Scenario
+SubsetDestroy ( sDimCible3 , sSubsetZero ) ;
+SubsetCreate ( sDimCible3 , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible3 , sSubsetZero , sScenarioCible , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible3 , sSubsetZero ) ; 
+
+# Mois
+SubsetDestroy ( sDimCible4 , sSubsetZero ) ; 
+SubsetCreate ( sDimCible4 , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible4 , sSubsetZero , pMois , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible4 , sSubsetZero ) ; 
+
+# Magasin : que les magasisn ayant une date d'ouverture sur l'exercice budget
+SubsetDestroy ( sDimCible5 , sSubsetZero ) ; 
+StringMDX = '{FILTER( {TM1SUBSETALL( ['| sDimCible5 | '] )}, ['| sDimCible5 | '].[Exercice_Ouverture] = "'|sExerciceCible|'")}' ;
+SubsetCreateByMDX ( sSubsetZero , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible5 , sSubsetZero ) ; 
+
+# m_Cout_Elec
+SubsetDestroy ( sDimCible , sSubsetZero ) ; 
+SubsetCreate ( sDimCible , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible , sSubsetZero , 'Consommation' , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible , sSubsetZero ) ;
+
+# RAZ de la vue zero
+ViewZeroOut( sCubeCible, sVueZero );
+#endregion
+#region Metadata
+
+# Moyenne des consos magasin n-1
+nMontant = nMontant + Value ;
+nDiviseur = nDiviseur + 1 ;
+
+# Récupération du nombre de magasin dans la source
+nNbreMagasin = SubsetGetSize( sDimCible5 , sSubsetSource );
+
+# Si Le nombre de magasin du subset est égal au diviseur
+# Alors calcul de la moyenne
+
+IF ( nNbreMagasin = nDiviseur ) ;
+  nMoyenne = nMontant \ nDiviseur ;
+ENDIF ;
+#endregion
+#region Data
+
+# Boucles sur les magasins avec une date d'ouverture sur l'exercice budget
+
+nTailleBoucle = DIMSIZ( sDimCible5 );
+i = 1 ;
+
+IF ( nCtrlBoucle = 0 ) ;
+  WHILE ( i <= nTailleBoucle ) ;
+
+    sMagasin = DIMNM( sDimCible5 , i );
+    sExeOuverture = CellGetS ( '}ElementAttributes_Magasin' , sMagasin , 'Exercice_Ouverture' ) ;
+
+    IF ( sExeOuverture @= sExerciceCible & ELLEV( sDimCible5 , sMagasin ) = 0 ) ;
+      CellPutN( nMoyenne , sCubeCible , sExerciceCible , sVersionCible , sScenarioCible , pMois , sMagasin , m_Cout_Elec );
+    ENDIF ;
+
+    i = i + 1 ;
+
+  END ;
+  
+  # Incrémentation de la variable de controle
+  nCtrlBoucle = 1 ;
+  
+ENDIF ;
+
+#endregion
+#region Epilog
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+# Declaration variables et constantes
+
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+# HEURE D'EXECUTION
+nNewFormatId  =  NewDateFormatter ( 'fr-FR' , 'Europe/Paris' , 'serial' , 'medium' , 'datetime' );
+Z_LOCAL_TIME = FormatDate ( NOW () , 'yyyy-MM-dd H:mm' , nNewFormatId );
+Z_UTILISATEUR = TM1User;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+nDebut= SCAN( 'pans:u:', Z_UTILISATEUR );
+nDebutLong = LONG('pans:u:');
+nStart = nDebut + nDebutLong ;
+nTotal = LONG(Z_UTILISATEUR) ;
+Z_UTILISATEUR = SUBST(Z_UTILISATEUR, nStart, nTotal - nStart - 1) ;
+
+CELLPUTS( Z_STATUS , sCubeParamS , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamS ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamS , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamS , cMainProcName ,'txt_Utilisateur' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+#endregion

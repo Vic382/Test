@@ -1,0 +1,13 @@
+{
+	"@type":"Process",
+	"Name":"Master_Param_Fonctionnel",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Master_Param_Fonctionnel.ti",
+	"UIData":"_ParameterConstraints=e30=€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

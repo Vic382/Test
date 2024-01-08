@@ -1,0 +1,283 @@
+#region Prolog
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#***********************************************************************************************************
+#***********************************************************************************************************
+# CREATEUR : DIMO SOFTWARE - CTY
+# DATE DE CREATION : 07/07/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : Ce processus permet de gérer les copie de version , de scénarion et d'exercice
+# selon le paramètrage du cube 
+#***********************************************************************************************************
+
+#***********************************************************************************************************
+#                                  Définition des cubes
+#***********************************************************************************************************
+
+sCubeParamP	             = 'ParametresSources' ;
+sCubeParamT	             = 'ParametrageT' ;
+sCubeParamCopieScenarioExercice = 'Param_Copie_Scenario_Exercice' ; 
+
+
+#***********************************************************************************************************
+#                                  Définition des dimensions
+#***********************************************************************************************************
+sDimCube = '}Cubes' ;
+
+#***********************************************************************************************************
+#                                  Définition des constantes
+#***********************************************************************************************************
+
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+#***********************************************************************************************************
+#                                  Définition des variables
+#***********************************************************************************************************
+
+nDebug = 1 ;
+nErrors = 0 ;
+
+
+#**Fichier Debug
+sFichierRepDebug = '..\DEBUG\' ;
+sDebug = sFichierRepDebug | 'BugCopieDataVersionScenarioExercice.txt' ;
+
+
+#***********************************************************************************************************
+#                                  Initialisation des variables
+#***********************************************************************************************************
+zLogNumero        = 1 ;
+
+#***********************************************************************************************************
+#                                  Log start time
+#***********************************************************************************************************
+ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'START' ,
+'pV2' , 'Copie Data' ) ;
+
+
+###########################################
+## Creation vue source
+###########################################
+
+###****Déclaration des variables
+
+sCubeSource = 'Param_Copie_Scenario_Exercice' ;
+
+sDimSource1 = '}Cubes' ;
+sDimSource = 'm_Param_Copie_Scenario_Exercice' ;
+
+###**** Vue source
+sVueSource = 'zTI_' | cMainProcName | '_Source';
+# Désactivation du logging -> Réactivation en Epilog
+vLogChanges = CubeGetLogChanges( sCubeSource );
+CubeSetLogChanges( sCubeSource, 0 );
+
+IF( ViewExists( sCubeSource , sVueSource ) = 1 );
+  ViewDestroy( sCubeSource , sVueSource );
+ENDIF;
+ViewCreate( sCubeSource , sVueSource , nDebug );
+
+# Dimension = Cubes
+IF( SubsetExists( sDimSource1 , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource1 , sVueSource );
+ENDIF;
+StringMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( ['|sDimSource1|'] )}, 0)}';
+SubsetCreatebyMDX( sVueSource , StringMDX , nDebug );
+ViewSubsetAssign( sCubeSource, sVueSource , sDimSource1 , sVueSource );
+
+# Dimension = 'm_Param_Copie_Scenario_Exercice' 
+IF( SubsetExists( sDimSource , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource , sVueSource );
+ENDIF;
+StringMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( ['|sDimSource|'] )}, 0)}';
+SubsetCreatebyMDX( sVueSource , StringMDX , nDebug );
+ViewSubsetAssign( sCubeSource, sVueSource , sDimSource , sVueSource );
+
+#Définition de la source
+DataSourceNameForServer = sCubeSource ;
+DatasourceCubeView = sVueSource ;
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+###***COPIE VERSION***######
+
+## Commentaires
+##***sElementMapping permet de définir les différents éléments de mapping ( Scenario , Exercice , Version )  pour le processus "Bedrock.Cube.Data.Copy.IntraCube"
+sElementMapping = 'Version:' | pVersionSource | '->' |  pVersionCible ;
+sFilter = '' ;
+###**Copie de version pour les cubes qui sont identifiés dans le cube de paramétrage "Param_Copie_Scenario_Exercice"
+##****La variable nCopieVersion permet de cibler les cubes concernés par cette partie du processus de copie. 
+## Fin Commentaires
+nCopieVersion =  CellGetN ( sCubeParamCopieScenarioExercice , sCube , 'Copie_Version' ) ;
+
+IF ( nCopieVersion = 1 ) ;
+
+  RunProcess ( 'Bedrock.Cube.Data.Copy.IntraCube' , 'pCube' , sCube , 'pView' , '' , 'pFilter' , '' , 'pElementMapping' , sElementMapping , 'pFactor' , 1 ,  'pDimensionDelim' , '&' , 'pElementStartDelim' , ':' ,
+  'pElementDelim' , '+' , 'pMappingDelimiter' , '->' , 'pZeroTarget' , 1 ,  'pZeroSource' , 0 , 'pDeleteViewsAndSubsets' , 1 , 'pSuppressConsol' , 1 , 'pSuppressRules' , 1 ,  'pAccumulate' , 0 ,
+  'pDropAndReattachRules' , 0 , 'pCopyDataViaClonedCube' , 0  , 'pDebug' , 0  ) ;
+
+  IF ( pVersionSource @= '' % pVersionCible @= '' ) ;
+
+    nErrors = 1 ;
+    #ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'FATAL' , 'pRef' , nErrors ,
+    #'pV3' , 'Les paramètres de version source et cible ne sont pas renseignés ' ) ;
+   
+    ProcessBreak ;
+  ENDIF ;
+
+  IF ( nErrors <> 1 ) ;
+    #ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'DATA' , 'pStatus' , 'INFO' ,
+    #'pV3' , 'Vous avez copié la version ' | pVersionSource |  ' dans la version ' | pVersionCible | ' du cube ' | sCube ) ;
+  ENDIF ;
+
+ENDIF ;
+
+###***FIN COPIE VERSION***######
+
+###***COPIE SCENARIO***######
+## Commentaire
+##***sElementMapping permet de définir les différents éléments de mapping ( Scenario , Exercice , Version )  pour le processus "Bedrock.Cube.Data.Copy.IntraCube"
+sElementMapping = 'Scenario:' | pScenarioSource  | '->' |  pScenarioCible ;
+sFilter = '' ;
+###**Copie de scenario pour les cubes qui sont identifiés dans le cube de paramétrage "Param_Copie_Scenario_Exercice"
+##****La variable nCopieVersion permet de cibler les cubes concernés par cette partie du processus de copie. 
+## Fin Commentaire
+
+
+nCopieScenario =  CellGetN ( sCubeParamCopieScenarioExercice , sCube , 'Copie_Scenario' ) ;
+
+IF ( nCopieScenario = 1 ) ;
+
+  RunProcess ( 'Bedrock.Cube.Data.Copy.IntraCube' , 'pCube' , sCube, 'pView' , '' , 'pFilter' , '' , 'pElementMapping' , sElementMapping , 'pFactor' , 1 ,  'pDimensionDelim' , '&' , 'pElementStartDelim' , ':' ,
+  'pElementDelim' , '+' , 'pMappingDelimiter' , '->' , 'pZeroTarget' , 1 ,  'pZeroSource' , 0 , 'pDeleteViewsAndSubsets' , 1 , 'pSuppressConsol' , 1 , 'pSuppressRules' , 1 ,  'pAccumulate' , 0 ,
+  'pDropAndReattachRules' , 0 , 'pCopyDataViaClonedCube' , 0  , 'pDebug' , 0  ) ;
+
+   IF ( pScenarioSource  @= '' % pScenarioCible @= '' ) ;
+
+    nErrors = 1 ;
+    #ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'FATAL' , 'pRef' , nErrors ,
+    #'pV3' , 'Les paramètres de scenario source et cible ne sont pas renseignés ' ) ;
+   
+    ProcessBreak ;
+  ENDIF ;
+  IF ( nErrors <> 1 ) ;
+    #ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'DATA' , 'pStatus' , 'INFO' ,
+    #'pV3' , 'Vous avez copié le scenario ' | pScenarioSource  |  ' dans le scenario ' | pScenarioCible | ' du cube ' | sCube ) ;
+  ENDIF ;
+ENDIF ;
+
+###***FIN COPIE SCENARIO***######
+
+
+###***COPIE VERSION / SCENARIO***######
+
+##***sElementMapping permet de définir les différents éléments de mapping ( Scenario , Exercice , Version )  pour le processus "Bedrock.Cube.Data.Copy.IntraCube"
+sElementMapping = 'Scenario:' | pScenarioSource | '->' | pScenarioCible | '& Version:' | pVersionSource | '->' |  pVersionCible ; 
+sFilter = '' ;
+###**Copie de version pour les cubes qui sont identifiés dans le cube de paramétrage "Param_Copie_Scenario_Exercice"
+##****La variable nCopieVersionScenario permet de cibler les cubes concernés par cette partie du processus de copie. 
+nCopieVersionScenario =  CellGetN ( sCubeParamCopieScenarioExercice , sCube , 'Copie_Version_Scenario' ) ;
+
+IF ( nCopieVersionScenario = 1 ) ;
+
+  RunProcess ( 'Bedrock.Cube.Data.Copy.IntraCube' , 'pCube' , sCube, 'pView' , '' , 'pFilter' , '' , 'pElementMapping' , sElementMapping , 'pFactor' , 1 ,  'pDimensionDelim' , '&' , 'pElementStartDelim' , ':' ,
+  'pElementDelim' , '+' , 'pMappingDelimiter' , '->' , 'pZeroTarget' , 1 ,  'pZeroSource' , 0 , 'pDeleteViewsAndSubsets' , 1 , 'pSuppressConsol' , 1 , 'pSuppressRules' , 1 ,  'pAccumulate' , 0 ,
+  'pDropAndReattachRules' , 0 , 'pCopyDataViaClonedCube' , 0  , 'pDebug' , 0  ) ;
+
+  IF ( pScenarioSource  @= '' % pScenarioCible @= '' % pVersionSource @= '' % pVersionCible @= '') ;
+
+    nErrors = 1 ;
+    #ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'FATAL' , 'pRef' , nErrors ,
+    #'pV3' , 'Les paramètres de scenario et de version source et cible ne sont pas renseignés ' ) ;
+   
+    ProcessBreak ;
+  ENDIF ;
+  
+  IF ( nErrors <> 1 ) ;
+    #ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'DATA' , 'pStatus' , 'INFO' ,
+    #'pV3' , 'Vous avez copié le scenario ' | pScenarioSource  | ' et la version ' | pVersionSource |  ' dans le scenario ' | pScenarioCible | ' et la version ' | pVersionCible |  ' pour le cube ' | sCube ) ; 
+  ENDIF ;
+ENDIF ;
+
+###***FIN COPIE VERSION/SCENARIO***######
+
+
+###***COPIE VERSION / SCENARIO/EXERCICE***######
+
+##***sElementMapping permet de définir les différents éléments de mapping ( Scenario , Exercice , Version )  pour le processus "Bedrock.Cube.Data.Copy.IntraCube"
+sElementMapping = 'Scenario:' | pScenarioSource | '->' | pScenarioCible | '& Annee:' | pExerciceSource | '->' | pExerciceCible | '& Version:' | pVersionSource | '->' |  pVersionCible ; 
+sFilter = '' ;
+###**Copie de version pour les cubes qui sont identifiés dans le cube de paramétrage "Param_Copie_Scenario_Exercice"
+##****La variable nCopieVersionScenario permet de cibler les cubes concernés par cette partie du processus de copie. 
+nCopieVersionScenarioExercice =  CellGetN ( sCubeParamCopieScenarioExercice , sCube , 'Copie_Exercice_Version_Scenario' ) ;
+
+IF ( nCopieVersionScenarioExercice = 1 ) ;
+
+  RunProcess ( 'Bedrock.Cube.Data.Copy.IntraCube' , 'pCube' , sCube, 'pView' , '' , 'pFilter' , '' , 'pElementMapping' , sElementMapping , 'pFactor' , 1 ,  'pDimensionDelim' , '&' , 'pElementStartDelim' , ':' ,
+  'pElementDelim' , '+' , 'pMappingDelimiter' , '->' , 'pZeroTarget' , 1 ,  'pZeroSource' , 0 , 'pDeleteViewsAndSubsets' , 1 , 'pSuppressConsol' , 1 , 'pSuppressRules' , 1 ,  'pAccumulate' , 0 ,
+  'pDropAndReattachRules' , 0 , 'pCopyDataViaClonedCube' , 0  , 'pDebug' , 0  ) ;
+
+  IF ( pScenarioSource  @= '' % pScenarioCible @= '' % pVersionSource @= '' % pVersionCible @= '' % pExerciceSource @= '' % pExerciceCible @= '') ;
+    nErrors = 1 ;
+    ProcessBreak ;
+  ENDIF ;
+
+  IF (  nErrors <> 1 ) ;
+
+  ENDIF ; 
+ENDIF ;
+
+###***FIN COPIE VERSION/SCENARIO/EXERCICE***######
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+# Declaration variables et constantes
+
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+Z_LOCAL_TIME=   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+Z_UTILISATEUR = TM1User;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+CELLPUTS( Z_STATUS , sCubeParamP , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamP ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamP , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamP , cMainProcName ,'txt_Utilisateur' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+#endregion
