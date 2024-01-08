@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"ParametresFonctionnels",
+	"Hierarchies@Code.links":
+	[
+		"ParametresFonctionnels.hierarchies/ParametresFonctionnels.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('ParametresFonctionnels')/Hierarchies('ParametresFonctionnels')"
+	}
+}

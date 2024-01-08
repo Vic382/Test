@@ -1,0 +1,6 @@
+{
+	"@type":"Subset",
+	"Name":"Niv1_Desc.",
+	"Alias":"Description",
+	"Expression":"{TM1FILTERBYLEVEL ( {TM1SubsetAll ( [Poste_Budgetaire] ) } , 1 )}"
+}

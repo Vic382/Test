@@ -1,0 +1,26 @@
+{
+	"@type":"NativeView",
+	"Name":"ParametresFonctionnels",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('m_ParametresFonctionnels')/Hierarchies('m_ParametresFonctionnels')/Subsets('All Members')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('ParametresFonctionnels')/Hierarchies('ParametresFonctionnels')/Subsets('All Members')"
+			}
+		}
+	],
+	"Titles":[],
+	"SuppressEmptyColumns":false,
+	"SuppressEmptyRows":false,
+	"FormatString":"0.00"
+}

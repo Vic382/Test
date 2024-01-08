@@ -1,0 +1,34 @@
+{
+	"@type":"Cube",
+	"Name":"Param_Methode_Saisie",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Exercice')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Poste_Budgetaire')"
+		},
+		{
+			"@id":"Dimensions('m_Param_Methode_Saisie')"
+		}
+	],
+	"MeasuresDimension":
+	{
+		"@id":"Dimensions('m_Param_Methode_Saisie')"
+	},
+	"TimeDimension":
+	{
+		"@id":"Dimensions('Exercice')"
+	},
+	"Views@Code.links":
+	[
+		"Param_Methode_Saisie.views/Par Défaut.json"
+	]
+}

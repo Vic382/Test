@@ -1,0 +1,40 @@
+{
+	"@type":"Cube",
+	"Name":"Bon_Achat",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Exercice')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Mois')"
+		},
+		{
+			"@id":"Dimensions('Type_Bon_Achat')"
+		},
+		{
+			"@id":"Dimensions('Magasin')"
+		},
+		{
+			"@id":"Dimensions('m_Bon_Achat')"
+		}
+	],
+	"MeasuresDimension":
+	{
+		"@id":"Dimensions('m_Bon_Achat')"
+	},
+	"TimeDimension":
+	{
+		"@id":"Dimensions('Mois')"
+	},
+	"Views@Code.links":
+	[
+		"Bon_Achat.views/Par Défaut.json"
+	]
+}

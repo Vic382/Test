@@ -1,0 +1,26 @@
+{
+	"@type":"Chore",
+	"Name":"CHORE_zSUPP_TECH",
+	"StartTime":"2020-08-06T05:30Z",
+	"DSTSensitive":false,
+	"Active":false,
+	"ExecutionMode":"SingleCommit",
+	"Frequency":"P1DT00H00M00S",
+	"Tasks":
+	[
+		{
+			"Step":0,
+			"Parameters":
+			[
+				{
+					"Name":"pTech",
+					"Value":"zTI"
+				}
+			],
+			"Process":
+			{
+				"@id":"Processes('zSupp_Tech')"
+			}
+		}
+	]
+}

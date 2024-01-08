@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"m_Param_Tarif_Sac",
+	"Hierarchies@Code.links":
+	[
+		"m_Param_Tarif_Sac.hierarchies/m_Param_Tarif_Sac.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_Param_Tarif_Sac')/Hierarchies('m_Param_Tarif_Sac')"
+	}
+}

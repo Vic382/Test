@@ -1,0 +1,34 @@
+{
+	"@type":"Cube",
+	"Name":"Param_Conditionnement_Sac",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Exercice')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Type_Sac')"
+		},
+		{
+			"@id":"Dimensions('m_Param_Conditionnement_Sac')"
+		}
+	],
+	"MeasuresDimension":
+	{
+		"@id":"Dimensions('m_Param_Conditionnement_Sac')"
+	},
+	"TimeDimension":
+	{
+		"@id":"Dimensions('Exercice')"
+	},
+	"Views@Code.links":
+	[
+		"Param_Conditionnement_Sac.views/Par Défaut.json"
+	]
+}
