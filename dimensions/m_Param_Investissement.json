@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"m_Param_Investissement",
+	"Hierarchies@Code.links":
+	[
+		"m_Param_Investissement.hierarchies/m_Param_Investissement.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_Param_Investissement')/Hierarchies('m_Param_Investissement')"
+	}
+}

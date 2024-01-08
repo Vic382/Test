@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Immobilisations Fictives",
+	"Expression":"{TM1SORT( {FILTER( {TM1SUBSETALL( [Immobilisation] )}, [Immobilisation].[Fictif] = \"FICTIF\")}, ASC)}"
+}

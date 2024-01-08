@@ -1,0 +1,74 @@
+{
+	"@type":"NativeView",
+	"Name":"Par Défaut",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Mois')/Hierarchies('Mois')/Subsets('Par Défaut')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('m_Bon_Achat')/Hierarchies('m_Bon_Achat')/Subsets('Par Défaut')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Magasin')/Hierarchies('Magasin')/Subsets('Par Défaut')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Exercice')/Hierarchies('Exercice')/Subsets('Par Défaut')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Exercice')/Hierarchies('Exercice')/Elements('Total_Exercice')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Version')/Hierarchies('Version')/Subsets('Par Défaut')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Version')/Hierarchies('Version')/Elements('V0')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Scenario')/Hierarchies('Scenario')/Subsets('Par Défaut')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Scenario')/Hierarchies('Scenario')/Elements('Reel')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Type_Bon_Achat')/Hierarchies('Type_Bon_Achat')/Subsets('Par Défaut')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Type_Bon_Achat')/Hierarchies('Type_Bon_Achat')/Elements('Bon_Achat_GIE')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":true,
+	"SuppressEmptyRows":true,
+	"FormatString":"0.00"
+}

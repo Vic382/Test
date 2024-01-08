@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"Banque",
+	"Hierarchies@Code.links":
+	[
+		"Banque.hierarchies/Banque.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Banque')/Hierarchies('Banque')"
+	}
+}

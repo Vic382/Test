@@ -1,0 +1,16 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_Investissement",
+	"Elements":
+	[
+		{
+			"Name":"Montant",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_Investissement.subsets/Niv0.json",
+		"m_Investissement.subsets/Par Défaut.json"
+	]
+}

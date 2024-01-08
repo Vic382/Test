@@ -1,0 +1,19 @@
+SKIPCHECK;
+
+# Calcul des taux de pénétration au Réel
+
+['VF','Reel','Taux_Penetration'] = ['Quantite'] \ DB('Frequentation_Magasin', !Exercice, !Version, !Scenario, !Mois, !Magasin, 'Frequentation' ) ;
+
+# Calcul du CA
+['CA'] = N : ['Quantite'] * DB( 'Param_Tarif_Sac', !Exercice, !Version, !Scenario, !Mois, !Type_Sac, 'Tarif_Vente'  ) ;
+
+FEEDERS;
+
+# Feeders taux penetration reel
+['Quantite'] => ['VF','Reel','Taux_Penetration'] ;
+
+# Feeders CA
+['Quantite'] => ['CA'] ;
+
+# Feeders du cube Stock_Sac
+['Quantite'] => DB( 'Stock_Sac', !Exercice, !Version, !Scenario, !Mois, !Type_Sac, !Magasin, 'Vente_Sac'  ) ;

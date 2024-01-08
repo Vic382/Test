@@ -1,0 +1,44 @@
+{
+	"@type":"Cube",
+	"Name":"CA_Magasin",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Exercice')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Mois')"
+		},
+		{
+			"@id":"Dimensions('Partenaire')"
+		},
+		{
+			"@id":"Dimensions('Moyen_Transaction')"
+		},
+		{
+			"@id":"Dimensions('Magasin')"
+		},
+		{
+			"@id":"Dimensions('m_CA_Magasin')"
+		}
+	],
+	"Rules@Code.link":"CA_Magasin.rules",
+	"MeasuresDimension":
+	{
+		"@id":"Dimensions('m_CA_Magasin')"
+	},
+	"TimeDimension":
+	{
+		"@id":"Dimensions('Mois')"
+	},
+	"Views@Code.links":
+	[
+		"CA_Magasin.views/Par Défaut.json"
+	]
+}

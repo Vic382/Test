@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Par défaut",
+	"Expression":"{TM1SUBSETALL( [ParametresFonctionnels] )}"
+}

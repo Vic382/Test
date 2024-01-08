@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"m_Commission_Bancaire",
+	"Hierarchies@Code.links":
+	[
+		"m_Commission_Bancaire.hierarchies/m_Commission_Bancaire.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_Commission_Bancaire')/Hierarchies('m_Commission_Bancaire')"
+	}
+}

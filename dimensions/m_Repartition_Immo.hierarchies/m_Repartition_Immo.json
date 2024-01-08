@@ -1,0 +1,16 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_Repartition_Immo",
+	"Elements":
+	[
+		{
+			"Name":"Taux",
+			"Type":"String"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_Repartition_Immo.subsets/Niv0.json",
+		"m_Repartition_Immo.subsets/Par Défaut.json"
+	]
+}

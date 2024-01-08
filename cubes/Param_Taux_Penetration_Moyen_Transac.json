@@ -1,0 +1,41 @@
+{
+	"@type":"Cube",
+	"Name":"Param_Taux_Penetration_Moyen_Transac",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Exercice')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Mois')"
+		},
+		{
+			"@id":"Dimensions('Moyen_Transaction')"
+		},
+		{
+			"@id":"Dimensions('Magasin')"
+		},
+		{
+			"@id":"Dimensions('m_Param_Taux_Penetration_Moyen_Transac')"
+		}
+	],
+	"Rules@Code.link":"Param_Taux_Penetration_Moyen_Transac.rules",
+	"MeasuresDimension":
+	{
+		"@id":"Dimensions('m_Param_Taux_Penetration_Moyen_Transac')"
+	},
+	"TimeDimension":
+	{
+		"@id":"Dimensions('Mois')"
+	},
+	"Views@Code.links":
+	[
+		"Param_Taux_Penetration_Moyen_Transac.views/Par Défaut.json"
+	]
+}

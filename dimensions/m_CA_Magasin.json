@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"m_CA_Magasin",
+	"Hierarchies@Code.links":
+	[
+		"m_CA_Magasin.hierarchies/m_CA_Magasin.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_CA_Magasin')/Hierarchies('m_CA_Magasin')"
+	}
+}

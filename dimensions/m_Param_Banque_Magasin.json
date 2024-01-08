@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"m_Param_Banque_Magasin",
+	"Hierarchies@Code.links":
+	[
+		"m_Param_Banque_Magasin.hierarchies/m_Param_Banque_Magasin.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_Param_Banque_Magasin')/Hierarchies('m_Param_Banque_Magasin')"
+	}
+}

@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"Vue_Source_23-11-29_Maj_Data_Investissement_Saisie_Ouverture_Magasin",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('m_Param_Investissement')/Hierarchies('m_Param_Investissement')/Elements('Montant')"
+		}
+	]
+}

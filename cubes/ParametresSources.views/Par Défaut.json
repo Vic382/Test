@@ -1,0 +1,26 @@
+{
+	"@type":"NativeView",
+	"Name":"Par Défaut",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('m_ParametresSources')/Hierarchies('m_ParametresSources')/Subsets('Par Défaut')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('}Processes')/Hierarchies('}Processes')/Subsets('Par Défaut')"
+			}
+		}
+	],
+	"Titles":[],
+	"SuppressEmptyColumns":true,
+	"SuppressEmptyRows":true,
+	"FormatString":"0.00"
+}

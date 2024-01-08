@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"Type_Credit_Bail",
+	"Hierarchies@Code.links":
+	[
+		"Type_Credit_Bail.hierarchies/Type_Credit_Bail.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Type_Credit_Bail')/Hierarchies('Type_Credit_Bail')"
+	}
+}

@@ -1,0 +1,37 @@
+{
+	"@type":"Cube",
+	"Name":"Credit_Bail",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Exercice')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Type_Credit_Bail')"
+		},
+		{
+			"@id":"Dimensions('Magasin')"
+		},
+		{
+			"@id":"Dimensions('m_Credit_Bail')"
+		}
+	],
+	"MeasuresDimension":
+	{
+		"@id":"Dimensions('m_Credit_Bail')"
+	},
+	"TimeDimension":
+	{
+		"@id":"Dimensions('Exercice')"
+	},
+	"Views@Code.links":
+	[
+		"Credit_Bail.views/Par Défaut.json"
+	]
+}

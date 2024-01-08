@@ -1,0 +1,12 @@
+SKIPCHECK;
+
+Feeders ;
+
+# Feeders du cube Param_Taux_Penetration_Moyen_Transac
+['Version':'VF','Scenario':'REEL','Partenaire':'Total_Partenaire','Moyen_Transaction':'Total_Moyen_Paiement','m_CA_Magasin':'CA'] => 
+DB('Param_Taux_Penetration_Moyen_Transac', !Exercice, 'Version':'VF','Scenario':'REEL' , !Mois, !Moyen_Transaction, !Magasin, 'm_Param_Taux_Penetration_Moyen_Transac':'Taux_Penetration' ) ;
+
+
+
+
+

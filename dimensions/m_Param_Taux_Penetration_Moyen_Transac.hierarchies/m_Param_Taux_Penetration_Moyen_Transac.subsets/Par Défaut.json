@@ -1,0 +1,6 @@
+{
+	"@type":"Subset",
+	"Name":"Par Défaut",
+	"Alias":"Description",
+	"Expression":"{TM1SubsetAll ( [m_Param_Taux_Penetration_Moyen_Transac] ) }"
+}

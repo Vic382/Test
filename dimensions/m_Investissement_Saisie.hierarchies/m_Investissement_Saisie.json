@@ -1,0 +1,34 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_Investissement_Saisie",
+	"Elements":
+	[
+		{
+			"Name":"Cout_Immo",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Duree_Amortissement",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"Date_Debut",
+			"Type":"String"
+		},
+		{
+			"Name":"Date_Fin",
+			"Type":"String"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_Investissement_Saisie.subsets/Niv0.json",
+		"m_Investissement_Saisie.subsets/Par Défaut.json",
+		"m_Investissement_Saisie.subsets/Vue_Source_23-11-28_Maj_Data_Investissement_Investissement_Saisie.json",
+		"m_Investissement_Saisie.subsets/Vue_Source_23-11-29_Maj_Data_Investissement_Investissement_Saisie.json",
+		"m_Investissement_Saisie.subsets/Vue_Source_23-11-30_Maj_Data_Investissement_Investissement_Saisie.json",
+		"m_Investissement_Saisie.subsets/Vue_Source_23-12-04_Maj_Data_Investissement_Investissement_Saisie.json",
+		"m_Investissement_Saisie.subsets/Vue_Source_23-12-05_Maj_Data_Investissement_Investissement_Saisie.json",
+		"m_Investissement_Saisie.subsets/Vue_Source_23-12-06_Maj_Data_Investissement_Investissement_Saisie.json"
+	]
+}

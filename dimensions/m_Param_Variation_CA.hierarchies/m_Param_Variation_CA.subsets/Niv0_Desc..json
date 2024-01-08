@@ -1,0 +1,6 @@
+{
+	"@type":"Subset",
+	"Name":"Niv0_Desc.",
+	"Alias":"Description",
+	"Expression":"{TM1FILTERBYLEVEL ( {TM1SubsetAll ( [m_Param_Variation_CA] ) } , 0 )}"
+}

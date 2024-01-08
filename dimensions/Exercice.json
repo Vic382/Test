@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"Exercice",
+	"Hierarchies@Code.links":
+	[
+		"Exercice.hierarchies/Exercice.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Exercice')/Hierarchies('Exercice')"
+	}
+}

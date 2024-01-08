@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"reel",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Scenario')/Hierarchies('Scenario')/Elements('Reel')"
+		}
+	]
+}

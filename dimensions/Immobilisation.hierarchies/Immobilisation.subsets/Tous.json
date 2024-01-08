@@ -1,0 +1,6 @@
+{
+	"@type":"Subset",
+	"Name":"Tous",
+	"Alias":"Alias",
+	"Expression":"{TM1SUBSETALL([Immobilisation])}"
+}

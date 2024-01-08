@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"Repartition_Immo",
+	"Hierarchies@Code.links":
+	[
+		"Repartition_Immo.hierarchies/Repartition_Immo.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Repartition_Immo')/Hierarchies('Repartition_Immo')"
+	}
+}

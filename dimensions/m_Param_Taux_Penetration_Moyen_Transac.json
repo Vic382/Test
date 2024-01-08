@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"m_Param_Taux_Penetration_Moyen_Transac",
+	"Hierarchies@Code.links":
+	[
+		"m_Param_Taux_Penetration_Moyen_Transac.hierarchies/m_Param_Taux_Penetration_Moyen_Transac.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_Param_Taux_Penetration_Moyen_Transac')/Hierarchies('m_Param_Taux_Penetration_Moyen_Transac')"
+	}
+}

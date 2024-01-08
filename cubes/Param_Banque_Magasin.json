@@ -1,0 +1,37 @@
+{
+	"@type":"Cube",
+	"Name":"Param_Banque_Magasin",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Exercice')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Mois')"
+		},
+		{
+			"@id":"Dimensions('Magasin')"
+		},
+		{
+			"@id":"Dimensions('m_Param_Banque_Magasin')"
+		}
+	],
+	"MeasuresDimension":
+	{
+		"@id":"Dimensions('m_Param_Banque_Magasin')"
+	},
+	"TimeDimension":
+	{
+		"@id":"Dimensions('Mois')"
+	},
+	"Views@Code.links":
+	[
+		"Param_Banque_Magasin.views/Par Défaut.json"
+	]
+}
