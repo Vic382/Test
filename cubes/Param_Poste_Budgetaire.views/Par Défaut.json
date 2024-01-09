@@ -1,0 +1,26 @@
+{
+	"@type":"NativeView",
+	"Name":"Par Défaut",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('m_Param_Poste_Budgetaire')/Hierarchies('m_Param_Poste_Budgetaire')/Subsets('Par Défaut')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Poste_Budgetaire_N')/Hierarchies('Poste_Budgetaire_N')/Subsets('Par Défaut')"
+			}
+		}
+	],
+	"Titles":[],
+	"SuppressEmptyColumns":true,
+	"SuppressEmptyRows":true,
+	"FormatString":"0.00"
+}
