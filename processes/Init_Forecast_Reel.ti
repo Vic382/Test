@@ -59,8 +59,8 @@ sElementMapping3 = 'Version:'|sVersionSource|'->'|sVersionCible|'& Scenario:'|sS
 
 
 # Contrôle du scénario cible, doit être atterrissage
-sScenarioCtrl = SUBST ( sScenarioCible , 1 , 3 ) ;
-IF ( sScenarioCtrl @<> 'Att' ) ;
+
+IF ( sScenarioCible @<> 'Atterrissage' ) ;
   ItemSkip;
 ENDIF ;
 

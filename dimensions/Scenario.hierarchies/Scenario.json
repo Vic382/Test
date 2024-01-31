@@ -54,6 +54,10 @@
 		{
 			"Name":"Att11",
 			"Type":"Numeric"
+		},
+		{
+			"Name":"Atterrissage",
+			"Type":"Numeric"
 		}
 	],
 	"Subsets@Code.links":
