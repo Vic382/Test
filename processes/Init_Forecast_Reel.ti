@@ -84,6 +84,7 @@ WHILE ( nTailleBoucle >= i ) ;
   sTestExercice ='' ;
   sTestVersion ='' ;  
   sTestMois = '' ;
+  sTestCompte = '' ;
     
     j = 1 ;
 
@@ -133,8 +134,18 @@ WHILE ( nTailleBoucle >= i ) ;
       ENDIF ; 
       m = m + 1 ;
     END ;  
-    
 
+    n = 1 ;    
+                             
+    WHILE ( nNombreDim >= n ) ; 
+      sDim = TABDIM ( sNomCube , n ) ; 
+      ##Test sur l'existance de la dimension Poste Budgetaire                                                         
+      IF ( sDim @= 'Poste_Budgetaire' ) ;                                                                                      
+        sTestCompte = 'Oui' ; 
+      ENDIF ; 
+      n = n + 1 ;
+    END ;      
+    
     IF ( sTestMois @= 'Oui' ) ;
       l = 1 ;
       nNombreElement = Dimsiz ( sDimMois ) ; 
@@ -144,39 +155,95 @@ WHILE ( nTailleBoucle >= i ) ;
         
         nIndexMois = DIMIX ( sDimMois , sMois ) ;
         
-        sMoisPrev = CellGetS ( '}ElementAttributes_Scenario' , sScenarioCible , 'Premier_Mois_Prev') ;
-        nIndexMoisPrev = DIMIX ( sDimMois , sMoisPrev ) ;    
+        sMoisPrev = CellGetS ( 'ParametresFonctionnels', 'MoisEnCours', 'ValeurS' ) ;
+        nIndexMoisPrev = DIMIX ( sDimMois , sMoisPrev ) ;
+
+        sMoisPrecPrev = CellGetS ( '}ElementAttributes_Mois', sMoisPrev , 'Mois_Precedent' ) ;
+        nIndexMoisPrecPrev = DIMIX ( sDimMois , sMoisPrecPrev ) ;      
         
         IF ( ELLEV ( sDimMois , sMois ) = 0 & nIndexMois < nIndexMoisPrev ) ;
   
           sFilter = sDimMois | ':' | sMois ;  
+
+          IF ( sTestCompte @= 'Oui' & nIndexMois = nIndexMoisPrecPrev ) ; 
+
+            o = 1 ;
+            nNombreElementCompte = Dimsiz ( 'Poste_Budgetaire' ) ;   
+
+            WHILE ( nNombreElementCompte >= o ) ; 
+
+              sCompte = DIMNM( 'Poste_Budgetaire', o );
+              sCtrlCompte = '' ;  
+
+              IF ( ELLEV( 'Poste_Budgetaire', sCompte ) = 0 ) ;
+                sCtrlCompte = CellGetS( '}ElementAttributes_Poste_Budgetaire', sCompte , 'Import Balance Partielle' );
+              ENDIF ;    
+
+
+              IF ( sCtrlCompte @= 'X' ) ;
+                  
+                sFilterCompte = sDimMois | ':' | sMois | CHAR ( 38 ) | ' Poste_Budgetaire:' | sCompte ;
+                  
+                ############## TO UPDATE ##############
+                IF ( sTestScenario @= '' & sTestVersion@= 'Oui' & sTestExercice @= ''   ) ;  
         
-          ############## TO UPDATE ##############
-          IF ( sTestScenario @= '' & sTestVersion@= 'Oui' & sTestExercice @= ''   ) ;  
-  
-            #Lancement du processus bedrock
-            RunProcess ( 'Bedrock.Cube.Data.Copy.IntraCube' , 'pCube' , sNomCube , 'pView' , '' , 'pFilter' , sFilter , 'pElementMapping' , sElementMapping1 , 'pFactor' , 1 , 'pDimensionDelim' , '&' , 'pElementStartDelim' , ':' ,
-            'pElementDelim' , '+' , 'pMappingDelimiter' , '->' , 'pZeroTarget' , 1 , 'pZeroSource' , 0 , 'pDeleteViewsAndSubsets' , 1 , 'pSuppressConsol' , 1 , 'pSuppressRules' , 1 , 'pAccumulate' , 0 ,
-            'pDropAndReattachRules' , 0 , 'pCopyDataViaClonedCube' , 0 , 'pDebug' , 0 ) ;
-          ENDIF;
-  
-          ############## TO UPDATE ##############
-          IF ( sTestScenario @= 'Oui' & sTestVersion@= 'Oui' & sTestExercice @= ''   ) ;  
-  
-            #Lancement du processus bedrock
-            RunProcess ( 'Bedrock.Cube.Data.Copy.IntraCube' , 'pCube' , sNomCube , 'pView' , '' , 'pFilter' , sFilter , 'pElementMapping' , sElementMapping2 , 'pFactor' , 1 , 'pDimensionDelim' , '&' , 'pElementStartDelim' , ':' ,
-            'pElementDelim' , '+' , 'pMappingDelimiter' , '->' , 'pZeroTarget' , 1 , 'pZeroSource' , 0 , 'pDeleteViewsAndSubsets' , 1 , 'pSuppressConsol' , 1 , 'pSuppressRules' , 1 , 'pAccumulate' , 0 ,
-            'pDropAndReattachRules' , 0 , 'pCopyDataViaClonedCube' , 0 , 'pDebug' , 0 ) ;
-          ENDIF;
-  
-          ############## TO UPDATE ##############
-          IF ( sTestScenario @= 'Oui' & sTestVersion@= 'Oui' & sTestExercice @= 'Oui'   ) ;  
-  
-            #Lancement du processus bedrock
-            RunProcess ( 'Bedrock.Cube.Data.Copy.IntraCube' , 'pCube' , sNomCube , 'pView' , '' , 'pFilter' , sFilter , 'pElementMapping' , sElementMapping3 , 'pFactor' , 1 , 'pDimensionDelim' , '&' , 'pElementStartDelim' , ':' ,
-            'pElementDelim' , '+' , 'pMappingDelimiter' , '->' , 'pZeroTarget' , 1 , 'pZeroSource' , 0 , 'pDeleteViewsAndSubsets' , 1 , 'pSuppressConsol' , 1 , 'pSuppressRules' , 1 , 'pAccumulate' , 0 ,
-            'pDropAndReattachRules' , 0 , 'pCopyDataViaClonedCube' , 0 , 'pDebug' , 0 ) ;
-          ENDIF;
+                  #Lancement du processus bedrock
+                  RunProcess ( 'Bedrock.Cube.Data.Copy.IntraCube' , 'pCube' , sNomCube , 'pView' , '' , 'pFilter' , sFilterCompte , 'pElementMapping' , sElementMapping1 , 'pFactor' , 1 , 'pDimensionDelim' , '&' , 'pElementStartDelim' , ':' ,
+                  'pElementDelim' , '+' , 'pMappingDelimiter' , '->' , 'pZeroTarget' , 1 , 'pZeroSource' , 0 , 'pDeleteViewsAndSubsets' , 1 , 'pSuppressConsol' , 1 , 'pSuppressRules' , 1 , 'pAccumulate' , 0 ,
+                  'pDropAndReattachRules' , 0 , 'pCopyDataViaClonedCube' , 0 , 'pDebug' , 0 ) ;
+                ENDIF;
+        
+                ############## TO UPDATE ##############
+                IF ( sTestScenario @= 'Oui' & sTestVersion@= 'Oui' & sTestExercice @= ''   ) ;  
+        
+                  #Lancement du processus bedrock
+                  RunProcess ( 'Bedrock.Cube.Data.Copy.IntraCube' , 'pCube' , sNomCube , 'pView' , '' , 'pFilter' , sFilterCompte , 'pElementMapping' , sElementMapping2 , 'pFactor' , 1 , 'pDimensionDelim' , '&' , 'pElementStartDelim' , ':' ,
+                  'pElementDelim' , '+' , 'pMappingDelimiter' , '->' , 'pZeroTarget' , 1 , 'pZeroSource' , 0 , 'pDeleteViewsAndSubsets' , 1 , 'pSuppressConsol' , 1 , 'pSuppressRules' , 1 , 'pAccumulate' , 0 ,
+                  'pDropAndReattachRules' , 0 , 'pCopyDataViaClonedCube' , 0 , 'pDebug' , 0 ) ;
+                ENDIF;
+        
+                ############## TO UPDATE ##############
+                IF ( sTestScenario @= 'Oui' & sTestVersion@= 'Oui' & sTestExercice @= 'Oui'   ) ;  
+        
+                  #Lancement du processus bedrock
+                  RunProcess ( 'Bedrock.Cube.Data.Copy.IntraCube' , 'pCube' , sNomCube , 'pView' , '' , 'pFilter' , sFilterCompte , 'pElementMapping' , sElementMapping3 , 'pFactor' , 1 , 'pDimensionDelim' , '&' , 'pElementStartDelim' , ':' ,
+                  'pElementDelim' , '+' , 'pMappingDelimiter' , '->' , 'pZeroTarget' , 1 , 'pZeroSource' , 0 , 'pDeleteViewsAndSubsets' , 1 , 'pSuppressConsol' , 1 , 'pSuppressRules' , 1 , 'pAccumulate' , 0 ,
+                  'pDropAndReattachRules' , 0 , 'pCopyDataViaClonedCube' , 0 , 'pDebug' , 0 ) ;
+                ENDIF;
+              ENDIF ;
+                
+              o = o + 1 ;
+                
+            END ;    
+          ELSE  ;   
+            ############## TO UPDATE ##############
+            IF ( sTestScenario @= '' & sTestVersion@= 'Oui' & sTestExercice @= ''   ) ;  
+    
+              #Lancement du processus bedrock
+              RunProcess ( 'Bedrock.Cube.Data.Copy.IntraCube' , 'pCube' , sNomCube , 'pView' , '' , 'pFilter' , sFilter , 'pElementMapping' , sElementMapping1 , 'pFactor' , 1 , 'pDimensionDelim' , '&' , 'pElementStartDelim' , ':' ,
+              'pElementDelim' , '+' , 'pMappingDelimiter' , '->' , 'pZeroTarget' , 1 , 'pZeroSource' , 0 , 'pDeleteViewsAndSubsets' , 1 , 'pSuppressConsol' , 1 , 'pSuppressRules' , 1 , 'pAccumulate' , 0 ,
+              'pDropAndReattachRules' , 0 , 'pCopyDataViaClonedCube' , 0 , 'pDebug' , 0 ) ;
+            ENDIF;
+    
+            ############## TO UPDATE ##############
+            IF ( sTestScenario @= 'Oui' & sTestVersion@= 'Oui' & sTestExercice @= ''   ) ;  
+    
+              #Lancement du processus bedrock
+              RunProcess ( 'Bedrock.Cube.Data.Copy.IntraCube' , 'pCube' , sNomCube , 'pView' , '' , 'pFilter' , sFilter , 'pElementMapping' , sElementMapping2 , 'pFactor' , 1 , 'pDimensionDelim' , '&' , 'pElementStartDelim' , ':' ,
+              'pElementDelim' , '+' , 'pMappingDelimiter' , '->' , 'pZeroTarget' , 1 , 'pZeroSource' , 0 , 'pDeleteViewsAndSubsets' , 1 , 'pSuppressConsol' , 1 , 'pSuppressRules' , 1 , 'pAccumulate' , 0 ,
+              'pDropAndReattachRules' , 0 , 'pCopyDataViaClonedCube' , 0 , 'pDebug' , 0 ) ;
+            ENDIF;
+    
+            ############## TO UPDATE ##############
+            IF ( sTestScenario @= 'Oui' & sTestVersion@= 'Oui' & sTestExercice @= 'Oui'   ) ;  
+    
+              #Lancement du processus bedrock
+              RunProcess ( 'Bedrock.Cube.Data.Copy.IntraCube' , 'pCube' , sNomCube , 'pView' , '' , 'pFilter' , sFilter , 'pElementMapping' , sElementMapping3 , 'pFactor' , 1 , 'pDimensionDelim' , '&' , 'pElementStartDelim' , ':' ,
+              'pElementDelim' , '+' , 'pMappingDelimiter' , '->' , 'pZeroTarget' , 1 , 'pZeroSource' , 0 , 'pDeleteViewsAndSubsets' , 1 , 'pSuppressConsol' , 1 , 'pSuppressRules' , 1 , 'pAccumulate' , 0 ,
+              'pDropAndReattachRules' , 0 , 'pCopyDataViaClonedCube' , 0 , 'pDebug' , 0 ) ;
+            ENDIF;
+          ENDIF ;  
+              
         ENDIF ;
         
         l = l + 1 ;
