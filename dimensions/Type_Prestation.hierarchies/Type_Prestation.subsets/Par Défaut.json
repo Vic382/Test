@@ -1,6 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Par Défaut",
-	"Alias":"Description",
-	"Expression":"{TM1SubsetAll ( [Type_Prestation] ) }"
-}
