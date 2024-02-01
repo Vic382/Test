@@ -1,0 +1,543 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#*****************************************************************************
+# CREATEUR : Dimo Software - Charles THIERRY
+# DATE DE CREATION : 29/09/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : ../../2023
+# DESCRIPTION DU PROCESSUS : 
+# 1. Lecture du cube Salarie_Fictif & Param_Taux_Horaire
+# Calcul du Salaire_Fictif pour chaque salarié fictif : 
+#    Heure par semaine : TypeHoraire (Cube Fictif)
+#    * Taux horaire : (Cube Param_Taux_Horaire avec ancienneté mini)
+#    = Salaire semaine
+#    / 7
+#    = Salaire jour
+#    * Nbr jour dans le mois
+#    = Salaire mois 
+# Attention : si nouveau magasin, le cube Param_Taux_Horaire doit être manuellement renseigné avant
+
+# 2. Ecriture et projection du Salaire Fictif sur le cube MS_Individuelle : 
+#    - A partir de la date d'entrée du salarie fictif
+#    - Sur tous les mois suivants au Budget
+#*****************************************************************************
+
+### 0.Définition des variables du monitoring
+sCubeParamT	        = 'ParametrageT' ;
+sCubeParamS         = 'ParametresSources' ;
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+Z_DEBUT_EXE         = StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+nDebug = 1 ; 
+nEntete = 1;
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+### 1. Déclaration des variables
+sCubeCible = 'MS_Individuelle';
+sCubeSource = 'Salarie_Fictif';
+sCubePrime = 'Param_Prime';
+sCubeTaux = 'Param_Taux_Horaire';
+sExerciceEnCours = CellGetS( 'ParametresFonctionnels', 'ExerciceEnCours', 'ValeurS' )  ;
+sVersionEnCours = CellGetS( 'ParametresFonctionnels', 'VersionEnCours', 'ValeurS' )  ;
+sScenarioEnCours = CellGetS( 'ParametresFonctionnels', 'ScenarioEnCours', 'ValeurS' )  ;
+sAnneeEnCours = CellGetS( 'ParametresFonctionnels', 'AnneeEnCours', 'ValeurS' ) ;
+sDimMois = 'Mois';
+
+################  Debut de la vue SOURCE  ################
+# SOURCE = Cube Salarie_Fictif
+### 1. Définition de la source du processus
+sDimSource1 = 'Exercice' ; 
+sDimSource2 = 'Version' ;
+sDimSource3 = 'Scenario' ; 
+sDimSource4 = 'Magasin' ; 
+sDimSource5 = 'Salarie_Fictif' ; 
+sDimSource = 'm_Salarie_Fictif' ; 
+
+# Définition nom de vue / sous-ensemble
+sVueSource = 'Vue_Source' | Today (0) | '_' | GetProcessName () ;
+
+# Remise à 0 de la vue
+ViewDestroy ( sCubeSource , sVueSource ) ;
+ViewCreate ( sCubeSource , sVueSource , nDebug ) ; 
+
+### 2. Création des sous-ensembles des dimensions du cube source Salarie_Fictif
+# Dim 1 : Exercice : sur l'exercice en cours
+IF( SubsetExists( sDimSource1 , sVueSource ) = 1 );
+    SubsetDestroy( sDimSource1 , sVueSource );
+ENDIF;
+SubsetCreate ( sDimSource1 , sVueSource , nDebug) ; 
+SubsetElementInsert ( sDimSource1 , sVueSource , sExerciceEnCours , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource1 , sVueSource ) ; 
+
+# Dim 2 : Version : sur Version en cours
+IF( SubsetExists( sDimSource2 , sVueSource ) = 1 );
+    SubsetDestroy( sDimSource2 , sVueSource );
+ENDIF;
+SubsetCreate ( sDimSource2 , sVueSource ) ; 
+SubsetElementInsert ( sDimSource2 , sVueSource , sVersionEnCours , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource2 , sVueSource ) ; 
+
+# Dim 3 : Scenario : sur Scenario En Cours
+IF( SubsetExists( sDimSource3 , sVueSource ) = 1 );
+    SubsetDestroy( sDimSource3 , sVueSource );
+ENDIF;
+SubsetCreate ( sDimSource3 , sVueSource , nDebug) ; 
+SubsetElementInsert ( sDimSource3 , sVueSource , sScenarioEnCours , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource3 , sVueSource ) ; 
+
+# Dim 4 : Magasin : tous les niv0
+SubsetDestroy ( sDimSource4 , sVueSource ) ; 
+SubsetCreateByMDX ( sVueSource , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimSource4 | ' ] ) } , 0 ) }' , nDebug) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource4 , sVueSource ) ; 
+
+# Dim 5 : Salarie_Fictif : tous les niv0
+SubsetDestroy ( sDimSource5 , sVueSource ) ; 
+SubsetCreateByMDX ( sVueSource , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimSource5 | ' ] ) } , 0 ) }' , nDebug) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource5 , sVueSource ) ; 
+
+# Dim  : m_Salarie_Fictif : TypeHoraire uniquement
+SubsetDestroy ( sDimSource , sVueSource ) ; 
+SubsetCreate ( sDimSource , sVueSource ) ; 
+SubsetElementInsert ( sDimSource , sVueSource , 'Type_Horaire' , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource , sVueSource ) ; 
+
+### 3. Périmètre de calcul (0 = Inclure / 1 = Exclure)
+# On ne traite PAS les croisements égaux à zéro :
+ViewExtractSkipZeroesSet ( sCubeSource , sVueSource , 1 ) ; 
+# On ne traite PAS les croisements concernés par des règles de calculs
+ViewExtractSkipRuleValuesSet ( sCubeSource , sVueSourCe , 1 ) ;
+# On ne traite PAS les croisements concernés par des cellules consolidéees 
+ViewExtractSkipCalcsSet ( sCubeSource , sVueSource , 1 ) ; 
+
+### 4. Définition de la source du processu : 
+DataSourceNameForServer  = sCubeSource ; 
+DataSourceCubeView = sVueSource ; 
+
+########    Début de la vue CIBLE   ########
+### 0. Définition des variables
+sDim1 = 'Exercice' ; 
+sDim2 = 'Version' ;
+sDim3 = 'Scenario' ; 
+sDim4 = 'Mois' ; 
+sDim5 = 'Poste' ; 
+sDim6 = 'Magasin' ;
+sDim7 = 'Salarie' ;
+sDim = 'm_MS_Individuelle' ;
+
+### 1. Creation vue CIBLE sur MS_Individuelle
+sVueCible = 'Vue_Cible' | Today (0) | GetProcessName();
+
+IF( ViewExists( sCubeCible , sVueCible ) = 1 );
+  ViewDestroy( sCubeCible , sVueCible );
+ENDIF; 
+ViewCreate( sCubeCible , sVueCible , nDebug);
+
+# Dim 1 : Exercice : sur sExerciceEnCours
+IF( SubsetExists( sDim1 , sVueCible ) = 1 );
+  SubsetDestroy ( sDim1 , sVueCible ) ; 
+ENDIF;
+SubsetCreate ( sDim1 , sVueCible , nDebug) ; 
+SubsetElementInsert ( sDim1 , sVueCible , sExerciceEnCours , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueCible , sDim1 , sVueCible ) ; 
+
+# Dim 2 : Version : sur sVersionEnCours
+IF( SubsetExists( sDim2 , sVueCible ) = 1 );
+  SubsetDestroy ( sDim2 , sVueCible ) ; 
+ENDIF;
+SubsetCreate ( sDim2 , sVueCible ) ; 
+SubsetElementInsert ( sDim2 , sVueCible , sVersionEnCours , nDebug) ;
+ViewSubsetAssign ( sCubeCible , sVueCible , sDim2 , sVueCible ) ; 
+
+# Dim 3 : Scenario : sur le ScenarioEnCours
+IF( SubsetExists( sDim3 , sVueCible ) = 1 );
+  SubsetDestroy ( sDim3 , sVueCible ) ; 
+ENDIF;
+SubsetCreate ( sDim3 , sVueCible ) ; 
+SubsetElementInsert ( sDim3 , sVueCible , sScenarioEnCours , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueCible , sDim3 , sVueCible ) ; 
+
+# Dim 4 Mois : si le scénario est budget alors tous les mois sinon que les mois prev
+SubsetDestroy ( sDim4 , sVueCible ) ; 
+IF ( sScenarioEnCours @= 'BUDGET' ) ;
+  SubsetCreateByMDX ( sVueCible , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim4 | ' ] ) } , 0 ) }' , nDebug) ;
+ELSE ;
+
+  SubsetCreate ( sDim4 , sVueCible , nDebug) ; 
+
+  # Récupération du 1er mois de simulation dans les attributs
+  sFirstMoisPrev = CellGetS( '}ElementAttributes_Scenario', sScenarioEnCours , 'Premier_Mois_Prev'  );
+  nFirstMoisPrev = DIMIX( 'Mois' , sFirstMoisPrev );
+
+  # Boucle sur la dimension mois
+  nTailleBoucle = DIMSIZ( sDim4 );
+  i = 1 ;
+
+  WHILE ( i <= nTailleBoucle ) ;
+
+    sMois = DIMNM( sDim4 , i );
+  
+    # Contrôle avec l'index du 1er mois simulation
+    IF ( ELLEV ( sDim4 , sMois ) = 0 & i >= nFirstMoisPrev ) ;
+      SubsetElementInsert( sDim4 , sVueCible , sMois , 1 );
+    ENDIF ;
+  
+    i = i + 1 ;
+  
+  END ;
+
+ENDIF ;
+
+ViewSubsetAssign ( sCubeCible , sVueCible , sDim4 , sVueCible ) ; 
+
+# Dim 5 : Poste : Tous les élements de niv 0
+IF( SubsetExists( sDim5 , sVueCible ) = 1 );
+  SubsetDestroy ( sDim5 , sVueCible ) ; 
+ENDIF;
+SubsetCreateByMDX ( sVueCible , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim5 | ' ] ) } , 0 ) }' , nDebug) ;
+ViewSubsetAssign ( sCubeCible , sVueCible , sDim5 , sVueCible ) ; 
+
+# Dim 6 : Magasin : Tous les élements de niv 0
+IF( SubsetExists( sDim6 , sVueCible ) = 1 );
+  SubsetDestroy ( sDim6 , sVueCible ) ; 
+ENDIF;
+SubsetCreateByMDX ( sVueCible , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim6 | ' ] ) } , 0 ) }' , nDebug) ;
+ViewSubsetAssign ( sCubeCible , sVueCible , sDim6 , sVueCible ) ; 
+
+# Dim 7 : Salarie : Seulement les salariés avec dont l'attribut 'Type' : Fictif
+IF( SubsetExists( sDim7 , sVueCible ) = 1 );
+  SubsetDestroy ( sDim7 , sVueCible ) ; 
+ENDIF;
+SubsetCreateByMDX ( sVueCible , '{FILTER( {TM1SUBSETALL( [Salarie] )}, [Salarie].[Type] = "Fictif")}' , nDebug) ;
+ViewSubsetAssign ( sCubeCible , sVueCible , sDim7 , sVueCible ) ; 
+
+# Dim 8 : m_MS_Individuelle 
+IF( SubsetExists( sDim , sVueCible ) = 1 );
+  SubsetDestroy ( sDim , sVueCible ) ; 
+ENDIF;
+SubsetCreate ( sDim , sVueCible ) ; 
+SubsetElementInsert ( sDim , sVueCible , 'Salaire', nDebug  ) ;
+SubsetElementInsert ( sDim , sVueCible , 'PFA_HC', nDebug  ) ;
+SubsetElementInsert ( sDim , sVueCible , 'PFA_CC', nDebug  ) ;
+SubsetElementInsert ( sDim , sVueCible , 'PFA_RC', nDebug  ) ;
+SubsetElementInsert ( sDim , sVueCible , 'PFA_RGIE', nDebug  ) ;
+SubsetElementInsert ( sDim , sVueCible , 'PSO_RC', nDebug  ) ;
+SubsetElementInsert ( sDim , sVueCible , 'PSO_RGIE', nDebug  ) ;
+SubsetElementInsert ( sDim , sVueCible , 'Deprovision_PFA_HC', nDebug  ) ;
+SubsetElementInsert ( sDim , sVueCible , 'Deprovision_PFA_CC', nDebug  ) ;
+SubsetElementInsert ( sDim , sVueCible , 'Deprovision_PFA_RC', nDebug  ) ;
+SubsetElementInsert ( sDim , sVueCible , 'Deprovision_PFA_RGIE', nDebug  ) ;
+SubsetElementInsert ( sDim , sVueCible , 'Deprovision_PSO_RC', nDebug  ) ;
+SubsetElementInsert ( sDim , sVueCible , 'Deprovision_PSO_RGIE', nDebug  ) ;
+SubsetElementInsert ( sDim , sVueCible , 'Mutuelle', nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueCible , sDim , sVueCible ) ; 
+
+# Suppression des vues et sous-ensembles
+ViewZeroOut( sCubeCible, sVueCible );
+ViewDestroy( sCubeCible , sVueCible ) ;
+SubsetDestroy( sDim1 , sVueCible ) ;
+SubsetDestroy( sDim2 , sVueCible ) ;
+SubsetDestroy( sDim3 , sVueCible ) ;
+SubsetDestroy( sDim4 , sVueCible ) ;
+SubsetDestroy( sDim5 , sVueCible ) ;
+SubsetDestroy( sDim6 , sVueCible ) ;
+SubsetDestroy( sDim7 , sVueCible ) ;
+SubsetDestroy( sDim , sVueCible ) ;
+
+################    Fin de la vue CIBLE   ################
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+### 0. Variables 
+sContrat = 'CDI' ;
+sAnciennete = CellGetS (sCubeSource , Exercice, sVersionEnCours , sScenarioEnCours , Magasin , Salarie_Fictif , 'Anciennete');
+sPoste = CellGetS (sCubeSource , Exercice, sVersionEnCours , sScenarioEnCours , Magasin , Salarie_Fictif , 'Poste') ;
+
+
+# Date de début de contrat format YYYY-MM-DD
+sDateArrive = CellGetS( sCubeSource, Exercice, sVersionEnCours , sScenarioEnCours , Magasin , Salarie_Fictif, 'Date' );
+
+sJourArrive = subst(sDateArrive, 9, 2); 
+sMoisArrive = subst(sDateArrive, 6, 2); 
+nMoisArrive = StringToNumber ( sMoisArrive ) ;
+sAnneeArrive = subst(sDateArrive, 1, 4); 
+nDateArrive = DAYNO (sDateArrive);
+
+# Pas de date de fin de contrat (salarié fictif)
+
+### 1. Boucle sur les 12 mois
+nTailleBoucle = DimSiz ( sDimMois ) ;
+While ( nTailleboucle > 0 ) ;
+	# Récupération du mois 
+	sMois = DimNm ( sDimMois , nTailleBoucle ) ; 
+    nMois = DIMIX( 'Mois', sMois ) ;
+      
+	# Traitements seulement si le produit est un élément fin et Mois ecriture > 'Premier_Mois_Prev' (Attribut de Scenario)    
+	If ( ElLev ( sDimMois , sMois ) = 0 & nMois >= nFirstMoisPrev & nMois >= nMoisArrive ) ; 
+      
+      # DateDebut: 1er jour du mois parcouru format AAAA-MM-JJ
+      IF(sMois @= 'M01' % sMois @= 'M02'% sMois @= 'M03' ); 
+         sAnnee = SUBST(Exercice , 6 , 4) ;
+      ELSE ;
+         sAnnee = SUBST(Exercice , 1 , 4) ;
+      ENDIF;
+      
+      # Variables du mois parcouru
+      sMoisNum =  SUBST(sMois, 2, 2) ;
+      nbJourMois = ATTRN( 'Mois', sMois, 'NB_DAYS' );
+      sDateDebutMois = sAnnee | '-' | sMoisNum | '-' | '01'; 
+      nDateDebutMois = DAYNO( sDateDebutMois ); 
+      sDateFinMois = sAnnee | '-' | sMoisNum | '-' | NumberToString( nbJourMois );
+      nDateFinMois = DAYNO( sDateFinMois ); 
+      
+      # Nombre de jour d'ancienneté au début du mois
+      nJourAnciennete = nDateDebutMois - nDateArrive ;
+
+      # Calcul des proratas sur le mois d'arrivé du fictif (Depart)
+      #nProrataDebut = ( StringToNumber(sJourArrive) - nbJourMois) / nbJourMois  ; 
+      nProrataDebut = ( nbJourMois + 1 - StringToNumber(sJourArrive) )  / nbJourMois  ; 
+  
+      ### Gestion des différentes situations particulières 
+      # Cas n°1 :Salarié pas encore arrivé
+      #IF      (nJourAnciennete < -31) ;
+      IF( nDateArrive > nDateFinMois ) ;
+         ItemSkip; 
+         
+      # Cas n°2 : Arrivée du salarié sur le mois    
+      #ELSEIF( ( (nJourAnciennete >=  -31) & (nJourAnciennete <  0) ) ) ;   
+      ELSEIF ( nDateArrive > nDateDebutMois & nDateArrive <= nDateFinMois ) ;
+         nProrata  =  nProrataDebut; 
+      ELSE ;
+         nProrata = 1;
+      ENDIF;
+       
+       ### Calcul du nSalaireMois 
+       #    Heure par semaine : Type_Contrat (Cube Source Salarie_Fictif) : format : 3000 / 100 -> 30h semaines 
+       #    * Taux horaire : (Cube Param_Taux_Horaire avec ancienneté minimum)
+       #    = Salaire semaine
+       #    * 4.334
+       #    = Salaire mois 
+       nHeureSemaine = Value / 100 ;
+       nTauxHoraire = CellGetN( sCubeTaux , Exercice, sVersionEnCours , sScenarioEnCours, sPoste , sAnciennete , sContrat , Magasin , 'Taux_'|sMois );
+       nSalaireSemaine = nHeureSemaine * nTauxHoraire ;
+       nSalaireMois = nSalaireSemaine *  4.3334 * nProrata ;
+    
+       # Ecriture sur le cube cible : MS_Individuelle
+       CellPutN( nSalaireMois , sCubeCible, sExerciceEnCours, sVersionEnCours, sScenarioEnCours, sMois, sPoste , Magasin, Salarie_Fictif, 'Salaire' );
+
+       ###  Calcul des primes PFA à l'individu
+       ### Calcul des primes PFA HC
+       
+       # Primes provisionnées selon l'année calendaire
+       # Différenciation des exercices pour janvier, février et mars ( exercice n-1) sinon exercice en cours
+       IF ( sMois @= 'M01' % sMois @= 'M02' % sMois @= 'M03' ) ;
+         sExercicePFA = DIMNM( 'Exercice' , DIMIX( 'Exercice' , sExerciceEnCours ) - 1 ) ;
+         sScenarioPFA = 'Att11' ;
+         sVersionPFA = 'VF' ;
+       ELSE ;
+         sExercicePFA = sExerciceEnCours ;
+         sScenarioPFA = sScenarioEnCours ;
+         sVersionPFA = sVersionEnCours ;
+       ENDIF ;
+       
+       IF ( sPoste @= 'HC' ) ; 
+         nTauxHC   = CellGetN (sCubeTaux, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , sPoste , sAnciennete , sContrat , Magasin, 'Taux_'|sMois );
+         nTauxPFA_HC = CellGetN (sCubePrime, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , sMois , sPoste , Magasin, 'PFA', 'Taux' );
+         nPFA_HC   = nSalaireMois * nTauxPFA_HC * 1/12 ; 
+         
+         # Provision sur 11 mois
+         IF ( sMois @<> 'M12') ;
+           CellPutN( nPFA_HC , sCubeCible, sExerciceEnCours , sVersionEnCours , sScenarioEnCours, sMois, sPoste, Magasin, Salarie_Fictif, 'PFA_HC' );
+         ENDIF ;
+         IF ( sMois @= 'M12' ) ;
+           nPFA_HC_Deprov = nPFA_HC ;
+         ELSE ;
+           nPFA_HC_Deprov = CellGetN ( sCubeCible, sExercicePFA , sVersionPFA , sScenarioPFA, sMois, sPoste, Magasin, Salarie_Fictif, 'PFA_HC' );
+         ENDIF ;
+         ## Chargement du montant de deprovision sur M12
+         CellIncrementN ( nPFA_HC_Deprov , sCubeCible, sExerciceEnCours, sVersionEnCours , sScenarioEnCours, 'M12' , sPoste, Magasin, Salarie_Fictif, 'Deprovision_PFA_HC' );
+         IF ( sMois@<> 'M12' ) ;
+           CellINCREMENTN(  nPFA_HC_Deprov * -1 , sCubeCible, sExerciceEnCours , sVersionEnCours , sScenarioEnCours, 'M12' , sPoste, Magasin, Salarie_Fictif, 'PFA_HC' );  
+         ENDIF ;
+       ENDIF ;
+       
+       ### Calcul des primes PFA CC
+       IF ( sPoste @= 'CC' ) ; 
+         nTauxCC   = CellGetN (sCubeTaux, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , sPoste , sAnciennete , sContrat , Magasin, 'Taux_'|sMois );
+         nTauxPFA_CC = CellGetN (sCubePrime, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , sMois, sPoste , Magasin, 'PFA', 'Taux' );
+         nPFA_CC = nSalaireMois * nTauxPFA_CC * 1/12 ; 
+         # Provision sur 11 mois
+         IF ( sMois @<> 'M12') ;
+           CellPutN(  nPFA_CC , sCubeCible, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , sMois, sPoste, Magasin, Salarie_Fictif, 'PFA_CC' );   
+         ENDIF ;
+         IF ( sMois @= 'M12' ) ;
+           nPFA_CC_Deprov = nPFA_CC ;
+         ELSE ;
+           nPFA_CC_Deprov = CellGetN ( sCubeCible, sExercicePFA , sVersionPFA , sScenarioPFA, sMois, sPoste, Magasin, Salarie_Fictif, 'PFA_CC' );
+         ENDIF ;
+         ## Chargement du montant de deprovision sur M12
+         CellIncrementN( nPFA_CC_Deprov , sCubeCible, sExerciceEnCours, sVersionEnCours , sScenarioEnCours, 'M12' , sPoste, Magasin, Salarie_Fictif, 'Deprovision_PFA_CC' );
+         IF ( sMois @<> 'M12' ) ;
+           CellIncrementN(  nPFA_CC_Deprov * -1 , sCubeCible, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , 'M12', sPoste, Magasin, Salarie_Fictif , 'PFA_CC' );
+         ENDIF ;
+       ENDIF ;
+       
+       ### Calcul des primes PFA RC
+       IF ( sPoste @= 'RC' ) ; 
+         nTauxRC   = CellGetN (sCubeTaux, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , sPoste , sAnciennete , sContrat , Magasin, 'Taux_'|sMois );
+         nTauxPFA_RC = CellGetN (sCubePrime, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , sMois, sPoste , Magasin, 'PFA', 'Taux' );
+         nPFA_RC = nSalaireMois  * nTauxPFA_RC * 1/12 ; 
+         # Provision sur 11 mois
+         IF ( sMois @<> 'M12') ;
+           CellPutN(  nPFA_RC , sCubeCible, sExerciceEnCours , sVersionEnCours , sScenarioEnCours, sMois, sPoste, Magasin, Salarie_Fictif, 'PFA_RC' );
+         ENDIF ;
+         IF ( sMois @= 'M12' ) ;
+           nPFA_RC_Deprov = nPFA_RC ;
+         ELSE ;
+           nPFA_RC_Deprov = CellGetN ( sCubeCible, sExercicePFA , sVersionPFA , sScenarioPFA, sMois, sPoste, Magasin, Salarie_Fictif, 'PFA_RC' );
+         ENDIF ;
+         ## Chargement du montant de deprovision sur M12
+         CellIncrementN ( nPFA_RC_Deprov , sCubeCible, sExerciceEnCours, sVersionEnCours , sScenarioEnCours, 'M12' , sPoste, Magasin, Salarie_Fictif, 'Deprovision_PFA_RC' );
+         IF ( sMois @<> 'M12' ) ;
+           CellIncrementN(  nPFA_RC_Deprov * -1 , sCubeCible, sExerciceEnCours , sVersionEnCours , sScenarioEnCours, 'M12' , sPoste, Magasin, Salarie_Fictif, 'PFA_RC' );
+         ENDIF ;
+       ENDIF ;
+       
+       ### Calcul des primes PFA RESPONSABLE GIE
+       IF ( sPoste @= 'RESPONSABLE GIE' ) ; 
+         nTauxResGIE   = CellGetN (sCubeTaux, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , sPoste , sAnciennete , sContrat , Magasin, 'Taux_'|sMois );
+         nTauxPFA_ResGIE = CellGetN (sCubePrime, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , sMois, sPoste , Magasin, 'PFA', 'Taux' );
+         nPFA_ResGIE = nSalaireMois * nTauxPFA_ResGIE * 1/12 ; 
+         
+         # Provision sur 11 mois
+         IF ( sMois @<> 'M12') ;
+           CellPutN(  nPFA_ResGIE , sCubeCible, sExerciceEnCours , sVersionEnCours , sScenarioEnCours, sMois, sPoste, Magasin, Salarie_Fictif, 'PFA_RGIE' );  
+         ENDIF ;
+         IF ( sMois @= 'M12' ) ;
+           nPFA_ResGIE_Deprov = nPFA_ResGIE ;
+         ELSE ;
+           nPFA_ResGIE_Deprov = CellGetN ( sCubeCible, sExercicePFA , sVersionPFA , sScenarioPFA, sMois, sPoste, Magasin, Salarie_Fictif, 'PFA_RGIE' );
+         ENDIF ;
+         ## Chargement du montant de deprovision sur M12
+         CellIncrementN( nPFA_ResGIE_Deprov , sCubeCible, sExerciceEnCours, sVersionEnCours , sScenarioEnCours, 'M12' , sPoste, Magasin, Salarie_Fictif, 'Deprovision_PFA_RGIE' );
+         IF ( sMois @<> 'M12' ) ;
+           CellIncrementN(  nPFA_ResGIE_Deprov * -1 , sCubeCible, sExerciceEnCours , sVersionEnCours , sScenarioEnCours, 'M12' , sPoste, Magasin, Salarie_Fictif, 'PFA_RGIE' );
+         ENDIF ;
+       ENDIF ;
+
+       ###  Calcul des primes PSO à l'individu
+       ### Calcul des primes PSO RC
+       
+       # Primes provisionnées de juin à mai
+       # Différenciation des exercices pour avril et mai ( exercice en cours ) sinon exercice n-1
+       IF ( sMois @= 'M04' % sMois @= 'M05') ;
+         sExercicePSO = sExerciceEnCours ;
+         sScenarioPSO = sScenarioEnCours ;
+         sVersionPSO = sVersionEnCours ;
+       ELSE ;
+         sExercicePSO = DIMNM( 'Exercice' , DIMIX( 'Exercice' , sExerciceEnCours ) - 1 ) ;
+         sScenarioPSO = 'Att11' ;
+         sVersionPSO = 'VF' ;
+       ENDIF ;
+       
+       IF ( sPoste @= 'RC' ) ; 
+         nTauxRC   = CellGetN (sCubeTaux, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , sPoste , sAnciennete , sContrat , Magasin, 'Taux_'|sMois );
+         nTauxPSO_RC = CellGetN (sCubePrime, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , sMois, sPoste , Magasin, 'PSO', 'Taux' );
+         nPSO_RC = nSalaireMois * nTauxPSO_RC * 1/12;
+
+         # Provision sur 11 mois
+         IF ( sMois @<> 'M05') ;
+           CellPutN(  nPSO_RC , sCubeCible, sExerciceEnCours , sVersionEnCours , sScenarioEnCours, sMois, sPoste, Magasin, Salarie_Fictif, 'PSO_RC' );
+           
+         ENDIF ;
+         IF ( sMois @= 'M05' ) ;
+           nPSO_RC_Deprov = nPSO_RC ;
+         ELSE ;
+           nPSO_RC_Deprov = CellGetN ( sCubeCible, sExercicePSO , sVersionPSO , sScenarioPSO, sMois, sPoste, Magasin, Salarie_Fictif, 'PSO_RC' );
+         ENDIF ;
+         ## Chargement du montant de deprovision sur M05
+         CellIncrementN(  nPSO_RC_Deprov , sCubeCible, sExerciceEnCours, sVersionEnCours , sScenarioEnCours, 'M05' , sPoste, Magasin, Salarie_Fictif, 'Deprovision_PSO_RC' ) ; 
+         IF ( sMois @<> 'M05' ) ;
+           CellIncrementN(  nPSO_RC_Deprov *-1 , sCubeCible, sExerciceEnCours , sVersionEnCours , sScenarioEnCours, 'M05' , sPoste, Magasin, Salarie_Fictif, 'PSO_RC' );
+         ENDIF ;
+       ENDIF ;
+       
+       ### Calcul des primes PSO RESPONSABLE GIE'
+       IF ( sPoste @= 'RESPONSABLE GIE' ) ; 
+         nTauxRGIE   = CellGetN (sCubeTaux, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , sPoste , sAnciennete , sContrat , Magasin, 'Taux_'|sMois );
+         nTauxPSO_RGIE = CellGetN (sCubePrime, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , sMois, sPoste , Magasin, 'PSO', 'Taux' );
+         nPSO_RGIE = nSalaireMois  * nTauxPSO_RGIE  * 1/12; 
+         # Provision sur 11 mois
+         IF ( sMois @<> 'M05') ;
+           CellPutN(  nPSO_RGIE , sCubeCible, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , sMois, sPoste, Magasin, Salarie_Fictif, 'PSO_RGIE' );           
+         ENDIF ;
+         IF ( sMois @= 'M05' ) ;
+           nPSO_RGIE_Deprov = nPSO_RGIE ;
+         ELSE ;
+           nPSO_RGIE_Deprov = CellGetN ( sCubeCible, sExercicePSO , sVersionPSO , sScenarioPSO, sMois, sPoste, Magasin, Salarie_Fictif, 'PSO_RGIE' );
+         ENDIF ;
+         ## Chargement du montant de deprovision sur M05
+         CellIncrementN(  nPSO_RGIE_Deprov , sCubeCible, sExerciceEnCours, sVersionEnCours , sScenarioEnCours, 'M05' , sPoste, Magasin, Salarie_Fictif, 'Deprovision_PSO_RGIE' );
+         IF ( sMois @<> 'M05' ) ;
+           CellIncrementN(  nPSO_RGIE_Deprov * -1 , sCubeCible, sExerciceEnCours , sVersionEnCours , sScenarioEnCours , 'M05' , sPoste, Magasin, Salarie_Fictif, 'PSO_RGIE' );
+         ENDIF ;
+       ENDIF ;
+       
+       ### Calcul de la mutuelle
+       # On pousse par défault le montant saisi dans Param_Taux_Globaux
+       nMutuelleMontant = CellGetN('Param_Taux_Globaux', sExerciceEnCours , sVersionEnCours, sScenarioEnCours, sMois, Magasin, 'Mutuelle', 'Montant' ) ;
+       CellPutN(  nMutuelleMontant , sCubeCible, sExerciceEnCours, sVersionEnCours , sScenarioEnCours, sMois, sPoste, Magasin, Salarie_Fictif, 'Mutuelle' );
+
+  EndIf ; 
+  # Réduction de nTailleBoucle de 1 pour passer au mois suivant.
+  nTailleBoucle = nTailleBoucle - 1 ; 
+# Fin des traitements de la boucle, on retourne au ‘’While’’
+End ;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+# Declaration variables et constantes
+Z_FIN_EXE = StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE = Subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+Z_STATUS = IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION = Z_FIN_EXE - Z_DEBUT_EXE;
+Z_LOCAL_TIME =   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+Z_UTILISATEUR = TM1User;
+
+# Nettoyage -> CAMID("pans:u:cty@dimosoftware.com") into 'cty@dimosoftware.com'
+nDebut= SCAN( 'pans:u:', Z_UTILISATEUR );
+nDebutLong = LONG('pans:u:');
+nStart = nDebut + nDebutLong ;
+nTotal = LONG(Z_UTILISATEUR) ;
+sUser = SUBST(Z_UTILISATEUR, nStart, nTotal - nStart - 1) ;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+CELLPUTS( Z_STATUS , sCubeParamS , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamS ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamS , cMainProcName ,'DernExe');
+CELLPUTS( sUser, sCubeParamS , cMainProcName ,'txt_Utilisateur' );
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+
+#endregion

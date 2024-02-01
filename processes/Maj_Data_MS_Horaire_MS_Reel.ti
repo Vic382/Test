@@ -1,0 +1,442 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#*****************************************************************************
+# CREATEUR : Dimo Software - BNS
+# DATE DE CREATION : 31/08/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : ../../2023
+# DESCRIPTION DU PROCESSUS : 
+# Alimente le cube MS_Horaire à partir de MS_Reel
+# Récupération des heures par poste des salariés en CDI
+#*****************************************************************************
+
+### 0.Définition des variables du monitoring
+sCubeParamT	        = 'ParametrageT' ;
+sCubeParamP         = 'ParametresSources' ;
+sCubeParamS         = 'ParametresSources' ;
+sCubeParamF  = 'ParametresFonctionnels' ;
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+Z_DEBUT_EXE         = StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+nDebug = 1 ; 
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+#***********************************************************************************************************
+#                                  Définition des variables
+#***********************************************************************************************************
+
+# nDebug pour créer des ss-ensemble et vue temporaire
+# Si 1 les ss-ensemble et vue temporaire si 0 les ss-ensemble et vue ne seront pas supprimés
+nDebug = 1 ;
+
+
+sDimSem = 'Semaine'  ;
+
+
+#**********************************************************************************************************
+#                                  DEBUT ALIM CUBE
+#**********************************************************************************************************
+###***Définition de la phase en cours 
+sExercice = CellGetS ( sCubeParamF , 'ExerciceEnCours' , 'ValeurS' ) ;  
+sScenario = CellGetS ( sCubeParamF , 'ScenarioEnCours' , 'ValeurS' ) ;
+sVersion = CellGetS ( sCubeParamF , 'VersionEnCours' , 'ValeurS' ) ;
+sMoisProjection = CellGetS ( sCubeParamF , 'MoisProjection' , 'ValeurS' ) ;
+sExerciceProjection = CellGetS ( sCubeParamF , 'ExerciceProjection' , 'ValeurS' ) ; 
+
+###########################################
+## Creation vue zero
+###########################################
+
+# Le nom de la vue du cube :
+sVueZero = 'RAZ_vue_' | Today (0) | '_' | GetProcessName () ; 
+
+# Declaration des variables du cube cible
+sCubeCible = 'MS_Horaire' ;
+sDimCible1 = 'Exercice' ;
+sDimCible2 = 'Version' ;
+sDimCible3 = 'Scenario' ;
+sDimCible4 = 'Magasin' ;
+sDimCible5 = 'Semaine' ;
+sDimCible = 'm_MS_Horaire' ;
+
+IF( ViewExists( sCubeCible, sVueZero ) = 1 );
+  ViewDestroy( sCubeCible, sVueZero );
+ENDIF;
+ViewCreate( sCubeCible, sVueZero , nDebug );
+
+
+# Création des sous-ensembles des dimensions du cube
+
+# Exercice
+IF( SubsetExists( sDimCible1 , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible1 , sVueZero );
+ENDIF;
+SubsetCreate ( sDimCible1 , sVueZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible1 , sVueZero , sExercice , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible1 , sVueZero ) ; 
+
+# Version
+IF( SubsetExists( sDimCible2 , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible2 , sVueZero );
+ENDIF;
+SubsetCreate ( sDimCible2 , sVueZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible2 , sVueZero , sVersion , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible2 , sVueZero ) ; 
+
+# Scenario
+IF( SubsetExists( sDimCible3 , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible3 , sVueZero );
+ENDIF;
+SubsetCreate ( sDimCible3 , sVueZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible3 , sVueZero , sScenario , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible3 , sVueZero ) ; 
+
+# Magasin
+IF( SubsetExists( sDimCible4 , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible4 , sVueZero );
+ENDIF;
+SubsetCreatebyMDX( sVueZero , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDimCible4|'] )}, 0)}' , nDebug ) ;
+ViewSubsetAssign( sCubeCible , sVueZero , sDimCible4 , sVueZero );
+
+# Semaine
+IF( SubsetExists( sDimCible5 , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible5 , sVueZero );
+ENDIF;
+
+IF ( sScenario @= 'BUDGET' ) ;
+  SubsetCreatebyMDX( sVueZero , '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Semaine] )}, "'|sExercice|'")}, ALL, RECURSIVE )}, 0)}' , nDebug ) ;
+ELSE ;
+
+  SubsetCreate ( sDimCible5 , sVueZero , nDebug ) ; 
+  # Boucle sur la dimension mois
+  nTailleBoucle = DIMSIZ( sDimCible5 );
+  i = 1 ;
+
+  WHILE ( i <= nTailleBoucle ) ;
+
+    sSemaine = DIMNM( sDimCible5 , i );
+  
+    # Contrôle avec l'index du 1er mois simulation
+    IF ( ELLEV ( sDimCible5 , sSemaine ) = 0 ) ;
+      sMoisSemaine = ELPAR( sDimCible5 , sSemaine , 1 ) ;
+      sMoisS = Subst ( sMoisSemaine , 1 , 3 ) ;
+      sExerciceSemaine = Subst ( sMoisSemaine , 5 , 9  ) ;
+      #Récupération du 1er mois de simulation dans les attributs
+      sFirstMoisPrev = CellGetS( '}ElementAttributes_Scenario', sScenario , 'Premier_Mois_Prev'  );
+      nFirstMoisPrev = DIMIX( 'Mois' , sFirstMoisPrev );
+      nMoisSemaine = DIMIX( 'Mois' , sMoisS );
+      IF ( sExerciceSemaine @= sExercice & nMoisSemaine  >= nFirstMoisPrev ) ;
+        SubsetElementInsert( sDimCible5 , sVueZero , sSemaine , 1 );
+      ENDIF ;  
+    ENDIF ;
+  
+    i = i + 1 ;
+  
+  END ;
+
+ENDIF ;
+
+ViewSubsetAssign( sCubeCible , sVueZero , sDimCible5 , sVueZero );
+
+# m_MS_Horaire
+IF( SubsetExists( sDimCible , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible , sVueZero );
+ENDIF;
+SubsetCreate ( sDimCible , sVueZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible , sVueZero , 'Heure_HC' , nDebug ) ;
+SubsetElementInsert ( sDimCible , sVueZero , 'Heure_CC' , nDebug ) ;
+SubsetElementInsert ( sDimCible , sVueZero , 'Heure_RC' , nDebug ) ;
+SubsetElementInsert ( sDimCible , sVueZero , 'Heure_CDE' , nDebug ) ;
+SubsetElementInsert ( sDimCible , sVueZero ,  'Nb_HC' , nDebug ) ;
+SubsetElementInsert ( sDimCible , sVueZero ,  'Nb_CC' , nDebug ) ;
+SubsetElementInsert ( sDimCible , sVueZero ,  'Nb_RC' , nDebug ) ;
+SubsetElementInsert ( sDimCible , sVueZero , 'Nb_CDE' , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible , sVueZero ) ; 
+
+# RAZ de la vue zero
+ViewZeroOut( sCubeCible, sVueZero ) ;
+
+###########################################
+## Creation vue Source
+###########################################
+
+# Declaration des variables du cube source
+
+sCubeSource = 'MS_Reel' ; 
+sDimSource1 = 'Exercice' ;
+sDimSource2 = 'Contrat' ;
+sDimSource3 = 'Mois' ;
+sDimSource4 = 'Poste' ;
+sDimSource5 = 'Magasin' ;
+sDimSource6 = 'Salarie' ;
+sDimSource = 'm_MS_Reel' ;
+
+# Le nom de la vue du cube :
+sVueSource = 'Source_vue_' | Today (0) | '_' | GetProcessName () ; 
+
+# Le nom des sous-ensembles
+sSubsetSource = 'Source_Subset_' | Today (0) | '_' | GetProcessName () ; 
+
+# Destruction pour recréation de la vue
+ ViewDestroy ( sCubeSource , sVueSource ) ;
+ ViewCreate ( sCubeSource , sVueSource , nDebug ) ; 
+
+# Création des sous-ensembles des dimensions du cube
+
+# Exercice
+IF( SubsetExists( sDimSource1 , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource1 , sVueSource );
+ENDIF;
+SubsetCreate ( sDimSource1 , sVueSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource1 , sVueSource , sExerciceProjection , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource1 , sVueSource ) ;
+
+# Contrat
+IF( SubsetExists( sDimSource2 , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource2 , sVueSource );
+ENDIF;
+SubsetCreate ( sDimSource2 , sVueSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource2 , sVueSource , 'CDI' , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource2 , sVueSource ) ;
+
+# Mois
+IF( SubsetExists( sDimSource3 , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource3 , sVueSource );
+ENDIF;
+SubsetCreate ( sDimSource3 , sVueSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource3 , sVueSource , sMoisProjection , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource3 , sVueSource ) ;
+
+# Poste
+IF( SubsetExists( sDimSource4 , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource4 , sVueSource );
+ENDIF;
+SubsetCreatebyMDX( sVueSource , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDimSource4|'] )}, 0)}' , nDebug ) ;
+ViewSubsetAssign( sCubeSource , sVueSource , sDimSource4 , sVueSource );
+
+# Magasin
+IF( SubsetExists( sDimSource5 , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource5 , sVueSource );
+ENDIF;
+SubsetCreatebyMDX( sVueSource , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDimSource5|'] )}, 0)}' , nDebug ) ;
+ViewSubsetAssign( sCubeSource , sVueSource , sDimSource5 , sVueSource );
+
+# Salarie
+IF( SubsetExists( sDimSource6 , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource6 , sVueSource );
+ENDIF;
+SubsetCreatebyMDX( sVueSource , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDimSource6|'] )}, 0)}' , nDebug ) ;
+#SubsetCreate ( sDimSource6 , sVueSource , nDebug ) ; 
+#SubsetElementInsert ( sDimSource6 , sVueSource ,'Total_Salarie' , nDebug ) ;
+ViewSubsetAssign( sCubeSource , sVueSource , sDimSource6 , sVueSource );
+
+# m_MS_Reel
+IF( SubsetExists( sDimSource , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource , sVueSource );
+ENDIF;
+SubsetCreate ( sDimSource , sVueSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource , sVueSource , 'Heure_Contrat' , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource , sVueSource ) ;
+
+#### Uniquement pour une vue source ####
+ViewExtractSkipCalcsSet( sCubeSource , sVueSource , 0 );
+ViewExtractSkipZeroesSet( sCubeSource , sVueSource , 1 );
+ViewExtractSkipRuleValuesSet( sCubeSource , sVueSource , 1 );
+
+#Définition de la source
+DataSourceNameForServer = sCubeSource ;
+DatasourceCubeView = sVueSource ;
+
+
+### Création du sous-ensemble semaine de l'exercice en cours
+sSubsetExercice = 'ExerciceEnCours' ;
+SubsetDestroy( sDimSem , sSubsetExercice ) ;
+IF ( SubsetExists( sDimSem , sSubsetExercice ) = 0 );
+  SubsetCreate( sDimSem , sSubsetExercice , 0 ) ;
+ENDIF ;
+
+
+nTailleBoucle = DimSiz ( sDimSem ) ;
+
+# Début de la boucle : tant que la variable nTailleBoucle est supérieure à 0, nous allons réaliser les traitements suivants :
+While ( nTailleboucle > 0 ) ;
+
+	# Récupération de la semaine portant l'index correspondant à "nTailleBoucle"
+	sSemaine = DimNm ( sDimSem , nTailleBoucle ) ; 
+    
+	# Test pour connaître le niveau de la semaine : est-ce un élément consolidé ou un élément fin ?
+	# Nous faisons les traitements seulement si le produit est un élément fin
+	If ( ElLev ( sDimSem , sSemaine ) = 0 ) ; 
+		sExerciceSemaine = SUBST( sSemaine , 5 , 9) ;
+
+		IF  (  sExerciceSemaine @= sExercice ) ;
+
+			SubsetElementInsert( sDimSem , sSubsetExercice , sSemaine , 1 );
+
+		ENDIF;
+	EndIf ; 
+	# Réduction de nTailleBoucle de 1 pour passer à la semaine suivante suivant.
+	nTailleBoucle = nTailleBoucle - 1 ; 
+# Fin des traitements de la boucle, on retourne au ‘’While’’ pour faire le test de condition	
+End ;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# Récupération de la date de sortie du salarié
+sDateSortie = CellGetS ( sCubeSource, Exercice , Contrat , Mois , Poste , Magasin , Salarie , 'Date_Sortie' ) ;
+
+# Traitement des dates de sortie vide pour les CDI
+IF ( sDateSortie @= '' ) ;
+    
+    # Redéfinition de la date de fin comme étant la date de fin d'exercice
+    sExerciceFin = SUBST ( Exercice , 6 , 4 ) ;
+
+    # Pour le mois, récupération du dernier élément de la dimension
+    nTailleDim = DIMSIZ( sDimSource3 );
+    sMoisFin = DIMNM( sDimSource3 , nTailleDim );
+
+    # Pour le jour, récupération de l'attribut du mois
+    sJourFin = CellGetS( '}ElementAttributes_Mois', sMoisFin , 'NB_DAYS'  );
+
+    sDateSortie = sJourFin | '/' |  SUBST ( sMoisFin , 2 , 2 ) | '/' | sExerciceFin ;
+    
+ENDIF ;
+
+# Transformation de la date au format AAAA-MM-JJ pour fonction DayNo
+sJourSortie = SUBST( sDateSortie , 1 , 2 );
+sMoisSortie = SUBST( sDateSortie , 4 , 2 );
+sAnneeSortie = SUBST( sDateSortie , 7 , 4 );
+sDateFin = sAnneeSortie | '-' | sMoisSortie | '-' | sJourSortie ;
+nDateSortie = DayNo( sDateFin ) ;
+
+# Définition de la semaine de sortie
+# Récupération de la semaine du jour de sortie dans le cube Param_Periode
+sSemaineJourSortie = CellGetS ( 'Param_Periode', sDateFin , 'Num_Semaine' ) ;
+sExerciceSemaine = CellGetS ( 'Param_Periode', sDateFin , 'Exercice' ) ;
+sSemaineSortie = sSemaineJourSortie | '-' | sExerciceSemaine ;
+nSemaineSortie = DIMIX( sDimSem , sSemaineSortie );
+
+
+#La taille de la boucle correspond au nombre d'éléments de la dimension
+nTailleBoucle = SubsetGetSize( sDimSem , sSubsetExercice ) ;
+
+# Début de la boucle : tant que la variable nTailleBoucle est supérieure à 0, nous allons réaliser les traitements suivants :
+While ( nTailleboucle > 0 ) ;
+
+	# Récupération de la semaine portant l'index correspondant à "nTailleBoucle"
+
+	sSemaine = SubsetGetElementName( sDimSem , sSubsetExercice , nTailleboucle );
+
+    
+	# Test pour connaître le niveau de la semaine : est-ce un élément consolidé ou un élément fin ?
+	# Nous faisons les traitements seulement si le produit est un élément fin
+	If ( ElLev ( sDimSem , sSemaine ) = 0 ) ; 
+
+		sMois = ELPAR( 'Semaine' , sSemaine , 1 ) ;
+		nSemaine = ELCOMPN ( 'Semaine' , sMois )  ;
+        # Défintion de la semaine parcouru pour contrôle de date de sortie
+        nSemaineCtrl = DIMIX( sDimSem , sSemaine );
+
+
+        # Récupération du 1er mois de simulation dans les attributs
+        sFirstMoisPrev = CellGetS( '}ElementAttributes_Scenario', sScenario , 'Premier_Mois_Prev'  );
+        nFirstMoisPrev = DIMIX( 'Mois' , sFirstMoisPrev );
+
+        sMoisForecast = SUBST(ELPAR( 'Semaine', sSemaine, 1 ) , 1, 3);
+
+        # Défintion du mois parcouru pour contrôle de date de sortie                       
+        sMoisCtrl = SUBST ( sMois , 1 , 3 ) ;
+        IF ( sMoisCtrl @= 'M01' % sMoisCtrl @= 'M02' % sMoisCtrl @= 'M03' ) ;
+            sExerciceDebut = SUBST ( Exercice , 6 , 4 ) ;
+        ELSE ;
+            sExerciceDebut = SUBST ( Exercice , 1 , 4 ) ;
+        ENDIF ;
+        
+        sDateDebut = sExerciceDebut | '-' | SUBST ( sMoisCtrl , 2 , 2 ) | '-' | '01' ;
+        nDateDebut = DayNo ( sDateDebut ) ;
+        
+        nMois = DIMIX( 'Mois' , sMoisForecast );
+
+        # Si le mois parcouru est un mois prev et que le salarié est présent sur le mois et la semaine
+		IF ( nMois >= nFirstMoisPrev & nDateSortie >= nDateDebut & nSemaineSortie >= nSemaineCtrl ) ;
+
+
+			IF ( Poste @= 'HC' ) ;
+				CellIncrementN ( Value/100 , sCubeCible , sExercice ,sVersion , sScenario , Magasin , sSemaine , 'Heure_HC' ) ; 
+                                                	CellIncrementN ( 1 / nSemaine  , sCubeCible , sExercice ,sVersion , sScenario , Magasin , sSemaine , 'Nb_HC' ) ; 
+			ENDIF ; 
+
+			IF ( Poste @= 'CC' ) ;
+				CellIncrementN ( Value/100 , sCubeCible , sExercice ,sVersion , sScenario , Magasin , sSemaine ,  'Heure_CC'  ) ; 
+                                                	CellIncrementN ( 1 /nSemaine ,  sCubeCible , sExercice ,sVersion , sScenario , Magasin , sSemaine , 'Nb_CC' ) ; 
+			ENDIF ; 
+
+			IF ( Poste @= 'RC' ) ;
+				CellIncrementN ( Value/100 , sCubeCible ,  sExercice ,sVersion , sScenario , Magasin , sSemaine , 'Heure_RC' ) ;
+                                                	CellIncrementN ( 1 /nSemaine , sCubeCible , sExercice ,sVersion , sScenario , Magasin , sSemaine , 'Nb_RC' ) ;  
+			ENDIF ; 
+
+			IF ( Poste @= 'RESPONSABLE GIE' ) ;
+				CellIncrementN ( Value/100 , sCubeCible ,  sExercice ,sVersion , sScenario , Magasin , sSemaine , 'Heure_CDE' ) ; 
+                                                	CellIncrementN ( 1 /nSemaine , sCubeCible , sExercice ,sVersion , sScenario , Magasin , sSemaine , 'Nb_CDE' ) ; 
+			ENDIF ; 
+
+		EndIf ; 
+	ENDIF;
+	# Réduction de nTailleBoucle de 1 pour passer au produit suivant.
+	nTailleBoucle = nTailleBoucle - 1 ; 
+# Fin des traitements de la boucle, on retourne au ‘’While’’ pour faire le test de condition	
+End ;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+# Declaration variables et constantes
+Z_FIN_EXE = StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE = Subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+Z_STATUS = IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION = Z_FIN_EXE - Z_DEBUT_EXE;
+Z_LOCAL_TIME =   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+Z_UTILISATEUR = TM1User;
+
+# Nettoyage -> CAMID("pans:u:cty@dimosoftware.com") into 'cty@dimosoftware.com'
+nDebut= SCAN( 'pans:u:', Z_UTILISATEUR );
+nDebutLong = LONG('pans:u:');
+nStart = nDebut + nDebutLong ;
+nTotal = LONG(Z_UTILISATEUR) ;
+sUser = SUBST(Z_UTILISATEUR, nStart, nTotal - nStart - 1) ;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+CELLPUTS( Z_STATUS , sCubeParamS , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamS ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamS , cMainProcName ,'DernExe');
+CELLPUTS( sUser, sCubeParamS , cMainProcName ,'txt_Utilisateur' );
+#CELLPUTS( Mois, sCubeParamS , cMainProcName ,'DernRef' );
+#------------------------------------------------ FIN - MONITORING  -------------------------------------------#
+
+
+#endregion

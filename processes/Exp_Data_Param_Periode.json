@@ -1,0 +1,45 @@
+{
+	"@type":"Process",
+	"Name":"Exp_Data_Param_Periode",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Exp_Data_Param_Periode.ti",
+	"UIData":"_ParameterConstraints=e30=€",
+	"VariablesUIData":
+	[
+		"VarType=32€ColType=827€",
+		"VarType=32€ColType=827€",
+		"VarType=32€ColType=827€"
+	],
+	"DataSource":
+	{
+		"Type":"TM1CubeView",
+		"dataSourceNameForClient":"Param_Periode",
+		"dataSourceNameForServer":"Param_Periode",
+		"view":"Par Défaut"
+	},
+	"Parameters":[],
+	"Variables":
+	[
+		{
+			"Name":"Annee_Calendaire",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"m_Param_Periode",
+			"Type":"String",
+			"Position":2,
+			"StartByte":0,
+			"EndByte":0
+		},
+		{
+			"Name":"Value",
+			"Type":"String",
+			"Position":3,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

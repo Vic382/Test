@@ -1,6 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Tous_Desc.",
-	"Alias":"Description",
-	"Expression":"{TM1SubsetAll ( [Prestataire_Elec] ) }"
-}

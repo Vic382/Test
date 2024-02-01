@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"All Members",
-	"Expression":"[m_ParametresFonctionnels].MEMBERS"
-}

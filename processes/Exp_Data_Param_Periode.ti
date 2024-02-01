@@ -1,0 +1,143 @@
+#region Prolog
+
+#*****************************************************************************
+# CREATEUR : Dimo Software - VRT
+# DATE DE CREATION : 31/08/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 13/11/2023
+# DESCRIPTION DU PROCESSUS : 
+# Export des données de param periode pour initialiser l'instance charge d'exploitation
+
+#*****************************************************************************
+
+### 0.Définition des variables du monitoring
+sCubeParamT	        = 'ParametrageT' ;
+sCubeParamP         = 'ParametresSources' ;
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+Z_DEBUT_EXE         = StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+nDebug = 1 ; 
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+
+sCheminDossier = CellGetS( sCubeParamP, cMainProcName , 'Txt_RepertoireExport' ); 
+sNomFichier = CellGetS( sCubeParamP, cMainProcName , 'txt_NomFichierExport'); 
+sFichierExpCmp = sCheminDossier | sNomFichier |'.csv' ; 
+
+DataSourceASCIIDelimiter = ';' ;
+
+### 1. Déclaration des variables
+nEntete = 1 ; 
+
+
+########  Debut de la vue SOURCE  ########
+
+### 1. Définition de la source du processus
+sCubeSource = 'Param_Periode';
+sDimSource1 = 'Annee_Calendaire' ; 
+sDimSource = 'm_Param_Periode' ; 
+
+# Définition nom de vue / sous-ensemble
+sVueSource = 'Vue_Source' | Today (0) | '_' | GetProcessName () ;
+sSubsetSource = 'Source_Subset_' | Today (0) | '_' | GetProcessName () ; 
+
+# Remise à 0 de la vue
+ViewDestroy ( sCubeSource , sVueSource ) ;
+ViewCreate ( sCubeSource , sVueSource ) ; 
+
+### 2. Création des sous-ensembles des dimensions du cube source MS_Reel
+# Dim 1 : Niv 0 de la dimension Année_Calendaire
+SubsetDestroy ( sDimSource1 , sSubsetSource ) ; 
+SubsetCreateByMDX ( sSubsetSource , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimSource1 | ' ] ) } , 0 ) }' ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource1 , sSubsetSource ) ; 
+
+# Dim  : m_Param_Periode : tous les niv0
+SubsetDestroy ( sDimSource , sSubsetSource ) ; 
+SubsetCreate ( sDimSource , sSubsetSource ) ; 
+SubsetElementInsert ( sDimSource , sSubsetSource , 'Nom_Jour' , nDebug  ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource , sSubsetSource ) ; 
+
+
+### 3. Périmètre de calcul (0 = Inclure / 1 = Exclure)
+# On ne traite PAS les croisements égaux à zéro :
+ViewExtractSkipZeroesSet ( sCubeSource , sVueSource , 1 ) ; 
+# On ne traite PAS les croisements concernés par des règles de calculs
+ViewExtractSkipRuleValuesSet ( sCubeSource , sVueSourCe , 1 ) ;
+# On ne traite PAS les croisements concernés par des cellules consolidéees 
+ViewExtractSkipCalcsSet ( sCubeSource , sVueSource , 1 ) ; 
+
+### 5. Définition de la source du processu : 
+DataSourceNameForServer  = sCubeSource ; 
+DataSourceCubeView = sVueSource ; 
+#endregion
+#region Metadata
+
+#endregion
+#region Data
+
+
+#Définition des variable :
+
+nType = CellgetN ( sCubeSource , Annee_Calendaire , 'Type_jour' ) ;
+nJourFerie = CellgetN ( sCubeSource , Annee_Calendaire , 'Jour_Ferie' ) ;
+sLibelleJourFerie = CellgetS ( sCubeSource , Annee_Calendaire , 'Libelle_Jour_Ferie' ) ;
+sNum_Semaine = CellgetS ( sCubeSource , Annee_Calendaire , 'Num_Semaine' ) ;
+sNum_Semaine_Civlle = CellgetS ( sCubeSource , Annee_Calendaire , 'Num_Semaine_Civile' ) ;
+sMois = CellgetS ( sCubeSource , Annee_Calendaire , 'Mois' ) ;
+sMoisRattachement = CellgetS ( sCubeSource , Annee_Calendaire , 'Mois_Rattachement' ) ;
+sPeriodeRattachement = CellgetS ( sCubeSource , Annee_Calendaire , 'Periode_Rattachement' ) ;
+sTrimestre = CellgetS ( sCubeSource , Annee_Calendaire , 'Trimestre' ) ;
+sTrimestreRattachement = CellgetS ( sCubeSource , Annee_Calendaire , 'Trimestre_Rattachement' ) ;
+sSemestre = CellgetS ( sCubeSource , Annee_Calendaire , 'Semestre' ) ;
+sSemestreRattachement = CellgetS ( sCubeSource , Annee_Calendaire , 'Semestre_Rattachement' ) ;
+sAnnee = CellgetS ( sCubeSource , Annee_Calendaire , 'Annee' ) ;
+sExercice = CellgetS ( sCubeSource , Annee_Calendaire , 'Exercice' ) ;
+nLundi = CellgetN ( sCubeSource , Annee_Calendaire , 'Nb_Lundis' ) ;
+nMardi = CellgetN ( sCubeSource , Annee_Calendaire , 'Nb_Mardis' ) ;
+nMercredi = CellgetN ( sCubeSource , Annee_Calendaire , 'Nb_Mercredis' ) ;
+nJeudi = CellgetN ( sCubeSource , Annee_Calendaire , 'Nb_Jeudis' ) ;
+nVendredi = CellgetN ( sCubeSource , Annee_Calendaire , 'Nb_Vendredis' ) ;
+nSamedi = CellgetN ( sCubeSource , Annee_Calendaire , 'Nb_Samedis' ) ;
+nDimanche = CellgetN ( sCubeSource , Annee_Calendaire , 'Nb_Dimanches' ) ;
+nDimancheFetes = CellgetN ( sCubeSource , Annee_Calendaire , 'Nb_Dimanches_Fetes' ) ;
+
+#Définition de l'entete du fichier d'export
+IF ( nEntete =1 );
+
+  ASCIIOutput( sFichierExpCmp , 'Annee_Calendaire','Nom_Jour', 'Type_Jour', 'Jour_Ferie','Libelle_Jour_Ferie', 'Num_Semaine','Num_Semaine_Civile','Mois','Mois_Rattachement','Periode_Rattachement','Trimestre','Trimestre_Rattachement','Semestre', 'Semestre_Rattachement','Annee','Exercice'
+  ,'Nb_Lundis','Nb_Mardis','Nb_Mercredis','Nb_Jeudis','Nb_Vendredis','Nb_Samedis','Nb_Dimanches','Nb_Dimanches_Fetes');
+
+  nEntete = nEntete + 1 ; 
+
+ENDIF ;
+
+ASCIIOutput( sFichierExpCmp , Annee_Calendaire , value , NumberToString(nType), NumberToString(nJourFerie),sLibelleJourFerie, sNum_Semaine,sNum_Semaine_Civlle,sMois,sMoisRattachement,sPeriodeRattachement,sTrimestre,sTrimestreRattachement,sSemestre,sSemestreRattachement,sAnnee,sExercice
+,NumberToString(nLundi),NumberToString(nMardi),NumberToString(nMercredi),NumberToString(nJeudi),NumberToString(nVendredi),NumberToString(nSamedi),NumberToString(nDimanche),NumberToString(nDimancheFetes) );
+
+#endregion
+#region Epilog
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+# Declaration variables et constantes
+Z_FIN_EXE = StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE = Subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+Z_STATUS = IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION = Z_FIN_EXE - Z_DEBUT_EXE;
+Z_LOCAL_TIME =   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+Z_UTILISATEUR = TM1User;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+CELLPUTS( Z_STATUS , sCubeParamP , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamP ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamP , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamP , cMainProcName ,'txt_Utilisateur' );
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+#endregion
