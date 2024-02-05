@@ -3,7 +3,7 @@
 	"Name":"zBackup_Data_Archive",
 	"HasSecurityAccess":false,
 	"Code@Code.link":"zBackup_Data_Archive.ti",
-	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€_ParameterConstraints=e30=€",
 	"DataSource":
 	{
 		"Type":"None"
@@ -19,7 +19,37 @@
 		{
 			"Name":"pNbJours",
 			"Prompt":"Combien de jours de backup voulez vous conserver ?",
-			"Value":"200",
+			"Value":"45",
+			"Type":"String"
+		},
+		{
+			"Name":"pTM1Data",
+			"Prompt":"Quel est le chemin du répertoire Data ?",
+			"Value":"\"..\\Data\\\"",
+			"Type":"String"
+		},
+		{
+			"Name":"p7zExe",
+			"Prompt":"Quel est le chemin zip.exe ?",
+			"Value":"\"..\\EXE\\7-ZipPortable\\App\\7-Zip64\\7z.exe\"",
+			"Type":"String"
+		},
+		{
+			"Name":"pRepBackup",
+			"Prompt":"Quel est l'emplacement cible ?",
+			"Value":"\"..\\BACKUP\\\"",
+			"Type":"String"
+		},
+		{
+			"Name":"pRepExe",
+			"Prompt":"Quel est le chemin du répertoire EXE ?",
+			"Value":"..\\EXE\\",
+			"Type":"String"
+		},
+		{
+			"Name":"pBackup",
+			"Prompt":"Quel est le nom du 7zip.bat ?",
+			"Value":"7zip_archive_backup_Cloud.bat",
 			"Type":"String"
 		}
 	],

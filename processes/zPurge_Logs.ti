@@ -29,7 +29,7 @@ cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
 cTimeProcess        = cTimeStamp | '_' | cRandomInt;
 
 IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
-	cUtilisateur = 'Lanceur' ;
+	cUtilisateur = 'Admin' ;
 ELSE ;
 	cUtilisateur        = TM1User();
 ENDIF ;
@@ -52,16 +52,13 @@ nCountFichier      = 0 ;
 nErrors                  = 0 ;
 
 #***********************************************************************************************************
-#                                  Log start time
-#***********************************************************************************************************
-
-
-
-#***********************************************************************************************************
 #                                  Contrôle des paramètres
 #***********************************************************************************************************
 
-
+IF ( sNbHisto @= '' % pPrefixNomFichier @= '' ) ;
+  nErrors =  nErrors  + 1 ;
+  ProcessBreak;
+ENDIF ;
 
 ###########################
 # INITIALISATION DES VARIABLES #
@@ -125,4 +122,8 @@ End ;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
+
+IF ( nErrors > 0 ) ;
+  ProcessQuit();
+ENDIF ;
 #endregion

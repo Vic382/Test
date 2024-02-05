@@ -1,0 +1,126 @@
+#region Prolog
+
+#***********************************************************************************************
+# CREATEUR : VRT
+# DATE DE CREATION : 19/09/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : Master bouclant sur la dim Mois car 1 fichier par Mois
+#************************************************************************************************
+
+###############################   MONITORING   #################################
+
+### 0.Définition des variables du monitoring
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+sCubeParamS	             = 'ParametresSources' ;
+sCubeParamT	             = 'ParametrageT' ;
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+sSource = '' ;
+sNomFichier =  '' ;
+nErrors = 0 ;
+nErrorsSource = 0 ; 
+zLogNumero         = 1 ;
+nErrors          = 0;
+vMessage              = '';
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Admin' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+### 1. Déclaration des variables
+
+# Pour suppression des vues et ss ensemble temporaire
+nDebug = 1 ; 
+
+#**Fichier Debug
+sFichierRepDebug = CellGetS ( sCubeParamT , 'Txt_RepertoireDebug' , 'ValeurS' );
+sDebug = sFichierRepDebug | 'test'|cMainProcName|'.txt' ;
+
+
+###############################   FIN MONITORING   #################################
+
+# Déclaration des variables
+
+sDim = 'Mois' ;
+sSubsetSource = 'zTI_Source_' | cMainProcName ;
+
+# Création d'un subset dynamique avec tous les éléments fins si paramètre *
+# Sinon juste le mois voulu
+# IF ( pMois @= '*') ;
+#   SubsetDestroy ( sDim , sSubsetSource ) ; 
+#   StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDim | ' ] ) } , 0 ) }' ;
+#   SubsetCreateByMDX ( sSubsetSource , StringMDX , nDebug  ) ;
+# ELSE ;
+#   SubsetDestroy ( sDim , sSubsetSource ) ; 
+#   SubsetCreate( sDim , sSubsetSource , nDebug );
+#   SubsetElementInsert( sDim , sSubsetSource , pMois , 1 );
+# ENDIF ;
+
+# Récupération du mois en cours dans le cube param fonctionnel
+
+sMois = CellGetS( 'ParametresFonctionnels', 'MoisEnCours' , 'ValeurS' );
+
+SubsetDestroy ( sDim , sSubsetSource ) ; 
+SubsetCreate( sDim , sSubsetSource , nDebug );
+SubsetElementInsert( sDim , sSubsetSource , sMois , 1 );
+
+DatasourceDimensionSubset = sSubsetSource ;
+DatasourceNameForServer = sDim ;
+#endregion
+#region Data
+
+# Boucle sur la dimension Type_Sac car 1 fichier par type de sac
+
+nTailleBoucle = DIMSIZ( 'Type_Sac');
+i = 1 ;
+
+WHILE ( i <= nTailleBoucle ) ;
+
+  sTypeSac = DIMNM( 'Type_Sac' , i ) ;
+  
+  IF ( ELLEV( 'Type_Sac', sTypeSac ) = 0 );
+    ExecuteProcess( 'Imp_Data_Vente_Sac', 'pMois' , Mois , 'pTypeSac' , sTypeSac );
+  ENDIF ;
+  
+  i = i + 1 ;
+  
+END ;
+
+#endregion
+#region Epilog
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+# Declaration variables et constantes
+
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+# HEURE D'EXECUTION
+nNewFormatId  =  NewDateFormatter ( 'fr-FR' , 'Europe/Paris' , 'serial' , 'medium' , 'datetime' );
+Z_LOCAL_TIME = FormatDate ( NOW () , 'yyyy-MM-dd H:mm' , nNewFormatId );
+Z_UTILISATEUR = TM1User;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+nDebut= SCAN( 'pans:u:', Z_UTILISATEUR );
+nDebutLong = LONG('pans:u:');
+nStart = nDebut + nDebutLong ;
+nTotal = LONG(Z_UTILISATEUR) ;
+Z_UTILISATEUR = SUBST(Z_UTILISATEUR, nStart, nTotal - nStart - 1) ;
+
+CELLPUTS( Z_STATUS , sCubeParamS , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamS ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamS , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamS , cMainProcName ,'txt_Utilisateur' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+#endregion

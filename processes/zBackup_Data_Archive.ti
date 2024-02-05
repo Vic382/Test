@@ -4,19 +4,14 @@
 #****End: Generated Statements****
 
 #***********************************************************************************************************
-#
 # CREATEUR : VRT
-# DATE DE CREATION : 09/11/2020
+# DATE DE CREATION : 06/07/2023
 # DERNIERE MODIFICATION EFFECTUEE PAR : 
-# DATE DE DERNIERE MODIFICATION : ../../201.
+# DATE DE DERNIERE MODIFICATION : ../../
 # DESCRIPTION DU PROCESSUS : Archive le répertoire DATA dans une archive.zip
 #
-# Vérifier les paramètres. De base, ceux-ci sont incomplets. LAISSEZ LES DOUBLES QUOTES.
-#
 # Voir le fichier 7zip_archive_backup.bat pour plus d'informations
-#
 # Le chemin indiqué ci-dessous pour le .bat peut être modifié.
-#
 #***********************************************************************************************************
 
 #***********************************************************************************************************
@@ -24,6 +19,7 @@
 #***********************************************************************************************************
                                                                                                                                                                                                                                                                                                                                            
 sCubeParamT = 'ParametrageT' ;
+sCubeParamP = 'ParametresSources' ;
 
 #**********************************************************************************************************
 #                                  Définition des constantes
@@ -34,15 +30,14 @@ cRepertoireRacine = GetProcessErrorFileDirectory;
 cTimeStamp = TimSt( Now, '\Y\m\d\h\i\s' );
 cRandomInt = NumberToString( INT( RAND( ) * 1000 ));
 cTimeProcess = cTimeStamp | '_' | cRandomInt;
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
 
 # Gestion du lancement par tâche planifié
 IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
-	cUtilisateur = 'Lanceur' ;
+	cUtilisateur = 'Admin' ;
 ELSE ;
 	cUtilisateur        = TM1User();
 ENDIF ;
-
-cLenASCIICode = 3 ;
 
 #**********************************************************************************************************
 #                                  Définition des variables
@@ -51,42 +46,20 @@ cLenASCIICode = 3 ;
 StringGlobalVariable('sProcessReturnCode');
 NumericGlobalVariable('nProcessReturnCode');
 
-# Pour échanger avec Process.Log.Create
-NumericGlobalVariable ('zLogNumero') ; 
-         
 #**********************************************************************************************************
 #                                  Initialisation des variables
 #**********************************************************************************************************
 
-nErrors = 0 ;
-
-sRepertoireExe = CellGetS ( sCubeParamT , 'txt_RepertoireExe' , 'ValeurS' ) ;
-sBackup = CellGetS ( sCubeParamT , 'BackupBat' , 'ValeurS' ) ;
-
-sDelimiter = CHAR ( 34 ) ;
-
-sTM1Data = CellGetS ( sCubeParamT , 'txt_RepertoireData' , 'ValeurS' ) ;
-sTM1Data = sDelimiter | sTM1Data | sDelimiter  ;
-
-s7zExe = CellGetS ( sCubeParamT , 'txt_repertoire7zExe' , 'ValeurS' ) ;
-s7zExe = sDelimiter | s7zExe | sDelimiter  ;
-
-sRepBackup = CellGetS ( sCubeParamT , 'txt_RepertoireBackup' , 'ValeurS' ) ;
-sRepBackup = sDelimiter | sRepBackup | sDelimiter  ;
-
-
-#**********************************************************************************************************
-#                                  Log start time
-#**********************************************************************************************************
-
-
-sCommandBat = '"' | sRepertoireExe | sBackup | '"' ;
+sCommandBat = '"' | pRepExe | pBackup | '"' ;
 
 #**********************************************************************************************************
 #                                  DEBUT DE zBACKUP_Data_Archive
 #**********************************************************************************************************
 
-ExecuteCommand( sCommandBat  | ' ' | pNomArchive | ' ' | pNbJours | ' ' | sTM1Data | ' ' | s7zExe | ' ' | sRepBackup , 1 );
+ExecuteCommand( sCommandBat  | ' ' | pNomArchive | ' ' | pNbJours | ' ' | pTM1Data | ' ' | p7zExe | ' ' | pRepBackup , 1 );
+
+#ASCIIOutput( '..\DEBUG\DebugzBackup.csv', pRepExe, pBackup, sCommandBat, pNomArchive, pNbJours, pTM1Data, p7zExe, pRepBackup );
+
 #endregion
 #region Metadata
 
@@ -103,6 +76,24 @@ ExecuteCommand( sCommandBat  | ' ' | pNomArchive | ' ' | pNbJours | ' ' | sTM1Da
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
+#------------------------------------------------ MONITORING  ------------------------------------------------#
 
+# Declaration variables et constantes
 
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+Z_LOCAL_TIME=   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+Z_UTILISATEUR = TM1User;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+CELLPUTS( Z_STATUS , sCubeParamP , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamP ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamP , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamP , cMainProcName ,'txt_Utilisateur' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
 #endregion

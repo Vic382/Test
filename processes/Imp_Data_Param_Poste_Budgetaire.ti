@@ -1,0 +1,168 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#***********************************************************************************************
+# CREATEUR : VRT
+# DATE DE CREATION : 21/09/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : MAJ des données du cube Param_Poste_Budgetaire
+#************************************************************************************************
+
+###############################   MONITORING   #################################
+
+### 0.Définition des variables du monitoring
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+sCubeParamS	             = 'ParametresSources' ;
+sCubeParamT	             = 'ParametrageT' ;
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+sSource = '' ;
+sNomFichier =  '' ;
+nErrors = 0 ;
+nErrorsSource = 0 ; 
+zLogNumero         = 1 ;
+nErrors          = 0;
+vMessage              = '';
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Admin' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+### 1. Déclaration des variables
+
+# Pour suppression des vues et ss ensemble temporaire
+nDebug = 1 ; 
+
+#**Fichier Debug
+sFichierRepDebug = CellGetS ( sCubeParamT , 'Txt_RepertoireDebug' , 'ValeurS' );
+sDebug = sFichierRepDebug | 'test'|cMainProcName|'.txt' ;
+
+
+###############################   FIN MONITORING   #################################
+
+
+###########################################
+## Définition du fichier source
+###########################################
+
+# Répertoire fichier source
+sRepertoire = CellGetS ( sCubeParamS , cMainProcName , 'Txt_RepertoireSource' ) ;
+sNomFichier = CellGetS ( sCubeParamS , cMainProcName , 'txt_NomFichier' ) ;
+
+# Contrôle du répertoire
+
+IF ( sRepertoire @= '' % sNomFichier @= '' ) ;
+  ItemReject( 'Le répertoire ou le nom du fichier n'| CHAR(39)|'est pas renseigné dans le cube ParamètreSources' );
+  ProcessBreak;
+ENDIF ;
+
+# Renommage du fichier source selon les paramètres utilisateur
+sNomFichier = sNomFichier | '.csv'  ;
+sNomComplet = sRepertoire | sNomFichier ;
+
+# Controle de la présence du fichier source dans le répertoire
+IF ( FileExists( sNomComplet ) = 0 ) ;
+  ItemReject( 'Le fichier source ' | sNomFichier | ' n' | CHAR ( 39) | 'est pas présent dans le répertoire ' | sRepertoire );
+  ProcessBreak;
+ENDIF ;
+
+# Définition du fichier comme source
+DatasourceNameForServer = sNomComplet ;
+DataSourceASCIIDelimiter = ';' ;
+
+
+###########################################
+## Creation vue CIBLE sur Cout_Elec
+###########################################
+
+### Déclaration des variables
+sCubeCible = 'Param_Poste_Budgetaire';
+sDimCible1 = 'Poste_Budgetaire_N';
+sDimCible = 'm_Param_Poste_Budgetaire';
+
+
+# Le nom de la vue du cube :
+sVueZero = 'RAZ_vue_' | cMainProcName ; 
+
+# Le nom des sous-ensembles
+sSubsetZero = 'RAZ_Subset_' | cMainProcName ; 
+
+# Création de la vue cible
+IF( ViewExists( sCubeCible, sVueZero ) = 1 );
+  ViewDestroy( sCubeCible, sVueZero );
+ENDIF;
+ViewCreate( sCubeCible, sVueZero , nDebug );
+
+# Poste_Budgetaire_N
+SubsetDestroy ( sDimCible1 , sSubsetZero ) ;
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible1 | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetZero , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible1 , sSubsetZero ) ; 
+
+# m_Param_Poste_Budgetaire : Tous sauf le mapping balance partielle
+SubsetDestroy ( sDimCible , sSubsetZero ) ; 
+StringMDX = '{EXCEPT({TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible | ' ] ) } , 0 ) },{[m_Param_Poste_Budgetaire].[Balance_Partielle]})}' ;
+SubsetCreateByMDX ( sSubsetZero , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible , sSubsetZero ) ;
+
+# RAZ de la vue zero
+ViewZeroOut( sCubeCible, sVueZero );
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+CellPutS( Libelle ,sCubeCible , Code , 'Nom_Poste_Budgetaire'  );
+CellPutS( Regroupement ,sCubeCible , Code , 'Code_Regroupement'  );
+CellPutS( Libelle_Regroupement ,sCubeCible , Code , 'Nom_Regroupement'  );
+CellPutS( Regroupement_2 ,sCubeCible , Code , 'Code_Regroupement_2'  );
+CellPutS( Libelle_Regroupement_2 ,sCubeCible , Code , 'Nom_Regroupement_2'  );
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+# Declaration variables et constantes
+
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+# HEURE D'EXECUTION
+nNewFormatId  =  NewDateFormatter ( 'fr-FR' , 'Europe/Paris' , 'serial' , 'medium' , 'datetime' );
+Z_LOCAL_TIME = FormatDate ( NOW () , 'yyyy-MM-dd H:mm' , nNewFormatId );
+Z_UTILISATEUR = TM1User;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+nDebut= SCAN( 'pans:u:', Z_UTILISATEUR );
+nDebutLong = LONG('pans:u:');
+nStart = nDebut + nDebutLong ;
+nTotal = LONG(Z_UTILISATEUR) ;
+Z_UTILISATEUR = SUBST(Z_UTILISATEUR, nStart, nTotal - nStart - 1) ;
+
+CELLPUTS( Z_STATUS , sCubeParamS , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamS ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamS , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamS , cMainProcName ,'txt_Utilisateur' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+#endregion

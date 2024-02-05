@@ -3,7 +3,7 @@
 	"Name":"zPurge_Logs",
 	"HasSecurityAccess":false,
 	"Code@Code.link":"zPurge_Logs.ti",
-	"UIData":"CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€_ParameterConstraints=e30=€",
 	"DataSource":
 	{
 		"Type":"None"
