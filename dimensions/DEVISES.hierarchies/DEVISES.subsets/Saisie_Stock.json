@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Saisie_Stock",
-	"Expression":"{TM1SubsetBasis()}"
-}

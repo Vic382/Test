@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Masque_Prod_Cost",
-	"Expression":"{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {TM1SubsetBasis()}, ALL, RECURSIVE )}, 1)}"
-}

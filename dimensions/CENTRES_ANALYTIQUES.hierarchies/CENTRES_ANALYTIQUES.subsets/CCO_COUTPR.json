@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"CCO_COUTPR",
-	"Expression":"{TM1SORT( {TM1FILTERBYLEVEL( {FILTER( {TM1SUBSETALL( [CENTRES_ANALYTIQUES] )}, [CENTRES_ANALYTIQUES].[Regroupement_2] = \"CC0_COUTPR\")}, 0)}, ASC)}"
-}

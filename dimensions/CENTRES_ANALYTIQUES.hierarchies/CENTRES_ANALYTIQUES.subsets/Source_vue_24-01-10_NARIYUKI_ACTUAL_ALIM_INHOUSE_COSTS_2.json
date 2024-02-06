@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Source_vue_24-01-10_NARIYUKI_ACTUAL_ALIM_INHOUSE_COSTS_2",
-	"Expression":"{TM1FILTERBYLEVEL( {TM1SUBSETALL([CENTRES_ANALYTIQUES] )}, 0)}"
-}

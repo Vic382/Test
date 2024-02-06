@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Versions_Travail",
-	"Expression":"{ EXCEPT( { EXCEPT( {TM1SUBSETALL( [Version] )}, { [Version].[TOTAL_VERSION] }) }, { [Version].[VDEF] }) }"
-}

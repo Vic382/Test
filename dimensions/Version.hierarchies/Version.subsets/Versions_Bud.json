@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Versions_Bud",
-	"Expression":"{ EXCEPT( { EXCEPT( { DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Version] )}, \"VERSIONS_BUDGET\")}, {[Version].[VERSIONS_BUDGET]} ) }, { [Version].[VDEF] }) }, { [Version].[VERSIONS_BUDGET] }) }"
-}

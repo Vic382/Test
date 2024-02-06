@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Niv1_4",
-	"Expression":"{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SubsetBasis()}, \"OP\")}, ALL, RECURSIVE )}, 1,4)}"
-}

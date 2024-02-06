@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Budget en cours",
-	"Expression":"{TM1FilterByPattern (\r { TM1SubsetAll ( [Scenario] ) } ,\r[ParametresFonctionnels].( [ParametresFonctionnels].[BudgetEnCours] , [m_ParametresFOnctionnels].[ValeurS] ) ) } "
-}

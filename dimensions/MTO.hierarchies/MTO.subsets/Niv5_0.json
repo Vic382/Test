@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Niv5_0",
-	"Expression":"{TM1FILTERBYLEVEL( {TM1SUBSETALL( [MTO] )}, 0,5)}"
-}

@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Compte_Alloe",
-	"Expression":"{FILTER( {TM1SUBSETALL( [CENTRES_ANALYTIQUES] )}, [CENTRES_ANALYTIQUES].[Alloc_Depense] = \"OUI\")}"
-}

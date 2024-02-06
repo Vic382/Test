@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Réalisé + Budget en cours",
-	"Expression":"{ Union ( \r{ [Scenario].[Realise] },\r\t{TM1FilterByPattern ( { TM1SubsetAll ( [Scenario] ) } , [ParametresFonctionnels].( [ParametresFonctionnels].[BudgetEnCours] , [m_ParametresFOnctionnels].[ValeurS] ) ) } \r\t ) }"
-}

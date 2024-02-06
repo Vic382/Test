@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"SC",
-	"Expression":"{TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [MTO] )}, \"SC\")}, ALL, RECURSIVE )}"
-}
