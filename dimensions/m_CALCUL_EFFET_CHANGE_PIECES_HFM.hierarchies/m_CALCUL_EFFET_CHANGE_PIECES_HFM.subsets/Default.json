@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Default",
+	"Expression":"{TM1SubsetAll ( [m_CALCUL_EFFET_CHANGE_PIECES_HFM] ) }"
+}

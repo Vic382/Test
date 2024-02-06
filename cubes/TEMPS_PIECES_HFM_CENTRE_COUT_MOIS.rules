@@ -1,0 +1,21 @@
+#Region System
+SKIPCHECK;
+
+#EndRegion
+
+['ASSY']=N:['ASSY_PIECES_HFM']*['Q_PIECES_HFM'] ;
+['IF']=N:['IF_PIECES_HFM']*['Q_PIECES_HFM'] ;
+['PACK']=N:['PACK_PIECES_HFM']*['Q_PIECES_HFM'] ;
+['PAINT']=N:['PAINT_PIECES_HFM']*['Q_PIECES_HFM'] ;
+
+### Temps unitaires de ce fait les conso sont à 0 
+['ASSY_PIECES_HFM']=C:0;
+['IF_PIECES_HFM']=C:0;
+['PACK_PIECES_HFM']=C:0;
+['PAINT_PIECES_HFM']=C:	0;
+
+Feeders ;
+[ { 'ASSY_PIECES_HFM' , 'Q_PIECES_HFM' } ]=> ['ASSY'] ;
+[ { 'IF_PIECES_HFM' , 'Q_PIECES_HFM' } ]=> ['IF'] ;
+[ { 'PACK_PIECES_HFM' , 'Q_PIECES_HFM' } ]=> ['PACK'] ;
+[ { 'PAINT_PIECES_HFM' , 'Q_PIECES_HFM' } ]=> ['PAINT'] ;

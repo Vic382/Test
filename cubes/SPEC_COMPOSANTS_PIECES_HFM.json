@@ -1,0 +1,39 @@
+{
+	"@type":"Cube",
+	"Name":"SPEC_COMPOSANTS_PIECES_HFM",
+	"Rules@Code.link":"SPEC_COMPOSANTS_PIECES_HFM.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('EXERCICES')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('PIECES_HFM')"
+		},
+		{
+			"@id":"Dimensions('FOURNISSEUR')"
+		},
+		{
+			"@id":"Dimensions('COMPOSANT_PIECES_HFM')"
+		},
+		{
+			"@id":"Dimensions('DEVISES')"
+		},
+		{
+			"@id":"Dimensions('MOIS')"
+		},
+		{
+			"@id":"Dimensions('m_SPEC_COMPOSANTS_PIECES_HFM')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"SPEC_COMPOSANTS_PIECES_HFM.views/controle chargement spec et quantite.json"
+	]
+}

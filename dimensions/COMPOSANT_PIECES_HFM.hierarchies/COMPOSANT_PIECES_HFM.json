@@ -1,0 +1,1101 @@
+{
+	"@type":"Hierarchy",
+	"Name":"COMPOSANT_PIECES_HFM",
+	"Elements":
+	[
+		{
+			"Name":"TOTAL_COMPOSANT_PIECES_HFM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"21111VL0 M000AA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21111VL0 M902",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21581VL0 M002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21611VL0 M001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"22421VL0 M901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"22533VL0 M902",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"22549VL0 M001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"22810VL0 M901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"23233VL0 M001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"23251VL0 M902",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"23320VH7 L002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"23321VL0 M001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"23323VH7 L002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"43151VL0 B002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"50326VL0 M901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"51125VL0 M901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"51177VL0 M901",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"900 138 830 004",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90101VL0 M900",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90752VH7 L002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91052VL0 B002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91053VL0 B002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91054VL0 B002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91057VH7 L002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91251VL0 B002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91251VL0 M001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91252VL0 B002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"9405006000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"9430540222",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"9452028000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21111VL0 S000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21611VL0 P002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"22431VH7 T311M1",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"22451VL0 S001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"23211VL0 P001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"23251VH7 T300",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"23320VL0 P011",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"23323VL0 P011",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"43857VL0 P001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90504VH7 A003",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90751VL0 P001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"9405010080",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21110VE5 A000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21111VE5 A001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21115VE5 0002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21117VE5 A001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21230VE5 A001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21235VE5 A002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21520VE5 A010",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21525VE5 A010",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21912VE5 A001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"22533VH7 A002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"24134VE5 A001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25321VE5 A002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25331VE5 A011",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25332VE5 A001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25341VE5 A002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25341VE5 A002AA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25342VE5 0232",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25343VE5 A001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25431VE5 0102",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25435VE5 A001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25442VE5 0000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25510VE5 A000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25511VE5 A001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25513VE5 0002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25721VE5 A001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25732VE5 A001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25741VE5 A001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25741VE5 A001AA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25742VE5 0032",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25743VE5 A001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"900 038 920 005",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90101VE5 0002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90123VA4 8002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"904 532 350 002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90501VE5 0002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90503VE5 0002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90587VE5 0002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90588VE5 0002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90601VE5 0002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90662VE5 0000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90752VE5 A001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90865VE5 A000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91051VE5 0003",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91052VE5 0004",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91053VE5 0003",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91060VE5 A011Y1",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91063VE5 A011Y1",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91064VE5 0004",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91204KE8 0031",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91351VE5 0000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91352VE5 0000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"9430108100",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"9621108000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"22533VE5 A001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25321VE5 A103",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25721VE5 A201",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21520VE5 A110",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"25721VE5 A301",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21111VR8 N000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21111VR8 N000AA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21581VR8 N000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21611VR8 N000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"21611VR8 N000AA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"22431VR8 N030M3",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"22451VR8 N010",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"22455VR8 N000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"23211VR8 N000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"23251VR8 N010",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"23320VR8 N000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"23323VR8 N001",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"900 128 920 004",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"900 149 520 003",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90501VR8 N000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90651VE2 8002",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"90851VR8 N000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"91251VR8 N000",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"9430305080",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"9,61006E+11",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21111VL0 M000AA",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21111VL0 M902",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21581VL0 M002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21611VL0 M001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"22421VL0 M901",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"22533VL0 M902",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"22549VL0 M001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"22810VL0 M901",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"23233VL0 M001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"23251VL0 M902",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"23320VH7 L002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"23321VL0 M001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"23323VH7 L002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"43151VL0 B002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"50326VL0 M901",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"51125VL0 M901",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"51177VL0 M901",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"900 138 830 004",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90101VL0 M900",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90752VH7 L002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91052VL0 B002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91053VL0 B002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91054VL0 B002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91057VH7 L002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91251VL0 B002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91251VL0 M001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91252VL0 B002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"9405006000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"9430540222",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"9452028000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21111VL0 S000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21611VL0 P002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"22431VH7 T311M1",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"22451VL0 S001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"23211VL0 P001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"23251VH7 T300",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"23320VL0 P011",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"23323VL0 P011",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"43857VL0 P001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90504VH7 A003",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90751VL0 P001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"9405010080",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21110VE5 A000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21111VE5 A001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21115VE5 0002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21117VE5 A001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21230VE5 A001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21235VE5 A002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21520VE5 A010",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21525VE5 A010",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21912VE5 A001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"22533VH7 A002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"24134VE5 A001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25321VE5 A002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25331VE5 A011",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25332VE5 A001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25341VE5 A002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25341VE5 A002AA",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25342VE5 0232",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25343VE5 A001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25431VE5 0102",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25435VE5 A001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25442VE5 0000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25510VE5 A000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25511VE5 A001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25513VE5 0002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25721VE5 A001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25732VE5 A001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25741VE5 A001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25741VE5 A001AA",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25742VE5 0032",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25743VE5 A001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"900 038 920 005",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90101VE5 0002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90123VA4 8002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"904 532 350 002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90501VE5 0002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90503VE5 0002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90587VE5 0002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90588VE5 0002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90601VE5 0002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90662VE5 0000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90752VE5 A001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90865VE5 A000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91051VE5 0003",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91052VE5 0004",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91053VE5 0003",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91060VE5 A011Y1",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91063VE5 A011Y1",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91064VE5 0004",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91204KE8 0031",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91351VE5 0000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91352VE5 0000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"9430108100",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"9621108000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"22533VE5 A001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25321VE5 A103",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25721VE5 A201",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21520VE5 A110",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"25721VE5 A301",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21111VR8 N000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21111VR8 N000AA",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21581VR8 N000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21611VR8 N000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"21611VR8 N000AA",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"22431VR8 N030M3",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"22451VR8 N010",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"22455VR8 N000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"23211VR8 N000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"23251VR8 N010",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"23320VR8 N000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"23323VR8 N001",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"900 128 920 004",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"900 149 520 003",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90501VR8 N000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90651VE2 8002",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"90851VR8 N000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"91251VR8 N000",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"9430305080",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_COMPOSANT_PIECES_HFM",
+			"ComponentName":"9,61006E+11",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"COMPOSANT_PIECES_HFM.subsets/Default.json",
+		"COMPOSANT_PIECES_HFM.subsets/Niv0.json",
+		"COMPOSANT_PIECES_HFM.subsets/Niv1.json",
+		"COMPOSANT_PIECES_HFM.subsets/Tous.json"
+	]
+}

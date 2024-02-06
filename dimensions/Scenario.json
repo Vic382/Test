@@ -1,12 +1,13 @@
 {
 	"@type":"Dimension",
 	"Name":"Scenario",
-	"Hierarchies@Code.links":
-	[
-		"Scenario.hierarchies/Scenario.json"
-	],
+	"AllLeavesHierarchyName":"",
 	"DefaultHierarchy":
 	{
 		"@id":"Dimensions('Scenario')/Hierarchies('Scenario')"
-	}
+	},
+	"Hierarchies@Code.links":
+	[
+		"Scenario.hierarchies/Scenario.json"
+	]
 }

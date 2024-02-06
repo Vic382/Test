@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Cptes_Prod",
+	"Expression":"{TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [COMPTES] )}, \"TOTAL_COMPTES_PROD\")}, ALL, RECURSIVE )}"
+}

@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"RAZ_vue_23-12-27_Nariyuki_P_AUGMENTATION_SC",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Scenario')/Hierarchies('Scenario')/Elements('Nar_MTP')"
+		}
+	]
+}

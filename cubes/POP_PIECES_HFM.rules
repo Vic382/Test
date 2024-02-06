@@ -1,0 +1,31 @@
+SKIPCHECK;
+#EndRegion
+
+# PACK feeder dans ce cube
+['PACK'] = N: ROUNDP(['PU_PACK'],3) * ['Q_PIECES_HFM'] ;
+
+# PAINT feeder dans ce cube
+['PAINT'] = N: ROUNDP(['PU_PAINT'],3) * ['Q_PIECES_HFM'] ;
+
+# OIL feeder dans ce cube
+['OIL'] = N: ROUNDP(['PU_OIL'],3) * ['Q_PIECES_HFM'] ;
+
+# PETROL feeder dans ce cube
+['PETROL'] = N: ROUNDP(['PU_PETROL'],3) * ['Q_PIECES_HFM'] ;
+
+# Calcul des consos
+[{ 'PU_PACK', 'PU_PAINT', 'PU_OIL', 'PU_PETROL'}] = C:0;
+
+Feeders ;
+
+# PACK
+[ { 'PU_PACK' , 'Q_PIECES_HFM' } ] => ['PACK'] ;
+
+# PAINT
+[ { 'PU_PAINT' , 'Q_PIECES_HFM' } ] => ['PAINT'] ;
+
+# OIL
+[ { 'PU_OIL' , 'Q_PIECES_HFM' } ] => ['OIL'] ;
+
+# PETROL
+[ { 'PU_PETROL' , 'Q_PIECES_HFM' } ] => ['PETROL'] ;

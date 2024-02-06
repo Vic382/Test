@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"Source_vue_23-11-06_NARIYUKI_ACTUAL_ALIM_INHOUSE_COSTS_2",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Version')/Hierarchies('Version')/Elements('VDEF')"
+		}
+	]
+}

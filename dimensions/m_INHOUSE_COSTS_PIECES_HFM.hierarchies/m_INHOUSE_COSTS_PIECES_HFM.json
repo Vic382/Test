@@ -1,0 +1,16 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_INHOUSE_COSTS_PIECES_HFM",
+	"Elements":
+	[
+		{
+			"Name":"Montant",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_INHOUSE_COSTS_PIECES_HFM.subsets/Default.json",
+		"m_INHOUSE_COSTS_PIECES_HFM.subsets/Niv0.json"
+	]
+}

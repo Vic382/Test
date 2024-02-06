@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"RAZ_vue_Imp_Data_Investissement",
-	"Expression":"{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ Mois ] ) } , 0 ) }"
-}

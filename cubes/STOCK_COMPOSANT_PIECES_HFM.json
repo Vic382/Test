@@ -1,0 +1,30 @@
+{
+	"@type":"Cube",
+	"Name":"STOCK_COMPOSANT_PIECES_HFM",
+	"Rules@Code.link":"STOCK_COMPOSANT_PIECES_HFM.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('EXERCICES')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('COMPOSANT_PIECES_HFM')"
+		},
+		{
+			"@id":"Dimensions('DEVISES')"
+		},
+		{
+			"@id":"Dimensions('MOIS')"
+		},
+		{
+			"@id":"Dimensions('m_STOCK_COMPOSANTS_PIECES_HFM')"
+		}
+	],
+	"Views@Code.links":[]
+}

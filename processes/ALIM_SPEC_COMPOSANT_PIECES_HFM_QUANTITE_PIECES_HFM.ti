@@ -1,0 +1,346 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#***********************************************************************************************************
+# CREATEUR : DIMO SOFTWARE - BNS
+# DATE DE CREATION : 12/11/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : 
+# Alimentation du cube SPEC_COMPOSANTS_PIECES_HFM à partir du cube Q_PIECES_HFM
+#***********************************************************************************************************
+
+#***********************************************************************************************************
+#                                  Définition des cubes
+#***********************************************************************************************************
+
+sCubeParamP = 'ParametresSources' ;
+sCubeParamT = 'ParametrageT' ;
+sCubeParamF = 'ParametresFonctionnels' ;
+
+
+#***********************************************************************************************************
+#                                  Définition des constantes
+#***********************************************************************************************************
+
+cMainProcName = GetProcessName();
+cRepertoireRacine = GetProcessErrorFileDirectory;
+cTimeStamp = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess = cTimeStamp | '_' | cRandomInt;
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+# Permet de définir l'écriture dans le bac à sable actif de l'utilisateur
+SetUseActiveSandboxProperty(1) ;
+
+#***********************************************************************************************************
+#                                  Définition des variables
+#***********************************************************************************************************
+
+# nDebug pour créer des ss-ensemble et vue temporaire
+# Si 1 les ss-ensemble et vue temporaire si 0 les ss-ensemble et vue ne seront pas supprimés
+nDebug = 1 ;
+
+nCpteurMTP = 1;
+
+
+#**********************************************************************************************************
+#                                  DEBUT ALIM CUBE
+#**********************************************************************************************************
+###***Définition de la phase en cours 
+sExercice = CellGetS ( sCubeParamF , 'ExerciceEnCours' , 'ValeurS' ) ; 
+sScenario = CellGetS ( sCubeParamF , 'ScenarioEnCours' , 'ValeurS' ) ;
+sVersion = CellGetS ( sCubeParamF , 'VersionEnCours' , 'ValeurS' ) ;
+
+sDimCom ='COMPOSANT_PIECES_HFM';
+
+###########################################
+## Creation vue zero
+###########################################
+#Le nom de la vue du cube :
+sVueZero = 'RAZ_vue_' | Today (0) | '_' | GetProcessName () ; 
+
+##Declaration des variables du cube cible
+sCubeCible = 'SPEC_COMPOSANTS_PIECES_HFM' ;
+sDimCible1 = 'EXERCICES' ;
+sDimCible2 = 'Scenario' ;
+sDimCible3 = 'Version' ;
+sDimCible4 = 'PIECES_HFM' ;
+sDimCible5 = 'FOURNISSEUR' ;
+sDimCible6 = 'COMPOSANT_PIECES_HFM' ;
+sDimCible7 = 'DEVISES' ;
+sDimCible8 = 'MOIS' ;
+sDimCible = 'm_SPEC_COMPOSANTS_PIECES_HFM' ;
+
+IF( ViewExists( sCubeCible, sVueZero ) = 1 );
+  ViewDestroy( sCubeCible, sVueZero );
+ENDIF;
+ViewCreate( sCubeCible, sVueZero , nDebug );
+
+
+##Création des sous-ensembles des dimensions du cube
+
+##EXERCICES
+IF( SubsetExists( sDimCible1 , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible1 , sVueZero );
+ENDIF;
+SubsetCreate ( sDimCible1 , sVueZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible1 , sVueZero , sExercice , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible1 , sVueZero ) ; 
+
+##Scenario
+IF( SubsetExists( sDimCible2 , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible2 , sVueZero );
+ENDIF;
+SubsetCreate ( sDimCible2 , sVueZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible2 , sVueZero , sScenario , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible2 , sVueZero ) ; 
+
+##Version
+IF( SubsetExists( sDimCible3 , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible3 , sVueZero );
+ENDIF;
+SubsetCreate ( sDimCible3 , sVueZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible3 , sVueZero , sVersion , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible3 , sVueZero ) ; 
+
+##PIECES_HFM
+IF( SubsetExists( sDimCible4 , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible4 , sVueZero );
+ENDIF;
+SubsetCreatebyMDX( sVueZero , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDimCible4|'] )}, 0)}' , nDebug ) ;
+ViewSubsetAssign( sCubeCible , sVueZero , sDimCible4 , sVueZero );
+
+##FOURNISSEUR
+IF( SubsetExists( sDimCible5 , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible5 , sVueZero );
+ENDIF;
+SubsetCreatebyMDX( sVueZero , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDimCible5|'] )}, 0)}' , nDebug ) ;
+ViewSubsetAssign( sCubeCible , sVueZero , sDimCible5 , sVueZero );
+
+#COMPOSANT_PIECES_HFM
+IF( SubsetExists( sDimCible6 , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible6 , sVueZero );
+ENDIF;
+SubsetCreatebyMDX( sVueZero , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDimCible6|'] )}, 0)}' , nDebug ) ;
+ViewSubsetAssign( sCubeCible , sVueZero , sDimCible6 , sVueZero );
+
+##DEVISES
+IF( SubsetExists( sDimCible7 , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible7 , sVueZero );
+ENDIF;
+SubsetCreatebyMDX( sVueZero , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDimCible7|'] )}, 0)}' , nDebug ) ;
+ViewSubsetAssign( sCubeCible , sVueZero , sDimCible7 , sVueZero );
+
+##MOIS
+IF( SubsetExists( sDimCible8 , sVueZero ) = 1 );
+  SubsetDestroy( sDimCible8 , sVueZero );
+ENDIF;
+SubsetCreatebyMDX( sVueZero , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDimCible8|'] )}, 0)}' , nDebug ) ;
+ViewSubsetAssign( sCubeCible , sVueZero , sDimCible8 , sVueZero );
+
+
+##m_SPEC_COMPOSANTS_PIECES_HFM
+IF( SubsetExists( sDimCible , sVueZero ) = 1 );
+ SubsetDestroy( sDimCible , sVueZero );
+ENDIF;
+SubsetCreate ( sDimCible , sVueZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible , sVueZero , 'Q_PIECES_HFM' , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible , sVueZero ) ; 
+
+##RAZ de la vue zero
+ViewZeroOut( sCubeCible, sVueZero ) ;
+
+
+
+###########################################
+## Creation vue Source
+###########################################
+
+# Declaration des variables du cube source
+
+sCubeSource = 'Q_PIECES_HFM' ; 
+sDimSource1 = 'EXERCICES' ; 
+sDimSource2 = 'Scenario' ;
+sDimSource3 = 'Version' ;
+sDimSource4 = 'PIECES_HFM' ;
+sDimSource5 = 'MOIS' ;
+sDimSource6 = 'MOIS_YTD' ;
+sDimSource = 'm_Q_PIECES_HFM' ;
+
+
+# Le nom de la vue du cube :
+sVueSource = 'Source_vue_' | Today (0) | '_' | GetProcessName () ; 
+
+# Le nom des sous-ensembles
+sSubsetSource = 'Source_Subset_' | Today (0) | '_' | GetProcessName () ; 
+
+# Destruction pour recréation de la vue
+ ViewDestroy ( sCubeSource , sVueSource ) ;
+ ViewCreate ( sCubeSource , sVueSource , nDebug ) ; 
+
+# Création des sous-ensembles des dimensions du cube
+
+# Exercices
+IF( SubsetExists( sDimSource1 , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource1 , sVueSource );
+ENDIF;
+SubsetCreate ( sDimSource1 , sVueSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource1 , sVueSource , sExercice , nDebug ) ;
+ViewSubsetAssign( sCubeSource , sVueSource , sDimSource1 , sVueSource );
+
+# Scenario
+IF( SubsetExists( sDimSource2 , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource2 , sVueSource );
+ENDIF;
+SubsetCreate ( sDimSource2 , sVueSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource2 , sVueSource , sScenario , nDebug ) ;
+ViewSubsetAssign( sCubeSource , sVueSource , sDimSource2 , sVueSource );
+
+# version
+IF( SubsetExists( sDimSource3 , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource3 , sVueSource );
+ENDIF;
+SubsetCreate ( sDimSource3 , sVueSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource3 , sVueSource , sVersion , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource3 , sVueSource ) ; 
+
+# PIECES_HFM
+IF( SubsetExists( sDimSource4 , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource4 , sVueSource );
+ENDIF;
+SubsetCreatebyMDX( sVueSource , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDimSource4|'] )}, 0)}' , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource4 , sVueSource ) ; 
+
+# MOIS
+IF( SubsetExists( sDimSource5 , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource5 , sVueSource );
+ENDIF;
+SubsetCreatebyMDX( sVueSource , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDimSource5|'] )}, 0)}' , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource5 , sVueSource ) ; 
+
+# MOIS_YTD
+IF( SubsetExists( sDimSource6 , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource6 , sVueSource );
+ENDIF;
+SubsetCreate ( sDimSource6 , sVueSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource6 , sVueSource , 'M' , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource6 , sVueSource ) ; 
+
+# m_Q_PIECES_HFM
+IF( SubsetExists( sDimSource , sVueSource ) = 1 );
+  SubsetDestroy( sDimSource , sVueSource );
+ENDIF;
+SubsetCreate ( sDimSource , sVueSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource , sVueSource , 'Produites' , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource , sVueSource ) ; 
+
+
+#### Uniquement pour une vue source ####
+ViewExtractSkipCalcsSet( sCubeSource , sVueSource , 1 );
+ViewExtractSkipZeroesSet( sCubeSource , sVueSource , 1 );
+ViewExtractSkipRuleValuesSet( sCubeSource , sVueSource , 1 );
+
+#Définition de la source
+DataSourceNameForServer = sCubeSource ;
+DatasourceCubeView = sVueSource ;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+i=1 ;
+nTailleBoucle = DIMSIZ( sDimCom );
+
+while( i <= nTailleBoucle  );
+     
+    sComposant = DIMNM( sDimCom, i );
+
+    IF ( ELLEV( sDimCom , sComposant ) = 0 ) ;
+        sFournisseur = CellGetS( '}ElementAttributes_COMPOSANT_PIECES_HFM', sComposant, 'FOURNISSEUR' );
+       
+        sDevise = CellGetS( '}ElementAttributes_FOURNISSEUR', sFournisseur, 'Devise' );
+
+        nComposant = CellGetN( sCubeCible, EXERCICES, Scenario, Version, PIECES_HFM, sFournisseur, sComposant, sDevise, MOIS, 'Q_SPEC_COMPOSANT_PIECES_HFM' );
+
+        IF ( nComposant > 0) ;
+            CellPutN(Value , sCubeCible, EXERCICES , Scenario, Version ,PIECES_HFM , sFournisseur, sComposant, sDevise, mois , 'Q_PIECES_HFM' );
+            CellPutN(Value , sCubeCible, EXERCICES , Scenario, Version ,PIECES_HFM , sFournisseur, sComposant, 'EUR_HFM', mois , 'Q_PIECES_HFM' );
+        ENDIF;
+        #ASCIIOutput( '..\debug\testquantite.txt' , NumberToSTring (Value) , sCubeCible, EXERCICES , Scenario, Version, sFournisseur, sComposant, sDevise, mois , 'Q_PIECES_HFM' );
+
+        
+    ENDIF;
+    i = i+1 ;
+
+END;
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+## DECLARATION DES VARIABLES #
+
+# Statut
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+
+# Fin d'exécution
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+
+## EXECUTION DU MONITORING #
+
+# UTILISATEUR
+Z_UTILISATEUR = TM1User;
+
+# HEURE D'EXECUTION
+Z_LOCAL_TIME=   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+
+# PERIODE (TODAY = Année - Mois )
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+# HEURE D'EXECUTION
+Z_LOCAL_TIME=   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+
+# PERIODE (TODAY = Année - Mois )
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+#################################
+# Informations sur le processus                          #
+#################################
+
+# STATUT
+CELLPUTS( Z_STATUS , sCubeParamP , cMainProcName , 'Statut' );
+
+# TIME
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamP ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamP , cMainProcName ,'DernExe');
+
+# UTILISATEUR
+CELLPUTS( Z_UTILISATEUR, sCubeParamP , cMainProcName ,'txt_Utilisateur' );
+
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+
+#endregion

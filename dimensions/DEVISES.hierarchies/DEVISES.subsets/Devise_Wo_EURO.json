@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Devise_Wo_EURO",
+	"Expression":"{ EXCEPT( {TM1SUBSETALL( [DEVISES] )}, { [DEVISES].[TOTAL_DEVISES], [DEVISES].[EUR], [DEVISES].[EUR_HFM] }) }"
+}

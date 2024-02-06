@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Niv6",
+	"Expression":"{TM1FILTERBYLEVEL ( {TM1SubsetAll ( [COMPTES] ) } , 6 )}"
+}

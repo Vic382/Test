@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"m_PIECES_HFM_COST",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_PIECES_HFM_COST')/Hierarchies('m_PIECES_HFM_COST')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"m_PIECES_HFM_COST.hierarchies/m_PIECES_HFM_COST.json"
+	]
+}

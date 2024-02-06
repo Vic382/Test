@@ -1,0 +1,16 @@
+SKIPCHECK;
+
+
+
+# YTD (Feeder dans ce cube)
+['04','YTD']=N:DB('Q_PIECES_HFM',!EXERCICES,!Scenario,!Version,!PIECES_HFM,'04','M',!m_Q_PIECES_HFM);
+['YTD']=N:DB('Q_PIECES_HFM',!EXERCICES,!Scenario,!Version,!PIECES_HFM,ATTRS( 'MOIS',!MOIS,'Mois Precedent'),'YTD',!m_Q_PIECES_HFM)+DB('Q_PIECES_HFM',!EXERCICES,!Scenario,!Version,!PIECES_HFM,!MOIS,'M',!m_Q_PIECES_HFM);
+['TOTAL_MOIS','YTD']=C:['03','YTD'];
+
+
+
+FEEDERS;
+#YTD
+['04','M']=>DB('Q_PIECES_HFM',!EXERCICES,!Scenario,!Version,!PIECES_HFM,'04','YTD',!m_Q_PIECES_HFM);
+['YTD']=>DB('Q_PIECES_HFM',!EXERCICES,!Scenario,!Version,!PIECES_HFM,ATTRS( 'MOIS',!MOIS,'Mois Suivant'),'YTD',!m_Q_PIECES_HFM);
+['M']=>DB('Q_PIECES_HFM',!EXERCICES,!Scenario,!Version,!PIECES_HFM,!MOIS,'YTD',!m_Q_PIECES_HFM);

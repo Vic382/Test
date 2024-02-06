@@ -1,0 +1,16 @@
+{
+	"@type":"Subset",
+	"Name":"Dotaion_Amort",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('COMPTES')/Hierarchies('COMPTES')/Elements('CE1_AMORT')"
+		},
+		{
+			"@id":"Dimensions('COMPTES')/Hierarchies('COMPTES')/Elements('681110')"
+		},
+		{
+			"@id":"Dimensions('COMPTES')/Hierarchies('COMPTES')/Elements('681120')"
+		}
+	]
+}

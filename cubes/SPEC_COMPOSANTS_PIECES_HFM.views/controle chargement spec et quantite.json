@@ -1,0 +1,770 @@
+{
+	"@type":"NativeView",
+	"Name":"controle chargement spec et quantite",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('m_SPEC_COMPOSANTS_PIECES_HFM')/Hierarchies('m_SPEC_COMPOSANTS_PIECES_HFM')/Subsets('Default')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('PIECES_HFM')/Hierarchies('PIECES_HFM')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('PIECES_HFM')/Hierarchies('PIECES_HFM')/Elements('20001VE5A212')"
+					},
+					{
+						"@id":"Dimensions('PIECES_HFM')/Hierarchies('PIECES_HFM')/Elements('20001VE5A322')"
+					},
+					{
+						"@id":"Dimensions('PIECES_HFM')/Hierarchies('PIECES_HFM')/Elements('20001VE5A012')"
+					},
+					{
+						"@id":"Dimensions('PIECES_HFM')/Hierarchies('PIECES_HFM')/Elements('20001VL0M902')"
+					},
+					{
+						"@id":"Dimensions('PIECES_HFM')/Hierarchies('PIECES_HFM')/Elements('20001VH7P200')"
+					},
+					{
+						"@id":"Dimensions('PIECES_HFM')/Hierarchies('PIECES_HFM')/Elements('20001VR8N020')"
+					}
+				]
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21111VL0 M000AA')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21111VL0 M902')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21581VL0 M002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21611VL0 M001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('22421VL0 M901')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('22533VL0 M902')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('22549VL0 M001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('22810VL0 M901')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('23233VL0 M001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('23251VL0 M902')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('23320VH7 L002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('23321VL0 M001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('23323VH7 L002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('43151VL0 B002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('50326VL0 M901')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('51125VL0 M901')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('51177VL0 M901')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('900 138 830 004')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90101VL0 M900')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90752VH7 L002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91052VL0 B002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91053VL0 B002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91054VL0 B002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91057VH7 L002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91251VL0 B002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91251VL0 M001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91252VL0 B002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('9405006000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('9430540222')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('9452028000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21111VL0 S000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21611VL0 P002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('22431VH7 T311M1')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('22451VL0 S001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('23211VL0 P001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('23251VH7 T300')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('23320VL0 P011')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('23323VL0 P011')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('43857VL0 P001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90504VH7 A003')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90751VL0 P001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('9405010080')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21110VE5 A000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21111VE5 A001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21115VE5 0002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21117VE5 A001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21230VE5 A001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21235VE5 A002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21520VE5 A010')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21525VE5 A010')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21912VE5 A001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('22533VH7 A002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('24134VE5 A001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25321VE5 A002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25331VE5 A011')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25332VE5 A001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25341VE5 A002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25341VE5 A002AA')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25342VE5 0232')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25343VE5 A001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25431VE5 0102')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25435VE5 A001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25442VE5 0000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25510VE5 A000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25511VE5 A001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25513VE5 0002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25721VE5 A001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25732VE5 A001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25741VE5 A001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25741VE5 A001AA')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25742VE5 0032')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25743VE5 A001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('900 038 920 005')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90101VE5 0002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90123VA4 8002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('904 532 350 002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90501VE5 0002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90503VE5 0002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90587VE5 0002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90588VE5 0002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90601VE5 0002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90662VE5 0000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90752VE5 A001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90865VE5 A000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91051VE5 0003')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91052VE5 0004')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91053VE5 0003')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91060VE5 A011Y1')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91063VE5 A011Y1')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91064VE5 0004')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91204KE8 0031')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91351VE5 0000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91352VE5 0000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('9430108100')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('9621108000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('22533VE5 A001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25321VE5 A103')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25721VE5 A201')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21520VE5 A110')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('25721VE5 A301')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21111VR8 N000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21111VR8 N000AA')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21581VR8 N000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21611VR8 N000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('21611VR8 N000AA')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('22431VR8 N030M3')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('22451VR8 N010')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('22455VR8 N000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('23211VR8 N000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('23251VR8 N010')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('23320VR8 N000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('23323VR8 N001')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('900 128 920 004')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('900 149 520 003')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90501VR8 N000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90651VE2 8002')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('90851VR8 N000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('91251VR8 N000')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('9430305080')"
+					},
+					{
+						"@id":"Dimensions('COMPOSANT_PIECES_HFM')/Hierarchies('COMPOSANT_PIECES_HFM')/Elements('9,61006E+11')"
+					}
+				]
+			}
+		},
+		{
+			"Subset":
+			{
+				"Hierarchy":
+				{
+					"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')"
+				},
+				"Elements":
+				[
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('220010')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('220225')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('220226')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401000')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401002')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401003')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401004')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401005')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401008')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401010')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401013')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401014')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401015')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401016')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401017')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401018')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401032')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401040')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401045')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401046')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401047')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401061')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401100')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401115')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401117')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401118')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401125')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401135')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401149')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401152')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401154')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401160')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401189')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401213')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401216')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401221')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401240')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401257')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401305')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401340')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401348')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401350')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401364')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401430')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401472')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401510')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401520')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401521')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401526')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401888')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401889')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401899')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401990')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401998')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('401999')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('402150')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('402170')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('402350')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('402400')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('402420')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('402540')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('402550')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('403339')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('405005')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('405010')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('405096')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('405100')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('405186')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('405302')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('405400')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('406325')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('408400')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('408500')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('408600')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('408700')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('409100')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('410001')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('410090')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('411001')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('411100')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('412010')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('412040')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('412050')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('413010')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('499997')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('499999')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('AF')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('ASH')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('ASTI')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('DT')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('HM')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('HPE')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('HPPC')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('JPN')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('SM')"
+					},
+					{
+						"@id":"Dimensions('FOURNISSEUR')/Hierarchies('FOURNISSEUR')/Elements('ZNA')"
+					}
+				]
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('DEVISES')/Hierarchies('DEVISES')/Subsets('Default')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('EXERCICES')/Hierarchies('EXERCICES')/Subsets('Default')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('EXERCICES')/Hierarchies('EXERCICES')/Elements('101KI')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Scenario')/Hierarchies('Scenario')/Subsets('Default')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Scenario')/Hierarchies('Scenario')/Elements('OB')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Version')/Hierarchies('Version')/Subsets('Default')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Version')/Hierarchies('Version')/Elements('V2')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('MOIS')/Hierarchies('MOIS')/Subsets('Default')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('MOIS')/Hierarchies('MOIS')/Elements('04')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":true,
+	"SuppressEmptyRows":true,
+	"FormatString":"0.#########"
+}

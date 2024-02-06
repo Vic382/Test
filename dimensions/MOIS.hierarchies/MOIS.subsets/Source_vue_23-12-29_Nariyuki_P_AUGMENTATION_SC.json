@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Source_vue_23-12-29_Nariyuki_P_AUGMENTATION_SC",
+	"Expression":"{TM1FILTERBYLEVEL( {TM1SUBSETALL([MOIS] )}, 0)}"
+}

@@ -1,0 +1,13 @@
+{
+	"@type":"Process",
+	"Name":"ALIM_COUT_PIECES_HFM_SPEC_COMPOSANT_PIECES_HFM",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"ALIM_COUT_PIECES_HFM_SPEC_COMPOSANT_PIECES_HFM.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€_ParameterConstraints=e30=€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

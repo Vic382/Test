@@ -1,0 +1,26 @@
+{
+	"@type":"Cube",
+	"Name":"PIECES_HFM_COST",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('EXERCICES')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('PIECES_HFM')"
+		},
+		{
+			"@id":"Dimensions('MOIS')"
+		},
+		{
+			"@id":"Dimensions('m_PIECES_HFM_COST')"
+		}
+	],
+	"Views@Code.links":[]
+}

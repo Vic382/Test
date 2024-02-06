@@ -1,0 +1,1626 @@
+{
+	"@type":"Hierarchy",
+	"Name":"MTO",
+	"Elements":
+	[
+		{
+			"Name":"TOTAL_MTO",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"OP",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"ORLEANS_PLAN",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"BC",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"BC UMK425",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"UMK425E2LEET",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"UMK425E2UEET",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"BC UMS425",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"UMS425E1LNET",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"BC UMK435",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"UMK435E3LEET",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"UMK435E3UEET",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"BC UMK450",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"UMK450ELEET",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"UMK450EUEET",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"UMK450EXEET",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"LM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"LM IZY",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HRG416C1PKEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG416C1PKUH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG416C1SKEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG416C1SKJH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG466C1PKEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG466C1PKUH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG466C1SKEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG466C1SKEP",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG466C1SKUP",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG466C1SKJH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"DCM HRG",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HRG416XBPEEA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG416XBPEUA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG466XBSEEA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG466XBSEUA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG466XBSEJA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"LM HRX",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HRX476C2HYEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRX476C2VKEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRX476C2VYEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRX476C2QYEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"DCM HRX",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HRX476XBVEEA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"LM HRD",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HRD536K4HXE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRD536K4QXE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRD536K4HXEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRD536K4QXEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"LM HRH",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HRH536K4HXE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRH536K4QXE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRH536K4HXEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRH536K4QXEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"LM HRX 53",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HRX537C6HYEA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRX537C6HZEA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRX537C6VKEA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRX537C6VYEA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRX537C7HYEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRX537C7HZEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRX537C7VKEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRX537C7VYEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRX537C8HYEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRX537C8HZEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRX537C8VKEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRX537C8VYEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"LM HRN",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HRN536C1VKEA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRN536C1VYEA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRN536C2VKEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRN536C2VYEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRN536C3VKEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRN536C3VYEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"LM HRG53",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HRG536C9VLEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG536C9SKEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG536C9VKEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRG536C9VYEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HRM VP7",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HRM310K2EAA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM520K1EAJ",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM520K2EAA",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM310K1B",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM310K1E",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM310K1EN",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM310K1S",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM520K1B",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM520K1E",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM520K1EN",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM520K1S",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM310K1EAB",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM310K1EAE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM310K1EAEN",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM310K1EAS",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM520K1EAB",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM520K1EAE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM520K1EAEN",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM520K1EAS",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM VP9",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HRM3000K1A",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM3000K1B",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM3000K1E",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM3000K1J",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM3000K1S",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM VP7W",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HRM1000B",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM1000E",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM1000S",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM1500B",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM1500E",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM1500S",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM1500BC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM1500EC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM1500SC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM2500B",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM2500E",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM2500S",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM2500BC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM2500EC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM2500JC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM2500SC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM VP9Y",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HRM4000BC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM4000EC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM4000JC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM4000SC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"SC",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"EUROMETAL",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"F",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"FG",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"FG201K1DET",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"FG205K1DET",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"STIGA",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"RM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HF",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HF2317HME",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HF2417K5HBE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HF2417K5HME",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HF2417K5HTE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HF2417K5HMJ",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HF2625HMEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HF2625HTEH",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"BOSCH",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"OEMS",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"BOSCH HRM",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HRM40EB",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM40EE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM40ES",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM40EBC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM40EEC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM40ESC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM70EEC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM70EBC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HRM70ESC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"BOSCH H_HELD",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"HHT36AXBEUE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HHT36AXBJUT",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HHB36AXBE86",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HHB36AXBJ86",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HHH36AXBE60R",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HHT36BXBELT",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HHB36BXBE75",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HHC36BXBE35",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"HHH36BXBE65T",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"BOSCH BATTERY",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"DP3640XAE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"DP3660XAE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"DP3660XAJ",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"DPW3660XAE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"DPW3690XAE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"DP3620XAE",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"BOSCH CHARGER",
+			"Type":"Consolidated"
+		},
+		{
+			"Name":"CV3680XABM",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"CV3680XAEM",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"CV3680XAJM",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"CV3680XASM",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"CV3680XAUM",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"CV3620XAEM",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"CV3620XAUM",
+			"Type":"Numeric"
+		}
+	],
+	"Edges":
+	[
+		{
+			"ParentName":"TOTAL_MTO",
+			"ComponentName":"OP",
+			"Weight":1
+		},
+		{
+			"ParentName":"TOTAL_MTO",
+			"ComponentName":"SC",
+			"Weight":1
+		},
+		{
+			"ParentName":"OP",
+			"ComponentName":"ORLEANS_PLAN",
+			"Weight":1
+		},
+		{
+			"ParentName":"ORLEANS_PLAN",
+			"ComponentName":"BC",
+			"Weight":1
+		},
+		{
+			"ParentName":"ORLEANS_PLAN",
+			"ComponentName":"LM",
+			"Weight":1
+		},
+		{
+			"ParentName":"ORLEANS_PLAN",
+			"ComponentName":"HRM",
+			"Weight":1
+		},
+		{
+			"ParentName":"BC",
+			"ComponentName":"BC UMK425",
+			"Weight":1
+		},
+		{
+			"ParentName":"BC",
+			"ComponentName":"BC UMS425",
+			"Weight":1
+		},
+		{
+			"ParentName":"BC",
+			"ComponentName":"BC UMK435",
+			"Weight":1
+		},
+		{
+			"ParentName":"BC",
+			"ComponentName":"BC UMK450",
+			"Weight":1
+		},
+		{
+			"ParentName":"BC UMK425",
+			"ComponentName":"UMK425E2LEET",
+			"Weight":1
+		},
+		{
+			"ParentName":"BC UMK425",
+			"ComponentName":"UMK425E2UEET",
+			"Weight":1
+		},
+		{
+			"ParentName":"BC UMS425",
+			"ComponentName":"UMS425E1LNET",
+			"Weight":1
+		},
+		{
+			"ParentName":"BC UMK435",
+			"ComponentName":"UMK435E3LEET",
+			"Weight":1
+		},
+		{
+			"ParentName":"BC UMK435",
+			"ComponentName":"UMK435E3UEET",
+			"Weight":1
+		},
+		{
+			"ParentName":"BC UMK450",
+			"ComponentName":"UMK450ELEET",
+			"Weight":1
+		},
+		{
+			"ParentName":"BC UMK450",
+			"ComponentName":"UMK450EUEET",
+			"Weight":1
+		},
+		{
+			"ParentName":"BC UMK450",
+			"ComponentName":"UMK450EXEET",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM",
+			"ComponentName":"LM IZY",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM",
+			"ComponentName":"DCM HRG",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM",
+			"ComponentName":"LM HRX",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM",
+			"ComponentName":"DCM HRX",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM",
+			"ComponentName":"LM HRD",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM",
+			"ComponentName":"LM HRH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM",
+			"ComponentName":"LM HRX 53",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM",
+			"ComponentName":"LM HRN",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM",
+			"ComponentName":"LM HRG53",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM IZY",
+			"ComponentName":"HRG416C1PKEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM IZY",
+			"ComponentName":"HRG416C1PKUH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM IZY",
+			"ComponentName":"HRG416C1SKEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM IZY",
+			"ComponentName":"HRG416C1SKJH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM IZY",
+			"ComponentName":"HRG466C1PKEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM IZY",
+			"ComponentName":"HRG466C1PKUH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM IZY",
+			"ComponentName":"HRG466C1SKEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM IZY",
+			"ComponentName":"HRG466C1SKEP",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM IZY",
+			"ComponentName":"HRG466C1SKUP",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM IZY",
+			"ComponentName":"HRG466C1SKJH",
+			"Weight":1
+		},
+		{
+			"ParentName":"DCM HRG",
+			"ComponentName":"HRG416XBPEEA",
+			"Weight":1
+		},
+		{
+			"ParentName":"DCM HRG",
+			"ComponentName":"HRG416XBPEUA",
+			"Weight":1
+		},
+		{
+			"ParentName":"DCM HRG",
+			"ComponentName":"HRG466XBSEEA",
+			"Weight":1
+		},
+		{
+			"ParentName":"DCM HRG",
+			"ComponentName":"HRG466XBSEUA",
+			"Weight":1
+		},
+		{
+			"ParentName":"DCM HRG",
+			"ComponentName":"HRG466XBSEJA",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX",
+			"ComponentName":"HRX476C2HYEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX",
+			"ComponentName":"HRX476C2VKEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX",
+			"ComponentName":"HRX476C2VYEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX",
+			"ComponentName":"HRX476C2QYEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"DCM HRX",
+			"ComponentName":"HRX476XBVEEA",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRD",
+			"ComponentName":"HRD536K4HXE",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRD",
+			"ComponentName":"HRD536K4QXE",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRD",
+			"ComponentName":"HRD536K4HXEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRD",
+			"ComponentName":"HRD536K4QXEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRH",
+			"ComponentName":"HRH536K4HXE",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRH",
+			"ComponentName":"HRH536K4QXE",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRH",
+			"ComponentName":"HRH536K4HXEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRH",
+			"ComponentName":"HRH536K4QXEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX 53",
+			"ComponentName":"HRX537C6HYEA",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX 53",
+			"ComponentName":"HRX537C6HZEA",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX 53",
+			"ComponentName":"HRX537C6VKEA",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX 53",
+			"ComponentName":"HRX537C6VYEA",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX 53",
+			"ComponentName":"HRX537C7HYEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX 53",
+			"ComponentName":"HRX537C7HZEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX 53",
+			"ComponentName":"HRX537C7VKEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX 53",
+			"ComponentName":"HRX537C7VYEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX 53",
+			"ComponentName":"HRX537C8HYEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX 53",
+			"ComponentName":"HRX537C8HZEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX 53",
+			"ComponentName":"HRX537C8VKEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRX 53",
+			"ComponentName":"HRX537C8VYEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRN",
+			"ComponentName":"HRN536C1VKEA",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRN",
+			"ComponentName":"HRN536C1VYEA",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRN",
+			"ComponentName":"HRN536C2VKEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRN",
+			"ComponentName":"HRN536C2VYEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRN",
+			"ComponentName":"HRN536C3VKEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRN",
+			"ComponentName":"HRN536C3VYEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRG53",
+			"ComponentName":"HRG536C9VLEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRG53",
+			"ComponentName":"HRG536C9SKEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRG53",
+			"ComponentName":"HRG536C9VKEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"LM HRG53",
+			"ComponentName":"HRG536C9VYEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM",
+			"ComponentName":"HRM VP7",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM",
+			"ComponentName":"HRM VP9",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM",
+			"ComponentName":"HRM VP7W",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM",
+			"ComponentName":"HRM VP9Y",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM310K2EAA",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM520K1EAJ",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM520K2EAA",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM310K1B",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM310K1E",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM310K1EN",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM310K1S",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM520K1B",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM520K1E",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM520K1EN",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM520K1S",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM310K1EAB",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM310K1EAE",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM310K1EAEN",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM310K1EAS",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM520K1EAB",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM520K1EAE",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM520K1EAEN",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7",
+			"ComponentName":"HRM520K1EAS",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP9",
+			"ComponentName":"HRM3000K1A",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP9",
+			"ComponentName":"HRM3000K1B",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP9",
+			"ComponentName":"HRM3000K1E",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP9",
+			"ComponentName":"HRM3000K1J",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP9",
+			"ComponentName":"HRM3000K1S",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM1000B",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM1000E",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM1000S",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM1500B",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM1500E",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM1500S",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM1500BC",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM1500EC",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM1500SC",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM2500B",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM2500E",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM2500S",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM2500BC",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM2500EC",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM2500JC",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP7W",
+			"ComponentName":"HRM2500SC",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP9Y",
+			"ComponentName":"HRM4000BC",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP9Y",
+			"ComponentName":"HRM4000EC",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP9Y",
+			"ComponentName":"HRM4000JC",
+			"Weight":1
+		},
+		{
+			"ParentName":"HRM VP9Y",
+			"ComponentName":"HRM4000SC",
+			"Weight":1
+		},
+		{
+			"ParentName":"SC",
+			"ComponentName":"EUROMETAL",
+			"Weight":1
+		},
+		{
+			"ParentName":"SC",
+			"ComponentName":"STIGA",
+			"Weight":1
+		},
+		{
+			"ParentName":"SC",
+			"ComponentName":"BOSCH",
+			"Weight":1
+		},
+		{
+			"ParentName":"EUROMETAL",
+			"ComponentName":"F",
+			"Weight":1
+		},
+		{
+			"ParentName":"F",
+			"ComponentName":"FG",
+			"Weight":1
+		},
+		{
+			"ParentName":"FG",
+			"ComponentName":"FG201K1DET",
+			"Weight":1
+		},
+		{
+			"ParentName":"FG",
+			"ComponentName":"FG205K1DET",
+			"Weight":1
+		},
+		{
+			"ParentName":"STIGA",
+			"ComponentName":"RM",
+			"Weight":1
+		},
+		{
+			"ParentName":"RM",
+			"ComponentName":"HF",
+			"Weight":1
+		},
+		{
+			"ParentName":"HF",
+			"ComponentName":"HF2317HME",
+			"Weight":1
+		},
+		{
+			"ParentName":"HF",
+			"ComponentName":"HF2417K5HBE",
+			"Weight":1
+		},
+		{
+			"ParentName":"HF",
+			"ComponentName":"HF2417K5HME",
+			"Weight":1
+		},
+		{
+			"ParentName":"HF",
+			"ComponentName":"HF2417K5HTE",
+			"Weight":1
+		},
+		{
+			"ParentName":"HF",
+			"ComponentName":"HF2417K5HMJ",
+			"Weight":1
+		},
+		{
+			"ParentName":"HF",
+			"ComponentName":"HF2625HMEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"HF",
+			"ComponentName":"HF2625HTEH",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH",
+			"ComponentName":"OEMS",
+			"Weight":1
+		},
+		{
+			"ParentName":"OEMS",
+			"ComponentName":"BOSCH HRM",
+			"Weight":1
+		},
+		{
+			"ParentName":"OEMS",
+			"ComponentName":"BOSCH H_HELD",
+			"Weight":1
+		},
+		{
+			"ParentName":"OEMS",
+			"ComponentName":"BOSCH BATTERY",
+			"Weight":1
+		},
+		{
+			"ParentName":"OEMS",
+			"ComponentName":"BOSCH CHARGER",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH HRM",
+			"ComponentName":"HRM40EB",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH HRM",
+			"ComponentName":"HRM40EE",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH HRM",
+			"ComponentName":"HRM40ES",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH HRM",
+			"ComponentName":"HRM40EBC",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH HRM",
+			"ComponentName":"HRM40EEC",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH HRM",
+			"ComponentName":"HRM40ESC",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH HRM",
+			"ComponentName":"HRM70EEC",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH HRM",
+			"ComponentName":"HRM70EBC",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH HRM",
+			"ComponentName":"HRM70ESC",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH H_HELD",
+			"ComponentName":"HHT36AXBEUE",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH H_HELD",
+			"ComponentName":"HHT36AXBJUT",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH H_HELD",
+			"ComponentName":"HHB36AXBE86",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH H_HELD",
+			"ComponentName":"HHB36AXBJ86",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH H_HELD",
+			"ComponentName":"HHH36AXBE60R",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH H_HELD",
+			"ComponentName":"HHT36BXBELT",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH H_HELD",
+			"ComponentName":"HHB36BXBE75",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH H_HELD",
+			"ComponentName":"HHC36BXBE35",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH H_HELD",
+			"ComponentName":"HHH36BXBE65T",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH BATTERY",
+			"ComponentName":"DP3640XAE",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH BATTERY",
+			"ComponentName":"DP3660XAE",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH BATTERY",
+			"ComponentName":"DP3660XAJ",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH BATTERY",
+			"ComponentName":"DPW3660XAE",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH BATTERY",
+			"ComponentName":"DPW3690XAE",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH BATTERY",
+			"ComponentName":"DP3620XAE",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH CHARGER",
+			"ComponentName":"CV3680XABM",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH CHARGER",
+			"ComponentName":"CV3680XAEM",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH CHARGER",
+			"ComponentName":"CV3680XAJM",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH CHARGER",
+			"ComponentName":"CV3680XASM",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH CHARGER",
+			"ComponentName":"CV3680XAUM",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH CHARGER",
+			"ComponentName":"CV3620XAEM",
+			"Weight":1
+		},
+		{
+			"ParentName":"BOSCH CHARGER",
+			"ComponentName":"CV3620XAUM",
+			"Weight":1
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"MTO.subsets/Default.json",
+		"MTO.subsets/Masque_Prod_Cost.json",
+		"MTO.subsets/Niv0.json",
+		"MTO.subsets/Niv1.json",
+		"MTO.subsets/Niv1_4.json",
+		"MTO.subsets/Niv2.json",
+		"MTO.subsets/Niv3.json",
+		"MTO.subsets/Niv4.json",
+		"MTO.subsets/Niv5.json",
+		"MTO.subsets/Niv5_0.json",
+		"MTO.subsets/OP.json",
+		"MTO.subsets/OP Niv0.json",
+		"MTO.subsets/Par Défaut.json",
+		"MTO.subsets/SC.json",
+		"MTO.subsets/SC Niv0.json",
+		"MTO.subsets/Tous.json"
+	]
+}

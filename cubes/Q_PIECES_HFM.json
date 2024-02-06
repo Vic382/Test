@@ -1,0 +1,30 @@
+{
+	"@type":"Cube",
+	"Name":"Q_PIECES_HFM",
+	"Rules@Code.link":"Q_PIECES_HFM.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('EXERCICES')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('PIECES_HFM')"
+		},
+		{
+			"@id":"Dimensions('MOIS')"
+		},
+		{
+			"@id":"Dimensions('MOIS_YTD')"
+		},
+		{
+			"@id":"Dimensions('m_Q_PIECES_HFM')"
+		}
+	],
+	"Views@Code.links":[]
+}

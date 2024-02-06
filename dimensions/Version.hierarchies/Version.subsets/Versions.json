@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Versions",
+	"Expression":"{TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Version] )}, \"Versions*\")}, ALL, RECURSIVE )}"
+}

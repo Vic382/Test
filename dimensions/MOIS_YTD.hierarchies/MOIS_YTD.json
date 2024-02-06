@@ -1,0 +1,22 @@
+{
+	"@type":"Hierarchy",
+	"Name":"MOIS_YTD",
+	"Elements":
+	[
+		{
+			"Name":"M",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"YTD",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"MOIS_YTD.subsets/Default.json",
+		"MOIS_YTD.subsets/Niv0.json",
+		"MOIS_YTD.subsets/Par Défaut.json",
+		"MOIS_YTD.subsets/Tous.json"
+	]
+}

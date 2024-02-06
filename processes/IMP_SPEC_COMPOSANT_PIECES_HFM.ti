@@ -1,0 +1,351 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#***********************************************************************************************************
+# CREATEUR : DIMO SOFTWARE - BNS
+# DATE DE CREATION : 12/06/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : 
+# charge les données concernant les composants des pièces fabriquées par HFM
+# dans le cube "SPEC_COMPOSANT_PIECES_HFM"
+#***********************************************************************************************************
+
+#***********************************************************************************************************
+#                                  Définition des cubes
+#***********************************************************************************************************
+
+sCubeParamP = 'ParametresSources' ;
+sCubeParamT = 'ParametrageT' ;
+sCubeParamF = 'ParametresFonctionnels' ;
+
+#***********************************************************************************************************
+#                                  Définition des constantes
+#***********************************************************************************************************
+
+cMainProcName = GetProcessName();
+cRepertoireRacine = GetProcessErrorFileDirectory;
+cTimeStamp = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess = cTimeStamp | '_' | cRandomInt;
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+# Permet de définir l'écriture dans le bac à sable actif de l'utilisateur
+SetUseActiveSandboxProperty(1) ;
+
+#***********************************************************************************************************
+#                                  Définition des variables
+#***********************************************************************************************************
+
+# nDebug pour créer des ss-ensemble et vue temporaire
+# Si 1 les ss-ensemble et vue temporaire si 0 les ss-ensemble et vue ne seront pas supprimés
+nDebug = 1 ;
+
+
+#**********************************************************************************************************
+#                                  DEBUT IMP DATA SPEC COMPOSANT PIECES HFM
+#**********************************************************************************************************
+
+###***Définition de la phase en cours 
+sExercice = CellGetS ( sCubeParamF , 'ExerciceEnCours' , 'ValeurS' ) ; 
+sScenario = CellGetS ( sCubeParamF , 'ScenarioEnCours' , 'ValeurS' ) ;
+sVersion = CellGetS ( sCubeParamF , 'VersionEnCours' , 'ValeurS' ) ;
+
+###**Définition de la source de données
+# Récupération du fichier source
+sNomFichier = CellGetS ( sCubeParamP , cMainProcName , 'Txt_NomFichier' ) ;
+sRepertoireSource = CellGetS ( sCubeParamP , cMainProcName , 'Txt_RepertoireSource' ) ;
+sFichierSource = sRepertoireSource | sNomFichier | '_' | sScenario  | '_' | sExercice | '_' | sVersion |  '.csv' ;
+
+DataSourceNameForServer = sFichierSource ;
+DataSourceASCIIDelimiter = ';' ;
+
+##########################################
+## Creation vue zero sur  SPEC_COMPOSANT_PIECES_HFM
+###########################################
+
+###****Déclaration des variables
+
+sCube = 'SPEC_COMPOSANTS_PIECES_HFM' ;
+
+sDim1 = 'EXERCICES' ;
+sDim2 = 'Scenario' ;
+sDim3 = 'Version' ;
+sDim4 = 'PIECES_HFM' ;
+sDim5 = 'FOURNISSEUR' ;
+sDim6 = 'COMPOSANT_PIECES_HFM' ;
+sDim7 = 'DEVISES' ;
+sDim8 = 'MOIS' ;
+sDim = 'm_SPEC_COMPOSANTS_PIECES_HFM' ;
+
+sVueZero = 'zTI_' | cMainProcName | '_Zero';
+
+IF( ViewExists( sCube , sVueZero ) = 1 );
+  ViewDestroy( sCube , sVueZero );
+ENDIF;
+ViewCreate( sCube , sVueZero , nDebug );
+
+# Exercice
+IF( SubsetExists( sDim1 , sVueZero ) = 1 );
+  SubsetDestroy( sDim1 , sVueZero );
+ENDIF;
+SubsetCreate ( sDim1 , sVueZero , nDebug ) ; 
+SubsetElementInsert ( sDim1 , sVueZero , sExercice , nDebug ) ;
+ViewSubsetAssign ( sCube , sVueZero , sDim1 , sVueZero ) ; 
+
+# Phase
+IF( SubsetExists( sDim2 , sVueZero ) = 1 );
+  SubsetDestroy( sDim2 , sVueZero );
+ENDIF;
+SubsetCreate ( sDim2 , sVueZero , nDebug ) ; 
+SubsetElementInsert ( sDim2 , sVueZero , sScenario , nDebug ) ;
+ViewSubsetAssign ( sCube , sVueZero , sDim2 , sVueZero ) ; 
+
+# Version
+IF( SubsetExists( sDim3 , sVueZero ) = 1 );
+  SubsetDestroy( sDim3 , sVueZero );
+ENDIF;
+SubsetCreate ( sDim3 , sVueZero , nDebug ) ; 
+SubsetElementInsert ( sDim3 , sVueZero , sVersion , nDebug ) ;
+ViewSubsetAssign ( sCube , sVueZero , sDim3 , sVueZero ) ; 
+
+# PIECES_HFM
+IF( SubsetExists( sDim4 , sVueZero ) = 1 );
+  SubsetDestroy( sDim4 , sVueZero );
+ENDIF;
+SubsetCreatebyMDX( sVueZero , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDim4|'] )}, 0)}' , nDebug );
+ViewSubsetAssign( sCube , sVueZero , sDim4 , sVueZero );
+
+# FOURNISSEUR
+IF( SubsetExists( sDim5 , sVueZero ) = 1 );
+  SubsetDestroy( sDim5 , sVueZero );
+ENDIF;
+SubsetCreatebyMDX( sVueZero , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDim5|'] )}, 0)}' , nDebug );
+ViewSubsetAssign( sCube , sVueZero , sDim5 , sVueZero );
+
+# COMPOSANT_PIECES_HFM
+IF( SubsetExists( sDim6 , sVueZero ) = 1 );
+  SubsetDestroy( sDim6 , sVueZero );
+ENDIF;
+SubsetCreatebyMDX( sVueZero , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDim6|'] )}, 0)}' , nDebug );
+ViewSubsetAssign( sCube , sVueZero , sDim6 , sVueZero );
+
+# Devise
+IF( SubsetExists( sDim7 , sVueZero ) = 1 );
+  SubsetDestroy( sDim7 , sVueZero );
+ENDIF;
+SubsetCreatebyMDX( sVueZero , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDim7|'] )}, 0)}' , nDebug );
+ViewSubsetAssign( sCube , sVueZero , sDim7 , sVueZero );
+
+# MOIS
+IF( SubsetExists( sDim8 , sVueZero ) = 1 );
+  SubsetDestroy( sDim8 , sVueZero );
+ENDIF;
+SubsetCreatebyMDX( sVueZero , '{TM1FILTERBYLEVEL( {TM1SUBSETALL(['|sDim8|'] )}, 0)}' , nDebug );
+ViewSubsetAssign( sCube , sVueZero , sDim8 , sVueZero );
+
+# m_IMP_SPEC
+IF( SubsetExists( sDim , sVueZero ) = 1 );
+  SubsetDestroy( sDim , sVueZero );
+ENDIF;
+SubsetCreate ( sDim , sVueZero , nDebug ) ; 
+SubsetElementInsert ( sDim , sVueZero , 'Q_SPEC_COMPOSANT_PIECES_HFM' , nDebug ) ;
+SubsetElementInsert ( sDim , sVueZero , 'PU' , nDebug ) ;
+SubsetElementInsert ( sDim , sVueZero , 'CD1' , nDebug ) ;
+SubsetElementInsert ( sDim , sVueZero , 'CD2' , nDebug ) ;
+SubsetElementInsert ( sDim , sVueZero , 'CD3' , nDebug ) ;
+SubsetElementInsert ( sDim , sVueZero , 'PRC' , nDebug ) ;
+SubsetElementInsert ( sDim , sVueZero , 'MAT' , nDebug ) ;
+ViewSubsetAssign ( sCube , sVueZero , sDim , sVueZero ) ;
+
+ViewZeroOut( sCube , sVueZero );
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+###*****Chargement des données dans le cube 
+
+##**Chargement des données par mois 
+
+IF ( TYPE @= 'Q' ) ; 
+
+	CELLPUTN ( M04 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '04' ,  'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;                
+	CELLPUTN ( M05 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '05' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M06 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '06' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M07 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , ' 07' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M08 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '08' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M09 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,   '09' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M10 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '10' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M11 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , '11' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M12 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , '12' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M01 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,   '01' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M02 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '02' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M03 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '03' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+
+
+	CELLPUTN ( M04 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , 'EUR_HFM' ,  '04' ,  'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;                
+	CELLPUTN ( M05 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , 'EUR_HFM' ,  '05' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M06 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , 'EUR_HFM' ,  '06' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M07 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , 'EUR_HFM' , ' 07' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M08 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , 'EUR_HFM' ,  '08' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M09 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , 'EUR_HFM' ,   '09' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M10 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , 'EUR_HFM' ,  '10' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M11 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , 'EUR_HFM' , '11' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M12 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , 'EUR_HFM' , '12' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M01 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , 'EUR_HFM' ,   '01' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M02 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , 'EUR_HFM' ,  '02' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+	CELLPUTN ( M03 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , 'EUR_HFM' ,  '03' , 'Q_SPEC_COMPOSANT_PIECES_HFM' ) ;
+
+ENDIF;
+
+IF ( TYPE @= 'PU' ) ; 
+
+	CELLPUTN ( M04 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '04' ,  'PU' ) ;
+	CELLPUTN ( M05 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '05' , 'PU' ) ;
+	CELLPUTN ( M06 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '06' , 'PU' ) ;
+	CELLPUTN ( M07 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , ' 07' , 'PU' ) ;
+	CELLPUTN ( M08 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '08' , 'PU' ) ;
+	CELLPUTN ( M09 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,   '09' , 'PU' ) ;
+	CELLPUTN ( M10 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '10' , 'PU' ) ;
+	CELLPUTN ( M11 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , '11' , 'PU' ) ;
+	CELLPUTN ( M12 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , '12' , 'PU' ) ;
+	CELLPUTN ( M01 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,   '01' , 'PU' ) ;
+	CELLPUTN ( M02 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '02' , 'PU' ) ;
+	CELLPUTN ( M03 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '03' , 'PU' ) ;
+
+ENDIF;
+
+IF ( TYPE @= 'CD1' ) ; 
+
+	CELLPUTN ( M04 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '04' ,  'CD1' ) ;
+	CELLPUTN ( M05 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '05' , 'CD1' ) ;
+	CELLPUTN ( M06 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '06' , 'CD1' ) ;
+	CELLPUTN ( M07 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , ' 07' , 'CD1' ) ;
+	CELLPUTN ( M08 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '08' , 'CD1' ) ;
+	CELLPUTN ( M09 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,   '09' , 'CD1' ) ;
+	CELLPUTN ( M10 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '10' , 'CD1' ) ;
+	CELLPUTN ( M11 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , '11' , 'CD1' ) ;
+	CELLPUTN ( M12 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , '12' , 'CD1' ) ;
+	CELLPUTN ( M01 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,   '01' , 'CD1' ) ;
+	CELLPUTN ( M02 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '02' , 'CD1' ) ;
+	CELLPUTN ( M03 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '03' , 'CD1' ) ;
+
+ENDIF;
+
+IF ( TYPE @= 'CD2' ) ; 
+
+	CELLPUTN ( M04 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '04' ,  'CD2' ) ;
+	CELLPUTN ( M05 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '05' , 'CD2' ) ;
+	CELLPUTN ( M06 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '06' , 'CD2' ) ;
+	CELLPUTN ( M07 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , ' 07' , 'CD2' ) ;
+	CELLPUTN ( M08 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '08' , 'CD2' ) ;
+	CELLPUTN ( M09 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,   '09' , 'CD2' ) ;
+	CELLPUTN ( M10 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '10' , 'CD2' ) ;
+	CELLPUTN ( M11 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , '11' , 'CD2' ) ;
+	CELLPUTN ( M12 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , '12' , 'CD2' ) ;
+	CELLPUTN ( M01 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,   '01' , 'CD2' ) ;
+	CELLPUTN ( M02 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '02' , 'CD2' ) ;
+	CELLPUTN ( M03 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '03' , 'CD2' ) ;
+
+ENDIF;
+
+IF ( TYPE @= 'PRC' ) ; 
+
+	CELLPUTN ( M04 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '04' ,  'PRC' ) ;
+	CELLPUTN ( M05 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '05' , 'PRC' ) ;
+	CELLPUTN ( M06 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '06' , 'PRC' ) ;
+	CELLPUTN ( M07 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , ' 07' , 'PRC' ) ;
+	CELLPUTN ( M08 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '08' , 'PRC' ) ;
+	CELLPUTN ( M09 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,   '09' , 'PRC' ) ;
+	CELLPUTN ( M10 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '10' , 'PRC' ) ;
+	CELLPUTN ( M11 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , '11' , 'PRC' ) ;
+	CELLPUTN ( M12 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , '12' , 'PRC' ) ;
+	CELLPUTN ( M01 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,   '01' , 'PRC' ) ;
+	CELLPUTN ( M02 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '02' , 'PRC' ) ;
+	CELLPUTN ( M03 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '03' , 'PRC' ) ;
+
+ENDIF;
+
+IF ( TYPE @= 'MAT' ) ; 
+
+	CELLPUTN ( M04 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '04' ,  'MAT' ) ;
+	CELLPUTN ( M05 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '05' , 'MAT' ) ;
+	CELLPUTN ( M06 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '06' , 'MAT' ) ;
+	CELLPUTN ( M07 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , ' 07' , 'MAT' ) ;
+	CELLPUTN ( M08 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '08' , 'MAT' ) ;
+	CELLPUTN ( M09 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,   '09' , 'MAT' ) ;
+	CELLPUTN ( M10 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '10' , 'MAT' ) ;
+	CELLPUTN ( M11 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , '11' , 'MAT' ) ;
+	CELLPUTN ( M12 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise , '12' , 'MAT' ) ;
+	CELLPUTN ( M01 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,   '01' , 'MAT' ) ;
+	CELLPUTN ( M02 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '02' , 'MAT' ) ;
+	CELLPUTN ( M03 , sCube , sExercice , sScenario , sVersion ,  Code_Transmission, Code_Fournisseur , Code_Piece , Devise ,  '03' , 'MAT' ) ;
+
+ENDIF;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+## DECLARATION DES VARIABLES #
+
+# Statut
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+
+# Fin d'exécution
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+
+## EXECUTION DU MONITORING #
+
+# UTILISATEUR
+Z_UTILISATEUR = TM1User;
+
+# HEURE D'EXECUTION
+Z_LOCAL_TIME=   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+
+# PERIODE (TODAY = Année - Mois )
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+# HEURE D'EXECUTION
+Z_LOCAL_TIME=   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+
+# PERIODE (TODAY = Année - Mois )
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+#################################
+# Informations sur le processus                          #
+#################################
+
+# STATUT
+CELLPUTS( Z_STATUS , sCubeParamP , cMainProcName , 'Statut' );
+
+# TIME
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamP ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamP , cMainProcName ,'DernExe');
+
+# UTILISATEUR
+CELLPUTS( Z_UTILISATEUR, sCubeParamP , cMainProcName ,'txt_Utilisateur' );
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+
+#endregion

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Atterrissage+ Budget courant",
+	"Expression":"{UNION({[Scenario].[atterrissage]} , TM1FILTERBYPATTERN(TM1SUBSETALL([Scenario]) , [ParametresFonctionnels].([ParametresFonctionnels].[Tech_BudComparaison],[m_ParametresFOnctionnels].[ValeurS])))}"
+}

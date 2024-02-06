@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"Source_vue_23-12-15_NARIYUKI_ACTUAL_ALIM_INHOUSE_COSTS_2",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('EXERCICES')/Hierarchies('EXERCICES')/Elements('100KI')"
+		}
+	]
+}

@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"CENTRES_ANALYTIQUES",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('CENTRES_ANALYTIQUES')/Hierarchies('CENTRES_ANALYTIQUES')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"CENTRES_ANALYTIQUES.hierarchies/CENTRES_ANALYTIQUES.json"
+	]
+}

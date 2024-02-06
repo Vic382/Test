@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Detail_SGA",
+	"Expression":"{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [COMPTES] )}, \"CE1_EXPENS\")}, ALL, RECURSIVE )}, 1,2,3)}"
+}

@@ -1,0 +1,31 @@
+SKIPCHECK;
+#UNDEFVALS;
+
+
+#PU_DEBUT
+['PU_DEBUT'] = C: 0;
+
+# ['Q_SI'] => Calcul du stock Initial selon le stock 
+# Feeder dans ce cube
+['Q_SI'] = N: IF ( ['STOCK_DEBUT'] <> 0 , ['STOCK_DEBUT'] , DB ( 'STOCK_COMPOSANT_PIECES_HFM', !EXERCICES, !Scenario, !Version, !COMPOSANT_PIECES_HFM, !DEVISES, ATTRS('MOIS',!MOIS,'Mois Precedent'), 'SF' )) ;
+# ['PU_SI']  => Calcul du prix unitaire du stock initial 
+# Feeder dans ce cube
+['PU_SI'] = N: IF ( ['PU_DEBUT']<> 0 , ['PU_DEBUT'], DB ('STOCK_COMPOSANT_PIECES_HFM', !EXERCICES, !Scenario, !Version, !COMPOSANT_PIECES_HFM, !DEVISES, ATTRS('MOIS',!MOIS,'Mois Precedent'), 'PU_SI' )) ;
+['PU_SI'] = C: 0;
+
+# Calcul du stock Final en fonction des 
+# SF Feeder dans ce cube
+['SF'] = N: If ( ( ['Q_SI'] - ['CONSO_SI'] ) >  0 ,  ( ['Q_SI'] - ['CONSO_SI'] ) , 0 ) ;
+
+
+Feeders ;
+
+
+# Q_SI
+['STOCK_DEBUT'] => ['Q_SI'] ;
+['SF']=>DB( 'STOCK_COMPOSANT_PIECES_HFM', !EXERCICES, !Scenario, !Version, !COMPOSANT_PIECES_HFM, !DEVISES, ATTRS('MOIS',!MOIS,'Mois Suivant'), 'Q_SI'  );
+# PU_SI
+['PU_DEBUT'] => ['PU_SI'] ;
+['PU_SI'] => DB( 'STOCK_COMPOSANT_PIECES_HFM', !EXERCICES, !Scenario, !Version, !COMPOSANT_PIECES_HFM, !DEVISES, ATTRS('MOIS',!MOIS,'Mois Suivant') , 'PU_SI'  ) ;
+# SF
+[ { 'Q_SI' , 'CONSO_SI' } ] => ['SF'] ;

@@ -1,0 +1,27 @@
+{
+	"@type":"Cube",
+	"Name":"POP_PIECES_HFM",
+	"Rules@Code.link":"POP_PIECES_HFM.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('EXERCICES')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('PIECES_HFM')"
+		},
+		{
+			"@id":"Dimensions('MOIS')"
+		},
+		{
+			"@id":"Dimensions('m_POP_PIECES_HFM')"
+		}
+	],
+	"Views@Code.links":[]
+}

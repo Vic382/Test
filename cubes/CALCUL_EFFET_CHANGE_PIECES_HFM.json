@@ -1,0 +1,26 @@
+{
+	"@type":"Cube",
+	"Name":"CALCUL_EFFET_CHANGE_PIECES_HFM",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('PIECES_HFM')"
+		},
+		{
+			"@id":"Dimensions('EXERCICES')"
+		},
+		{
+			"@id":"Dimensions('MOIS')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('m_CALCUL_EFFET_CHANGE_PIECES_HFM')"
+		}
+	],
+	"Views@Code.links":[]
+}

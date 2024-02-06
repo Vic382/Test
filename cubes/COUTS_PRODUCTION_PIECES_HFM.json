@@ -1,0 +1,33 @@
+{
+	"@type":"Cube",
+	"Name":"COUTS_PRODUCTION_PIECES_HFM",
+	"Rules@Code.link":"COUTS_PRODUCTION_PIECES_HFM.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('EXERCICES')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('COST')"
+		},
+		{
+			"@id":"Dimensions('MOIS_YTD')"
+		},
+		{
+			"@id":"Dimensions('MOIS')"
+		},
+		{
+			"@id":"Dimensions('PIECES_HFM')"
+		},
+		{
+			"@id":"Dimensions('m_COUTS_PRODUCTION_PIECES_HFM')"
+		}
+	],
+	"Views@Code.links":[]
+}

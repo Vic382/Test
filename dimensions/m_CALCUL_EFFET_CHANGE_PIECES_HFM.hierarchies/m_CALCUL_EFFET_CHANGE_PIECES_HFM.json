@@ -1,0 +1,32 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_CALCUL_EFFET_CHANGE_PIECES_HFM",
+	"Elements":
+	[
+		{
+			"Name":"Q_PIECES_HFM_SCENARIO_EN_COURS",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"PU_SCENARIO_PREC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"TX_CHANGE_SCENARIO_EN_COURS",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"TX_CHANGE_SCENARIO_PREC",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"EFFET_CHANGE",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_CALCUL_EFFET_CHANGE_PIECES_HFM.subsets/Default.json",
+		"m_CALCUL_EFFET_CHANGE_PIECES_HFM.subsets/Niv0.json"
+	]
+}

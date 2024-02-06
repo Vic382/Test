@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"MTO",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('MTO')/Hierarchies('MTO')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"MTO.hierarchies/MTO.json"
+	]
+}

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"CC9",
+	"Expression":"{TM1FILTERBYPATTERN( {TM1FILTERBYLEVEL( {TM1SUBSETALL( [CENTRES_ANALYTIQUES] )}, 0)}, \"9*\")}"
+}

@@ -1,0 +1,35 @@
+{
+	"@type":"Cube",
+	"Name":"INHOUSE_COSTS_PIECES_HFM",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('EXERCICES')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('PIECES_HFM')"
+		},
+		{
+			"@id":"Dimensions('COMPTES')"
+		},
+		{
+			"@id":"Dimensions('CENTRES_ANALYTIQUES')"
+		},
+		{
+			"@id":"Dimensions('TYPE_TEMPS')"
+		},
+		{
+			"@id":"Dimensions('MOIS')"
+		},
+		{
+			"@id":"Dimensions('m_INHOUSE_COSTS_PIECES_HFM')"
+		}
+	],
+	"Views@Code.links":[]
+}

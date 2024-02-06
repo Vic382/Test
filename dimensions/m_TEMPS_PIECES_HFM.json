@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"m_TEMPS_PIECES_HFM",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_TEMPS_PIECES_HFM')/Hierarchies('m_TEMPS_PIECES_HFM')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"m_TEMPS_PIECES_HFM.hierarchies/m_TEMPS_PIECES_HFM.json"
+	]
+}

@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Niv1",
+	"Expression":"{TM1FILTERBYLEVEL ( {TM1SubsetAll ( [m_COUTS_PRODUCTION_PIECES_HFM] ) } , 1 )}"
+}

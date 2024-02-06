@@ -1,0 +1,24 @@
+{
+	"@type":"Cube",
+	"Name":"TEMPS_PIECES_HFM",
+	"Rules@Code.link":"TEMPS_PIECES_HFM.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('EXERCICES')"
+		},
+		{
+			"@id":"Dimensions('MOIS')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('PIECES_HFM')"
+		},
+		{
+			"@id":"Dimensions('m_TEMPS_PIECES_HFM')"
+		}
+	],
+	"Views@Code.links":[]
+}

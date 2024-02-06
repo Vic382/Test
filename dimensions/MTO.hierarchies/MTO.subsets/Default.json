@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Default",
+	"Expression":"{FILTER( {TM1SUBSETALL( [MTO] )}, [MTO].[INACTIF] = \"\")}"
+}

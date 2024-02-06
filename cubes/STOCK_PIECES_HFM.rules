@@ -1,0 +1,21 @@
+SKIPCHECK;
+['Q_Stock_Final'] = N: DB( 'STOCK_PIECES_HFM', !EXERCICES, !Scenario, !Version, !PIECES_HFM, !MOIS, 'EUR_HFM' , 'Q_produite'  )
+    + DB( 'STOCK_PIECES_HFM', !EXERCICES, !Scenario, !Version, !PIECES_HFM, !MOIS, 'EUR_HFM' , 'Q_stock'  )
+        - DB( 'STOCK_PIECES_HFM', !EXERCICES, !Scenario, !Version, !PIECES_HFM, !MOIS, 'EUR_HFM' , 'Q_Consommee'  ) ;
+
+['Q_stock'] = N: DB( 'STOCK_PIECES_HFM', !EXERCICES, !Scenario, !Version, !PIECES_HFM, DB( '}ElementAttributes_MOIS' , !MOIS ,'Mois Precedent'), !DEVISES, 'Q_Stock_Final'  ) ;
+
+['Prix_Unitaire_Q_Pro'] = N:	DB( 'STOCK_PIECES_HFM', !EXERCICES, !Scenario, !Version, !PIECES_HFM, !MOIS, 'EUR_HFM' , 'Prix_Q_Produite'  ) \	DB( 'STOCK_PIECES_HFM', !EXERCICES, !Scenario, !Version, !PIECES_HFM, !MOIS, 'EUR_HFM' , 'Q_produite'  ) ;
+['Prix_Unitaire_Q_Stock'] = N:  DB( 'STOCK_PIECES_HFM', !EXERCICES, !Scenario, !Version, !PIECES_HFM, !MOIS, 'EUR_HFM' , 'Prix_Q_Stock'  ) \	DB( 'STOCK_PIECES_HFM', !EXERCICES, !Scenario, !Version, !PIECES_HFM, !MOIS, 'EUR_HFM' , 'Q_stock'  ) ;
+
+FEEDERS;
+
+['Q_produite'] =>DB('STOCK_PIECES_HFM',!EXERCICES,!Scenario,!Version,!PIECES_HFM,!MOIS,'EUR_HFM','Q_Stock_Final') ;
+['Q_stock'] =>DB('STOCK_PIECES_HFM',!EXERCICES,!Scenario,!Version,!PIECES_HFM,!MOIS,'EUR_HFM','Q_Stock_Final') ;
+['Q_Consommee'] =>DB('STOCK_PIECES_HFM',!EXERCICES,!Scenario,!Version,!PIECES_HFM,!MOIS,'EUR_HFM','Q_Stock_Final') ;
+
+['Q_produite'] => DB('STOCK_PIECES_HFM',!EXERCICES,!Scenario,!Version,!PIECES_HFM,!MOIS,'EUR_HFM','Prix_Unitaire_Q_Pro') ;
+['Q_stock'] => DB('STOCK_PIECES_HFM',!EXERCICES,!Scenario,!Version,!PIECES_HFM,!MOIS,'EUR_HFM','Prix_Unitaire_Q_Stockl') ;
+
+
+

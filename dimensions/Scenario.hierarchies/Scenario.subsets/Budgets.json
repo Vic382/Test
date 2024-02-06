@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Budgets",
+	"Expression":"{TM1FILTERBYPATTERN( {TM1SUBSETALL( [Scenario] )}, \"Budget*\")}"
+}

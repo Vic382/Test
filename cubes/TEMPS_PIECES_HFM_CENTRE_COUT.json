@@ -1,0 +1,20 @@
+{
+	"@type":"Cube",
+	"Name":"TEMPS_PIECES_HFM_CENTRE_COUT",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('EXERCICES')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('PIECES_HFM_CENTRE_COUT')"
+		},
+		{
+			"@id":"Dimensions('m_TEMPS_PIECES_HFM_CENTRE_COUT')"
+		}
+	],
+	"Views@Code.links":[]
+}

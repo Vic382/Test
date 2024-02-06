@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Default",
+	"Expression":"{TM1SubsetAll ( [m_COUT_PIECES_HFM] ) }"
+}

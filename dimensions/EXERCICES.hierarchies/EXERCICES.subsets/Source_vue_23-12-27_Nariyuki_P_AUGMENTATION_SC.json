@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"Source_vue_23-12-27_Nariyuki_P_AUGMENTATION_SC",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('EXERCICES')/Hierarchies('EXERCICES')/Elements('101KI')"
+		}
+	]
+}

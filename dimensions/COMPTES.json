@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"COMPTES",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('COMPTES')/Hierarchies('COMPTES')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"COMPTES.hierarchies/COMPTES.json"
+	]
+}

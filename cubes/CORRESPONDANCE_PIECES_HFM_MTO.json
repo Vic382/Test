@@ -1,0 +1,14 @@
+{
+	"@type":"Cube",
+	"Name":"CORRESPONDANCE_PIECES_HFM_MTO",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('MTO')"
+		},
+		{
+			"@id":"Dimensions('m_CORRESPONDANCE_PIECES_HFM_MTO')"
+		}
+	],
+	"Views@Code.links":[]
+}

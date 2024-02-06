@@ -1,5 +1,0 @@
-{
-	"@type":"Subset",
-	"Name":"Par Défaut auto",
-	"Expression":"{TM1SubsetAll ( [Annee_Calendaire] ) }"
-}

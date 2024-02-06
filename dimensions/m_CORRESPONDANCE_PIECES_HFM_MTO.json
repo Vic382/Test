@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"m_CORRESPONDANCE_PIECES_HFM_MTO",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_CORRESPONDANCE_PIECES_HFM_MTO')/Hierarchies('m_CORRESPONDANCE_PIECES_HFM_MTO')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"m_CORRESPONDANCE_PIECES_HFM_MTO.hierarchies/m_CORRESPONDANCE_PIECES_HFM_MTO.json"
+	]
+}

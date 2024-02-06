@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"RAZ_vue_23-09-26_Nariyuki_P_AUGMENTATION_SC",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Scenario')/Hierarchies('Scenario')/Elements('Nar_1QFC_Bis')"
+		}
+	]
+}

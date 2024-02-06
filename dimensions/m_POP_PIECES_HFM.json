@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"m_POP_PIECES_HFM",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_POP_PIECES_HFM')/Hierarchies('m_POP_PIECES_HFM')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"m_POP_PIECES_HFM.hierarchies/m_POP_PIECES_HFM.json"
+	]
+}

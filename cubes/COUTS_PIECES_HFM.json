@@ -1,0 +1,36 @@
+{
+	"@type":"Cube",
+	"Name":"COUTS_PIECES_HFM",
+	"Rules@Code.link":"COUTS_PIECES_HFM.rules",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('EXERCICES')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('PIECES_HFM')"
+		},
+		{
+			"@id":"Dimensions('FOURNISSEUR')"
+		},
+		{
+			"@id":"Dimensions('COMPOSANT_PIECES_HFM')"
+		},
+		{
+			"@id":"Dimensions('DEVISES')"
+		},
+		{
+			"@id":"Dimensions('MOIS')"
+		},
+		{
+			"@id":"Dimensions('m_COUT_PIECES_HFM')"
+		}
+	],
+	"Views@Code.links":[]
+}

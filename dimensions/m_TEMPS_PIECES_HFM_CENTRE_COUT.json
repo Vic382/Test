@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"m_TEMPS_PIECES_HFM_CENTRE_COUT",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_TEMPS_PIECES_HFM_CENTRE_COUT')/Hierarchies('m_TEMPS_PIECES_HFM_CENTRE_COUT')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"m_TEMPS_PIECES_HFM_CENTRE_COUT.hierarchies/m_TEMPS_PIECES_HFM_CENTRE_COUT.json"
+	]
+}

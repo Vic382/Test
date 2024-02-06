@@ -1,0 +1,13 @@
+{
+	"@type":"Dimension",
+	"Name":"m_COUTS_PRODUCTION_PIECES_HFM",
+	"AllLeavesHierarchyName":"",
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_COUTS_PRODUCTION_PIECES_HFM')/Hierarchies('m_COUTS_PRODUCTION_PIECES_HFM')"
+	},
+	"Hierarchies@Code.links":
+	[
+		"m_COUTS_PRODUCTION_PIECES_HFM.hierarchies/m_COUTS_PRODUCTION_PIECES_HFM.json"
+	]
+}
