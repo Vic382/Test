@@ -1,0 +1,167 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#*****************************************************************************
+# CREATEUR : Dimo Software - VRT
+# DATE DE CREATION : 02/02/2024
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : ../../2023
+# DESCRIPTION DU PROCESSUS : 
+# Export des données du cube MS_Horaire  pour envoyer
+#  les données dans l'application budget
+#*****************************************************************************
+
+### 0.Définition des variables du monitoring
+sCubeParamT	        = 'ParametrageT' ;
+sCubeParamP         = 'ParametresSources' ;
+sCubeParamF  = 'ParametresFonctionnels' ;
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+Z_DEBUT_EXE         = StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+nDebug = 1 ; 
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+
+#**Définition du périmètre de travail
+sExercice = DimensionElementPrincipalName( 'Exercice', CellGetS ( sCubeParamF , 'ExerciceEnCours' , 'ValeurS' ) ) ;  
+sScenario = DimensionElementPrincipalName( 'Scenario', CellGetS ( sCubeParamF , 'ScenarioEnCours' , 'ValeurS' )  ) ; 
+sVersion = DimensionElementPrincipalName( 'Version', CellGetS ( sCubeParamF , 'VersionEnCours' , 'ValeurS' )  ) ; 
+
+### 1. Récupération du fichier Imp_Data_MS_REEL_MM_YYYY.csv
+
+sCheminDossier = CellGetS( sCubeParamP, cMainProcName , 'Txt_RepertoireExport' );
+sNomFichier = CellGetS( sCubeParamP, cMainProcName , 'txt_NomFichierExport') ;  
+sNomFichierFinal =  sNomFichier | '_' | sExercice | '_' | sScenario | '_' | sVersion    ; 
+sFichierExpCmp = sCheminDossier | sNomFichierFinal |'.csv' ; 
+
+DataSourceASCIIDelimiter = ';' ;
+
+### 1. Déclaration des variables
+nEntete = 1 ; 
+
+
+########  Debut de la vue SOURCE  ########
+
+### 1. Définition de la source du processus
+sCubeSource = 'MS_Horaire';
+sDimSource1 = 'Exercice' ; 
+sDimSource2 = 'Version' ; 
+sDimSource3 = 'Scenario' ; 
+sDimSource4 = 'Magasin' ; 
+sDimSource5 = 'Semaine' ; 
+sDimSource = 'm_MS_Horaire' ; 
+
+# Définition nom de vue / sous-ensemble
+sVueSource = 'Vue_Source' | Today (0) | '_' | GetProcessName () ;
+sSubsetSource = 'Source_Subset_' | Today (0) | '_' | GetProcessName () ; 
+
+# Remise à 0 de la vue
+ViewDestroy ( sCubeSource , sVueSource ) ;
+ViewCreate ( sCubeSource , sVueSource , nDebug ) ; 
+
+### 2. Création des sous-ensembles des dimensions du cube source MS_Reel
+# Dim 1 : Exercice
+SubsetDestroy ( sDimSource1 , sSubsetSource ) ; 
+SubsetCreate ( sDimSource1 , sSubsetSource ) ; 
+SubsetElementInsert ( sDimSource1 , sSubsetSource , sExercice , nDebug  ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource1 , sSubsetSource ) ; 
+
+# Dim 2 : Version
+SubsetDestroy ( sDimSource2 , sSubsetSource ) ; 
+SubsetCreate ( sDimSource2 , sSubsetSource ) ; 
+SubsetElementInsert ( sDimSource2 , sSubsetSource , sVersion , nDebug  ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource2 , sSubsetSource ) ; 
+
+# Dim 3 : Scenario
+SubsetDestroy ( sDimSource3 , sSubsetSource ) ; 
+SubsetCreate ( sDimSource3 , sSubsetSource ) ; 
+SubsetElementInsert ( sDimSource3 , sSubsetSource , sScenario , nDebug  ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource3 , sSubsetSource ) ; 
+
+# Dim 4 : Magasin
+SubsetDestroy ( sDimSource4 , sSubsetSource ) ; 
+SubsetCreatebyMDX( sSubsetSource , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimSource4 | ' ] ) } , 0 ) }' , nDebug );
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource4 , sSubsetSource ) ; 
+
+# Dim 5 : Semaine
+SubsetDestroy ( sDimSource5 , sSubsetSource ) ; 
+SubsetCreatebyMDX( sSubsetSource , '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimSource5 | ' ] ) } , 0 ) }' , nDebug );
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource5 , sSubsetSource ) ; 
+
+# Dim  : m_MS_Horaire
+SubsetDestroy ( sDimSource , sSubsetSource ) ; 
+SubsetCreate ( sDimSource , sSubsetSource ) ; 
+SubsetElementInsert ( sDimSource , sSubsetSource , 'Total_Masse_Salariale_Horaire' , nDebug  ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource , sSubsetSource ) ; 
+
+
+### 3. Périmètre de calcul (0 = Inclure / 1 = Exclure)
+# On ne traite PAS les croisements égaux à zéro :
+ViewExtractSkipZeroesSet ( sCubeSource , sVueSource , 1 ) ; 
+# On ne traite PAS les croisements concernés par des règles de calculs
+ViewExtractSkipRuleValuesSet ( sCubeSource , sVueSourCe , 1 ) ;
+# On ne traite PAS les croisements concernés par des cellules consolidéees 
+ViewExtractSkipCalcsSet ( sCubeSource , sVueSource , 0 ) ; 
+
+### 5. Définition de la source du processu : 
+DataSourceNameForServer  = sCubeSource ; 
+DataSourceCubeView = sVueSource ; 
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#Définition de l'entete du fichier d'export
+IF ( nEntete =1 );
+
+  ASCIIOutput( sFichierExpCmp ,'Exercice', 'Version', 'Scenario' , 'Magasin' , 'Semaine' , 'Total_Masse_Salariale_Horaire' );
+
+  nEntete = nEntete + 1 ; 
+
+ENDIF ;
+
+sMois = SUBST ( ELPAR( 'Semaine', Semaine , 1 ) , 1 , 3 ) ;
+
+
+ASCIIOutput( sFichierExpCmp , Exercice , Version , Scenario , Magasin , sMois , NumberToString ( Value ) );
+
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+# Declaration variables et constantes
+Z_FIN_EXE = StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE = Subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+Z_STATUS = IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION = Z_FIN_EXE - Z_DEBUT_EXE;
+Z_LOCAL_TIME =   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+Z_UTILISATEUR = TM1User;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+CELLPUTS( Z_STATUS , sCubeParamP , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamP ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamP , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamP , cMainProcName ,'txt_Utilisateur' );
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+#endregion
