@@ -1,0 +1,13 @@
+{
+	"@type":"Process",
+	"Name":"MASTER_INHOUSE_COSTS_PIECES_HFM",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"MASTER_INHOUSE_COSTS_PIECES_HFM.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":[],
+	"Variables":[]
+}

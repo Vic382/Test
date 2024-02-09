@@ -1,0 +1,134 @@
+#region Prolog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#***********************************************************************************************************
+# CREATEUR : DIMO SOFTWARE - BNS
+# DATE DE CREATION : 02/02/2024
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : 
+# Master de mise à jour des quantites pièces hfm
+#***********************************************************************************************************
+
+#***********************************************************************************************************
+#                                  Définition des cubes
+#***********************************************************************************************************
+
+sCubeParamP = 'ParametresSources' ;
+sCubeParamT = 'ParametrageT' ;
+sCubeParamF = 'ParametresFonctionnels' ;
+
+#***********************************************************************************************************
+#                                  Définition des constantes
+#***********************************************************************************************************
+
+cMainProcName = GetProcessName();
+cRepertoireRacine = GetProcessErrorFileDirectory;
+cTimeStamp = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess = cTimeStamp | '_' | cRandomInt;
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+# Permet de définir l'écriture dans le bac à sable actif de l'utilisateur
+SetUseActiveSandboxProperty(1) ;
+
+#***********************************************************************************************************
+#                                  Définition des variables
+#***********************************************************************************************************
+
+# nDebug pour créer des ss-ensemble et vue temporaire
+# Si 1 les ss-ensemble et vue temporaire si 0 les ss-ensemble et vue ne seront pas supprimés
+nDebug = 1 ;
+
+
+#**********************************************************************************************************
+#                                  DEBUT MAJ_REFERENTIEL
+#**********************************************************************************************************
+
+ExecuteProcess ( 'IMP_DATA_QUANTITE_PIECES_HFM' );
+ExecuteProcess ( 'ALIM_SPEC_COMPOSANT_PIECES_HFM_QUANTITE_PIECES_HFM' );
+ExecuteProcess ( 'ALIM_POP_PIECES_HFM_QUANTITE_PIECES_HFM' );
+ExecuteProcess ( 'ALIM_STOCK_PIECES_HFM_QUANTITE_PIECES_HFM' );
+ExecuteProcess ( 'ALIM_TEMPS_PIECES_HFM_QUANTITE_PIECES_HFM' );
+
+
+
+
+
+
+
+
+
+
+
+
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+## DECLARATION DES VARIABLES #
+
+# Statut
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+
+# Fin d'exécution
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+
+## EXECUTION DU MONITORING #
+
+# UTILISATEUR
+Z_UTILISATEUR = TM1User;
+
+# HEURE D'EXECUTION
+Z_LOCAL_TIME=   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+
+# PERIODE (TODAY = Année - Mois )
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+# HEURE D'EXECUTION
+Z_LOCAL_TIME=   today(1) | '  -  ' | subst(TIME,1,2) | 'h' | subst(TIME,4,2);
+
+# PERIODE (TODAY = Année - Mois )
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+#################################
+# Informations sur le processus                          #
+#################################
+
+# STATUT
+CELLPUTS( Z_STATUS , sCubeParamP , cMainProcName , 'Statut' );
+
+# TIME
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamP ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamP , cMainProcName ,'DernExe');
+
+# UTILISATEUR
+CELLPUTS( Z_UTILISATEUR, sCubeParamP , cMainProcName ,'txt_Utilisateur' );
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+
+#endregion

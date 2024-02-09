@@ -1,0 +1,20 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_CORRESPONDANCE_PIECES_HFM_MTO",
+	"Elements":
+	[
+		{
+			"Name":"Correspondance",
+			"Type":"String"
+		},
+		{
+			"Name":"Quantite",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_CORRESPONDANCE_PIECES_HFM_MTO.subsets/Default.json",
+		"m_CORRESPONDANCE_PIECES_HFM_MTO.subsets/Niv0.json"
+	]
+}
