@@ -1,0 +1,61 @@
+{
+	"@type":"Process",
+	"Name":"Maj_Data_Credit_Bail_Saisie_Globale",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Maj_Data_Credit_Bail_Saisie_Globale.ti",
+	"UIData":"_ParameterConstraints=e30=€",
+	"VariablesUIData":
+	[
+		"VarType=32€ColType=827€"
+	],
+	"DataSource":
+	{
+		"Type":"TM1DimensionSubset",
+		"dataSourceNameForClient":"Magasin:Magasin",
+		"dataSourceNameForServer":"Magasin:Magasin",
+		"subset":"All"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pDateDeb",
+			"Prompt":"Quelle date de début ?",
+			"Value":"0",
+			"Type":"String"
+		},
+		{
+			"Name":"pDateFin",
+			"Prompt":"Quelle date de fin ?",
+			"Value":"0",
+			"Type":"String"
+		},
+		{
+			"Name":"pMensualite",
+			"Prompt":"Quel montant mensuel ?",
+			"Value":0,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pMotif",
+			"Prompt":"Quel motif ?",
+			"Value":"0",
+			"Type":"String"
+		},
+		{
+			"Name":"pGroupe",
+			"Prompt":"Quel groupe de magasin ?",
+			"Value":"0",
+			"Type":"String"
+		}
+	],
+	"Variables":
+	[
+		{
+			"Name":"Magasin",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

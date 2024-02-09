@@ -1,0 +1,17 @@
+{
+	"@type":"Cube",
+	"Name":"Groupe_Magasin",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Magasin')"
+		},
+		{
+			"@id":"Dimensions('m_Groupe_Magasin')"
+		}
+	],
+	"Views@Code.links":
+	[
+		"Groupe_Magasin.views/Par Défaut.json"
+	]
+}
