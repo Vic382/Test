@@ -1,8 +1,9 @@
 {
 	"@type":"Process",
-	"Name":"test",
+	"Name":"Master_Referentiel",
 	"HasSecurityAccess":false,
-	"UIData":"_ParameterConstraints=e30=\f",
+	"Code@Code.link":"Master_Referentiel.ti",
+	"UIData":"_ParameterConstraints=e30=€",
 	"DataSource":
 	{
 		"Type":"None"
