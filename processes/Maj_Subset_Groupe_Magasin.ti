@@ -117,8 +117,10 @@ IF ( nCtrl = 0 ) ;
     ENDIF ;
 ENDIF ;
 
-# Création du sous-ensemble si non existant 
-SubsetCreate( sDimSource1 , m_Groupe_Magasin );
+IF ( SubsetExists( sDimSource1 , m_Groupe_Magasin ) = 0 ) ;
+    # Création du sous-ensemble si non existant
+    SubsetCreate( sDimSource1 , m_Groupe_Magasin );
+ENDIF ;
 
 # Si l'élément est un niveau fin, ajout dans le sous-ensemble
 # Sinon, boucle pour récupérer les niveaux fins de l'élément

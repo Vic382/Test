@@ -1,19 +1,12 @@
 {
 	"@type":"Process",
-	"Name":"Maj_Data_Credit_Bail_Saisie_Globale",
+	"Name":"Master_Credit_Bail_Saisie_Globale",
 	"HasSecurityAccess":false,
-	"Code@Code.link":"Maj_Data_Credit_Bail_Saisie_Globale.ti",
+	"Code@Code.link":"Master_Credit_Bail_Saisie_Globale.ti",
 	"UIData":"_ParameterConstraints=e30=€",
-	"VariablesUIData":
-	[
-		"VarType=32€ColType=827€"
-	],
 	"DataSource":
 	{
-		"Type":"TM1DimensionSubset",
-		"dataSourceNameForClient":"Magasin:Magasin",
-		"dataSourceNameForServer":"Magasin:Magasin",
-		"subset":"All"
+		"Type":"None"
 	},
 	"Parameters":
 	[
@@ -48,14 +41,5 @@
 			"Type":"String"
 		}
 	],
-	"Variables":
-	[
-		{
-			"Name":"Magasin",
-			"Type":"String",
-			"Position":1,
-			"StartByte":0,
-			"EndByte":0
-		}
-	]
+	"Variables":[]
 }

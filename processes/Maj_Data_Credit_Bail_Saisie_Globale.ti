@@ -158,21 +158,21 @@ ViewZeroOut( sCubeCible, sVueZero );
 
 
 # Découpage des dates de début
-sJourDeb = SUBST ( pDateDeb , 1 , 2 ) ;
-sMoisDeb = SUBST ( pDateDeb , 4 , 2 ) ;
-sAnneeDeb = SUBST ( pDateDeb , 7 , 4 ) ;
+# sJourDeb = SUBST ( pDateDeb , 1 , 2 ) ;
+# sMoisDeb = SUBST ( pDateDeb , 4 , 2 ) ;
+sAnneeDeb = SUBST ( pDateDeb , 1 , 4 ) ;
 
 # Découpage des dates de fin
-sJourFin = SUBST ( pDateFin , 1 , 2 ) ;
-sMoisFin = SUBST ( pDateFin , 4 , 2 ) ;
-sAnneeFin = SUBST ( pDateFin , 7 , 4 ) ;
+# sJourFin = SUBST ( pDateFin , 1 , 2 ) ;
+# sMoisFin = SUBST ( pDateFin , 4 , 2 ) ;
+sAnneeFin = SUBST ( pDateFin , 1 , 4 ) ;
 
 # Reconstruction des dates au format AAAA-MM-JJ pour fonction DayNo
-sDateDeb = sAnneeDeb | '-' | sMoisDeb | '-' | sJourDeb ;
-nDateDeb = DayNo( sDateDeb );
+# sDateDeb = sAnneeDeb | '-' | sMoisDeb | '-' | sJourDeb ;
+nDateDeb = DayNo( pDateDeb );
 
-sDateFin = sAnneeFin | '-' | sMoisFin | '-' | sJourFin ;
-nDateFin = DayNo( sDateFin );
+# sDateFin = sAnneeFin | '-' | sMoisFin | '-' | sJourFin ;
+nDateFin = DayNo( pDateFin );
 
 # Définition de la date de début de l'exercice
 sDateDebExercice = SUBST ( sExercice , 1 , 4 ) | '-04-01' ;
@@ -199,8 +199,8 @@ ENDIF ;
 # Calcul de la durée
 nDuree = StringToNumber ( sAnneeFin ) - StringToNumber ( sAnneeDeb ) ;
 
-CellPutS ( sDateDeb , sCubeCible , sExercice , sVersion , sScenario , sMotif , Magasin , 'Date_Debut' ) ;
-CellPutS ( sDateFin , sCubeCible , sExercice , sVersion , sScenario , sMotif , Magasin , 'Date_Fin' ) ;
+CellPutS ( pDateDeb , sCubeCible , sExercice , sVersion , sScenario , sMotif , Magasin , 'Date_Debut' ) ;
+CellPutS ( pDateFin , sCubeCible , sExercice , sVersion , sScenario , sMotif , Magasin , 'Date_Fin' ) ;
 CellPutN ( pMensualite , sCubeCible , sExercice , sVersion , sScenario , sMotif , Magasin , 'Mensualite' ) ;
 CellPutN ( nDuree , sCubeCible , sExercice , sVersion , sScenario , sMotif , Magasin , 'Duree' ) ;
 #endregion
