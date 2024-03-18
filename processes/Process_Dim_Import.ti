@@ -1,0 +1,532 @@
+#region Prolog
+
+#***********************************************************************************************************
+# CREATEUR : DIMO SOFTWARE - MSI
+# DATE DE CREATION : 24/03/2020
+# DERNIERE MODIFICATION EFFECTUEE PAR : RCU
+# DATE DE DERNIERE MODIFICATION : 04/08/2020
+# DESCRIPTION DU PROCESSUS : 
+# MAJ de DIM a partir d'un fichier plat
+#***********************************************************************************************************
+
+#***********************************************************************************************************
+#
+# Ce processus importera des éléments Dimension dans une hiérarchie spécifiée à partir d'un fichier. 
+# Le processus est capable de lire un fichier généré par `} bedrock.hier.export
+#
+# Format du fichier:
+#
+# - 1ère ligne: les métadonnées du fichier contiennent des informations récapitulatives sur la dimension, la hiérarchie, le nombre d'éléments et date / heure de génération du fichier.
+# - 2ème ligne: dimension source et hiérarchie.
+# - 3e ligne: ordre de tri des dimensions.
+# - 4ème et 5ème ligne: Réservé pour un développement futur.
+# - 6ème ligne: en-tête pour l'export des éléments.
+# - 7ème ligne: les éléments exportent les données.
+#
+# Cas d'utilisation:
+# 1. Restaurez une dimension à partir d'une sauvegarde.
+# 2. Réplication rapide d'une grande dimension.
+#
+# Remarque:
+#
+# Un nom de dimension valide (pDim) est obligatoire sinon le processus sera abandonné.
+# Si nécessaire, un délimiteur personnalisé peut être utilisé en spécifiant la valeur du paramètre pDelim comme étant exactement un
+# ou sous forme de code ASCII à 3 chiffres (décimal). Par exemple, pour utiliser TAB comme délimiteur, utilisez 009.
+#
+#***********************************************************************************************************
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#***********************************************************************************************************
+#                                  Définition des cubes
+#***********************************************************************************************************
+
+sPref = '' ;
+
+sCubeParamP = 'ParametresSources' ;                                                                                                                                                                                                                                                                                                                                                  
+sCubeParamT = 'ParametrageT' ;
+
+cCubeS1 = '}DimensionProperties';
+
+#**********************************************************************************************************
+#                                  Définition des constantes
+#***********************************************************************************************************
+
+cMainProcName = GetProcessName();
+cRepertoireRacine = GetProcessErrorFileDirectory;
+cTimeStamp = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess = cTimeStamp | '_' | cRandomInt;
+
+# Gestion du lancement par tâche planifié
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Lanceur' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+cLenASCIICode = 3 ;
+
+#**********************************************************************************************************
+#                                  Définition des variables
+#**********************************************************************************************************
+
+StringGlobalVariable('sProcessReturnCode');
+NumericGlobalVariable('nProcessReturnCode');
+
+# Pour échanger avec Process.Log.Create
+NumericGlobalVariable ('zLogNumero') ; 
+         
+#**********************************************************************************************************
+#                                  Initialisation des variables
+#**********************************************************************************************************
+
+nProcessReturnCode= 0;
+zLogNumero	= 1 ;
+
+nMetaCount	= 0 ;
+nDataCount	= 0 ;
+
+nCountAttribut	= 0 ;
+nCountParent	= 0 ;
+nCountElement	= 0 ;
+nCountWarn            = 0 ;
+
+nErrors		= 0 ;
+
+pLegacy		= 0 ;
+pDelim	             	= TRIM(pDelim) ;
+pLogOutput             = 1 ;
+
+#**********************************************************************************************************
+#                                  Log start time
+#**********************************************************************************************************
+
+ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'START' ,
+	'pV2' , 'Import d une dimension' , 'pV3' , pDim ) ;
+
+#**********************************************************************************************************
+#                                  Contrôle des paramètres
+#**********************************************************************************************************
+
+#**********************************************************************************************************
+#	Contrôle de pDim comme Dimension
+#	
+#	Gérez l'erreur de saisie en splittant dim: hier en dimension et hiérarchie
+#**********************************************************************************************************
+
+IF ( Scan( ':', pDim ) > 0 & pHier @= '' ) ;
+	pHier       = SubSt( pDim, Scan( ':', pDim ) + 1, Long( pDim ) ) ;
+	pDim        = SubSt( pDim, 1, Scan( ':', pDim ) - 1 ) ;
+ENDIF ;
+
+# Cas ou aucune dimension n'est renseignée
+IF ( Trim( pDim ) @= '' ) ;
+	nErrors = 1 + nErrors ;
+	ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'FATAL' ,
+		'pRef' , nErrors , 'pV1' , 'pDim              : ' | pDim | ' valeur hors périmetre' ) ;
+
+# Cas ou la dimension n'existe pas
+ELSEIF( DimensionExists( pDim ) = 0 ) ;
+
+	DimensionCreate(pDim) ;
+
+	ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'DIM' ,
+		'pV1' , 'pDim              : ' | pDim | ' créee' ) ;
+
+ENDIF ;
+
+#**********************************************************************************************************	
+#	Contrôle de pHier comme Hierarchie
+#**********************************************************************************************************
+
+sHier = Trim( pHier ) ;
+
+# Si hiérarchie vide
+IF ( sHier @= '' ) ;
+	sHier = pDim;
+# Si hiérarchie = LEAVES, impossible
+ELSEIF ( sHier @= 'Leaves' ) ;
+	nErrors   = 1 + nErrors ;
+	ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'FATAL' ,
+		'pRef' , nErrors , 'pV1' , 'pHier              : ' | pDim |':'|sHier| ' valeur hors périmetre' ) ;
+
+ENDIF ;
+
+#**********************************************************************************************************	
+#	Contrôle de l'OS Linux ou Windows
+#**********************************************************************************************************
+
+IF ( Scan('/', GetProcessErrorFileDirectory)>0) ;
+	sOS = 'Linux' ;
+	sOSDelim = '/' ;
+ELSE ;
+	sOS = 'Windows' ;
+	sOSDelim = '\' ;
+ENDIF ;
+
+#**********************************************************************************************************
+#                                  Définition de la source du processus
+#**********************************************************************************************************
+
+# 1 - Définition du chemin du dossier dans lequel le fichier source se situe
+sSource = CellGetS (  sCubeParamP , cMainProcName  , 'txt_RepertoireSource' ) ;
+
+# Si chemin source vide
+IF ( sSource @= '' ) ;
+    	 nErrors = 1 + nErrors  ;
+    	ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'FATAL' ,
+		'pRef' , nErrors , 'pV1' , 'Le chemin du fichier source est vide' ) ;
+
+ENDIF ;
+
+IF ( SubSt( sSource , Long(sSource ), 1 ) @<> sOSDelim ) ;
+	sSource = sSource | sOSDelim ;
+ENDIF ;
+
+
+# 2 - Définition du nom du fichier source                                      
+sNomFichier = CellGetS (  sCubeParamP , cMainProcName  , 'txt_NomFichier' ) ;
+
+#3 - Le fichier à récupérer est la concatenation du chemin du fichier et du fichier
+sCheminSourceComplet = sSource | sNomFichier  ;   
+
+# Si le fichier est inexistant
+IF (FileExists(sCheminSourceComplet) = 0) ;
+	nErrors = 1 + nErrors  ;
+    	ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'FATAL' ,
+		'pRef' , nErrors , 'pV1' , 'Impossible de trouver le fichier' , 'pV2' ,  sCheminSourceComplet ) ;
+                     ProcessBreak; 
+ELSE ;
+    	ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'FILE' ,
+	    	'pV1' , sSource , 'pV2' , sNomFichier ) ;
+ENDIF ;
+
+#***********************************************************************************************************
+#                                  Suppression des élements dans la Dimension
+#***********************************************************************************************************
+IF ( DimensionExists( pDim ) <> 0 & pDeleteelements = 1 ) ; 
+  DimensionDeleteAllElements ( pDim) ; 
+ENDIF ; 
+
+#***********************************************************************************************************
+#                                  Définition des Dimensions
+#***********************************************************************************************************
+sAttrDimName = '}ElementAttributes_' | pDim ;
+
+#***********************************************************************************************************
+#                                  Suppression des attributs de la Dimension
+#***********************************************************************************************************
+IF (DimensionExists ('}ElementAttributes_'|pDim ) = 1 ) ; 
+  a = DIMSIZ('}ElementAttributes_'|pDim) ;
+  i = 1 ;
+  While ( i <= a ) ;
+
+   AttrDelete( pDim , DIMNM('}ElementAttributes_'|pDim, i )) ;
+   i = i+1 ; 
+
+  END ; 
+ENDIF ;
+
+#**********************************************************************************************************
+#                                  Délimiteur de champs et de caractères
+#**********************************************************************************************************
+
+IF ( pDelim @= '' ) ;
+    	pDelim = ',' ;
+ELSE ;
+    	# If length of pDelim is exactly 3 chars and each of them is decimal digit, then the pDelim is entered as ASCII code
+    	nValid = 0;
+
+    	IF ( LONG(pDelim) = cLenASCIICode ) ;
+
+    	    	nChar = 1;
+
+    	    	WHILE ( nChar <= cLenASCIICode ) ;
+    	    	    	If( CODE( pDelim, nChar )>=CODE( '0', 1 ) & CODE( pDelim, nChar )<=CODE( '9', 1 ) );
+    	    	    	    	nValid = 1;
+    	    	    	Else;
+    	    	    	    	nValid = 0;
+    	    	    	EndIf;
+    	    	    	nChar = nChar + 1;
+    	    	END ;
+    	ENDIF ;
+
+    	IF ( nValid<>0 ) ;
+    	    	pDelim=CHAR(StringToNumber( pDelim ));
+    	ELSE ;
+    	    	pDelim = SubSt( Trim( pDelim ), 1, 1 );
+    	ENDIF ;
+
+ENDIF ;
+
+IF ( pQuote @= '' ) ;
+    	## Use no quote character 
+ELSE ;
+    	# If length of pQuote is exactly 3 chars and each of them is decimal digit, then the pQuote is entered as ASCII code
+    	nValid = 0;
+
+    	IF ( LONG(pQuote) = cLenASCIICode ) ;
+
+    	    	nChar = 1;
+
+    	    	WHILE ( nChar <= cLenASCIICode ) ;
+    	    	    	If( CODE( pQuote, nChar ) >= CODE( '0', 1 ) & CODE( pQuote, nChar ) <= CODE( '9', 1 ) );
+    	    	    	    	nValid = 1;
+    	    	    	Else;
+    	    	    	    	nValid = 0;
+    	    	    	EndIf;
+    	    	    	nChar = nChar + 1;
+    	    	END ;
+
+    	ENDIF ;
+
+    	IF ( nValid<>0 ) ;
+    	    	pQuote=CHAR(StringToNumber( pQuote )) ;
+    	ELSE ;
+    	    	pQuote = SubSt( Trim( pQuote ), 1, 1 ) ;
+    	ENDIF ;
+
+ENDIF ;
+
+#**********************************************************************************************************
+#                                  Interruption du processus en raison d'erreurs
+#**********************************************************************************************************
+
+IF ( nErrors <> 0 ) ;
+    	ProcessBreak ;
+ENDIF ;
+
+#**********************************************************************************************************
+#                                  Préparation de la cible
+#**********************************************************************************************************
+
+# Si la hiérarchie existe
+IF ( HierarchyExists( pDim, sHier ) = 1 ) ;
+
+               # Suppression des rattachements
+                ExecuteProcess('}bedrock.hier.unwind' , 'pLogOutput', pLogOutput , 'pDim' , pDim , 'pHier' , pHier , 'pConsol' , '*' , 'pRecursive' , 1 ) ;
+
+                IF ( nProcessReturnCode = 1 & HierarchyExists( pDim, pHier ) = 1 ) ;
+    	    	ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'INFO' ,
+	    		'pV1' , 'Dimension unwound'  , 'pV2' , pDim | ':' | sHier ) ;
+                ELSE ;
+    	    	nErrors = 1 ;
+                ENDIF ;
+
+# Si la hiérarchie est inexistante
+ELSE ;
+
+                ExecuteProcess('}bedrock.hier.create' , 'pLogOutput' , pLogOutput , 'pDim' , pDim , 'pHier' , sHier ) ;
+
+                IF ( nProcessReturnCode = 1 & HierarchyExists( pDim, pHier ) = 1 ) ;
+    	    	ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'INFO' ,
+	    		'pV1' , 'Dimension Create'  , 'pV2' , pDim | ':' | sHier ) ;
+                ELSE ;
+    	    	nErrors = 1 ;
+                ENDIF ;
+ENDIF ;
+
+#**********************************************************************************************************
+#                                  Assignation de la source du processus
+#**********************************************************************************************************
+
+DataSourceNameForServer    	= sCheminSourceComplet ;
+DatasourceNameForClient    	= sCheminSourceComplet ;
+DatasourceType		= 'CHARACTERDELIMITED' ;
+DatasourceAsciiDelimiter    	= pDelim;
+DatasourceAsciiQuoteCharacter    	= pQuote;
+DatasourceASCIIDecimalSeparator    	= CHAR (44) ;
+DatasourceASCIIHeaderRecords    	= 1 ;
+#endregion
+#region Metadata
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF ( nErrors <> 0 ) ;
+	ProcessBreak;
+ENDIF ;
+
+IF ( pDim @= sHier ) ;
+	sDim = pDim ;
+ELSE ;
+	sDim = pDim|':'|sHier ;
+ENDIF ;
+
+#**********************************************************************************************************                                                                      
+#                                  Initialisation des variables                            
+#**********************************************************************************************************
+
+nMetaCount = nMetaCount + 1;
+
+sVar1 = v1 ;
+sVar2 = v2 ;
+sVar3 = v3 ;
+sVar4 = v4 ;
+sVar5 = v5 ;
+
+#**********************************************************************************************************    
+#                Création d'un ordre de tri par défaut pour la dimension                   
+#**********************************************************************************************************
+
+DimensionSortOrder ( sDim , 'ByInput' , 'Ascending' , 'ByHierarchy' , 'Ascending' ) ;
+
+## Set Dimension Sort Order
+IF ( v1 @= 'Sort parameters :' & 1 = 2 ) ;
+	CELLPUTS( sVar2, cCubeS1 , sDim, 'SORTELEMENTSTYPE' ) ;
+	CELLPUTS( sVar3, cCubeS1 , sDim, 'SORTCOMPONENTSTYPE' ) ;
+	CELLPUTS( sVar4, cCubeS1 , sDim, 'SORTELEMENTSSENSE' ) ;
+	CELLPUTS( sVar5, cCubeS1 , sDim, 'SORTCOMPONENTSSENSE' ) ;
+	DimensionSortOrder( sDim, sVar3, sVar5, sVar2, sVar4 ) ;
+ELSEIF( 1= 2 & pLegacy = 1 & nDataCount = 3 & ( sVar1 @= 'BYINPUT' % sVar1 @= 'BYNAME' % sVar1 @= 'BYHIERARCHY' % sVar1 @= 'BYLEVEL' ) ) ;
+	CELLPUTS( sVar1, cCubeS1 , sDim, 'SORTELEMENTSTYPE' ) ;
+	CELLPUTS( sVar2, cCubeS1 , sDim, 'SORTCOMPONENTSTYPE' ) ;
+	CELLPUTS( sVar3, cCubeS1 , sDim, 'SORTELEMENTSSENSE' ) ;
+	CELLPUTS( sVar4, cCubeS1 , sDim, 'SORTCOMPONENTSSENSE' ) ;
+	DimensionSortOrder( sDim, sVar2, sVar4, sVar1, sVar3 ) ;
+ENDIF  ;
+
+#**********************************************************************************************************                                                                                  
+#                Création des éléments de la dimension                   
+#**********************************************************************************************************
+
+
+IF ( V1 @= 'A' ) ;
+	AttrInsert ( pDim, '', sVar2 , SUBST( sVar3, 2, 1 ) );
+    	ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'META' , 'pStatus' , 'INFO' ,
+		'pV1' , 'Creation attribut ' | SUBST( sVar3, 2, 1 ) , 'pV2' , sVar2 ) ;
+	nCountAttribut = nCountAttribut + 1 ;
+ELSEIF ( V1 @= 'E' ) ;
+	If ( Dimix ( pDim, sVar2 ) = 0 ) ;
+		DimensionElementInsertDirect ( pDim , '' , sVar2 , sVar3 );
+		If ( sVar3 @= 'C' ) ;
+    			ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'META' , 'pStatus' , 'INFO'  , 'pRef' , 1 ,
+				'pV1' , 'Creation Parent ' | sVar3 , 'pV2' , sVar2 ) ;
+			nCountParent = nCountParent + 1 ;
+		Else;
+	    		ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'META' , 'pStatus' , 'INFO' , 'pRef' , 1 ,
+				'pV1' , 'Creation Element ' | sVar3 , 'pV2' , sVar2 ) ;
+			nCountElement = nCountElement + 1 ;
+           		EndIf ;
+	Else ; 
+
+	EndIf ;
+ELSEIF ( V1 @= 'P' ) ;
+	If ( Dimix ( pDim, sVar3 ) = 0 ) ;
+		DimensionElementInsertDirect ( pDim , '' , sVar3 , sVar4 );
+    		ExecuteProcess( 'Process_Log_Create', 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'META' , 'pStatus' , 'INFO'  , 'pRef' , 1 ,
+			'pV1' , 'Creation ParentP ' | sVar4 , 'pV2' , sVar3 ) ;
+		nCountParent = nCountParent + 1 ;
+	EndIf ;
+	If ( Dimix ( pDim, sVar2 ) <> 0 ) ;	
+		DimensionElementComponentAddDirect ( pDim , sVar3 , sVar2 , StringToNumber( sVar5 ) );
+	EndIf ;
+                  If ( Elispar (pDim , sVar2 , Dimnm( pDim , Dimix ( pDim , sVar2) ) ) =1)  ; 
+		nCountWarn = nCountWarn  + 1 ;	
+                                    ExecuteProcess( 'Process_Log_Create' , 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'WARN' ,
+	'pV1' , 'L élement |sVar2| est présent plusieurs fois avec le même parent direct'   ) ;   
+                  EndIf ; 
+ENDIF ;
+#endregion
+#region Data
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF ( nErrors <> 0 ) ;
+	ProcessBreak ;
+ENDIF ;
+
+sDim = pDim ;
+
+#**********************************************************************************************************                                                                                   
+#                                  Initialisation des variables                            
+#**********************************************************************************************************
+
+nDataCount = nDataCount + 1;
+
+sVar1 = v1 ;
+sVar2 = v2 ;
+sVar3 = v3 ; 
+sVar4 = v4 ;
+sVar5 = v5 ;
+
+#**********************************************************************************************************                                                                                   
+#                Chargement des valeurs des attribus                  
+
+#**********************************************************************************************************
+
+IF ( V1 @= 'V' );
+
+	sAttrType = DTYPE( sAttrDimName , sVar3 ) ;
+
+	IF ( DIMIX ( sDim , sVar2 ) <> 0 ) ;
+		IF ( sAttrType @= 'AN' ) ;
+			AttrPutN ( stringToNumber ( sVar4 ) , sDim, sVar2 , sVar3  ) ;
+		ELSE ;
+			AttrPutS ( sVar4, sDim, sVar2 , sVar3 ) ;
+		ENDIF ;
+	ELSE ;
+
+		ExecuteProcess( 'Process_Log_Create' , 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'DATA' , 'pStatus' , 'WARN' ,
+                		'pV1' , 'Chargement d''atribut impossible' , 'pV2' , sVar2 , 'pV3' , sVar3 ) ;
+
+	ENDIF ;
+
+ENDIF ;
+#endregion
+#region Epilog
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#**********************************************************************************************************
+#                                 Création / MAJ des sous-ensembles 
+#**********************************************************************************************************
+
+IF( DimensionExists( pDim ) <> 0 ) ;
+
+   ExecuteProcess( 'zSubset' , 'pDimension' , pDim  ) ;
+   #ExecuteProcess( 'zMaster_Subset' , 'pDimension' , pDim , 'pAllAlias' , 0 ) ;
+
+ENDIF;
+ 
+#**********************************************************************************************************
+#                                 Log End time 
+#**********************************************************************************************************
+
+ExecuteProcess( 'Process_Log_Create' , 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'INFO' ,
+	'pRef' , nCountAttribut , 'pV1' , 'Création(s) Attribut'   ) ;
+
+ExecuteProcess( 'Process_Log_Create' , 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'INFO' ,
+	'pRef' , nCountParent , 'pV1' , 'Création(s) Parent'   ) ;
+
+ExecuteProcess( 'Process_Log_Create' , 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'INFO' ,
+	'pRef' , nCountElement , 'pV1' , 'Création(s) Element'   ) ;
+
+ExecuteProcess( 'Process_Log_Create' , 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'WARN' ,
+	'pRef' , nCountWarn , 'pV1' , 'Echec(s) attribut'   ) ;
+
+ExecuteProcess( 'Process_Log_Create' , 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'FATAL' ,
+	'pRef' , nErrors , 'pV1' , 'Erreur(s) majeure'   ) ;
+
+#**********************************************************************************************************
+#                                 Contrôle des erreurs                                            
+#**********************************************************************************************************
+
+ExecuteProcess( 'Process_Log_Create' , 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'END' ) ;
+
+ExecuteProcess( 'Process_Log_Create' , 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , If ( GetProcessErrorFilename @= '' , 'OK' , 'KO' ) ,
+	'pV1' , 'Process exécuté en ' , 'pV2' , cUtilisateur ) ;
+
+ExecuteProcess( 'Process_Log_Create' , 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess , 'pNumero' , zLogNumero , 'pType' , 'LOG' , 'pStatus' , 'BYE' ) ;
+	
+#**********************************************************************************************************
+#                                 Création des fichiers de suivi depuis le cube Processes_Log et envoi email                         
+#**********************************************************************************************************
+	
+ExecuteProcess( 'Process_Log_Export' , 'pProcesses' , cMainProcName , 'pDateExec' , cTimeProcess ) ;
+#endregion

@@ -1,0 +1,51 @@
+{
+	"@type":"Process",
+	"Name":"zZip_And_Clean",
+	"HasSecurityAccess":true,
+	"Code@Code.link":"zZip_And_Clean.ti",
+	"UIData":"CubeAction=1511€DataAction=1503€CubeLogChanges=0€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pRepertoireDataSource",
+			"Prompt":"Répertoire de la source de données",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pNomEtExtensionFichierSource",
+			"Prompt":"Nom du Fichier Source et extension",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pRepertoireDataLog",
+			"Prompt":"Répertoire de la source de la Log",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pNomEtExtensionFichierLog",
+			"Prompt":"Nom du Fichier Log et extension",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pProcessName",
+			"Prompt":"Nom du Process",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pSuppFichierSource",
+			"Prompt":"Supprimer le fichier source ? (0 = NON, 1 = OUI)",
+			"Value":"1",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

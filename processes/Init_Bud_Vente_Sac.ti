@@ -1,0 +1,398 @@
+#region Prolog
+
+#***********************************************************************************************
+# CREATEUR : VRT
+# DATE DE CREATION : 11/10/2023
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : Initialisation des quantités budget dans le cube Vente_Sac
+# Récupération des fréquentation budget * taux de pénétration réel n-1
+#************************************************************************************************
+
+###############################   MONITORING   #################################
+
+### 0.Définition des variables du monitoring
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+sCubeParamS	             = 'ParametresSources' ;
+sCubeParamT	             = 'ParametrageT' ;
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+sSource = '' ;
+sNomFichier =  '' ;
+nErrors = 0 ;
+nErrorsSource = 0 ; 
+zLogNumero         = 1 ;
+nErrors          = 0;
+vMessage              = '';
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Admin' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+sDate = TimSt( Now, '\Y\m\d' );
+
+sUser = ATTRS( '}Clients' , cUtilisateur , '}TM1_DefaultDisplayValue' );
+nLong = LONG ( sUser ) ;
+sUser = SUBST ( sUser , 20 , nLong - 19 ) ;
+
+### 1. Déclaration des variables
+
+# Pour suppression des vues et ss ensemble temporaire
+nDebug = 1 ; 
+
+#**Fichier Debug
+sFichierRepDebug = CellGetS ( sCubeParamT , 'Txt_RepertoireDebug' , 'ValeurS' );
+sDebug = sFichierRepDebug | 'test'|cMainProcName|'.csv' ;
+
+#**Fichier Rejet
+sFichierRepRejet = CellGetS ( sCubeParamT , 'Txt_RepertoireRejet' , 'ValeurS' );
+sRejet = sFichierRepRejet | 'Rejet_'| '_' | sUser | '_' | sDate | '_' | cMainProcName|'.csv' ;
+
+# Suppression du fichier de rejet si Existant
+IF ( FileExists( sRejet ) = 1 ) ;
+  ASCIIDelete( sRejet );
+ENDIF ;
+
+
+###############################   FIN MONITORING   #################################
+
+# Définition des variables
+
+# Variable
+
+
+# Cubes
+sCubeFrequentation = 'Frequentation_Magasin' ;
+
+
+# Définition du périmètre
+# La source est toujours le Réel N-1 et la cible est toujours le budget
+
+# On récupère l'exercice en cours dans le cube paramètrefonctionnel
+sExerciceSource = DimensionElementPrincipalName ( 'Exercice' , CellGetS( 'ParametresFonctionnels', 'ExerciceEnCours' , 'ValeurS' ));
+
+# On récupère l'index de l'exercice en cours pour récupérer l'exercice précédent dans la dimension
+nIndex = DIMIX( 'Exercice', sExerciceSource );
+sExerciceSource = DIMNM( 'Exercice', nIndex -1 );
+sExerciceSourceN2 = DIMNM( 'Exercice', nIndex -2 );
+
+sScenarioSource = 'Atterrissage' ;
+sVersionSource = 'VF' ;
+
+sScenarioCible = DimensionElementPrincipalName ( 'Scenario' , CellGetS( 'ParametresFonctionnels', 'ScenarioEnCours' , 'ValeurS' ));
+sExerciceCible = DimensionElementPrincipalName ( 'Exercice' , CellGetS( 'ParametresFonctionnels', 'ExerciceEnCours' , 'ValeurS' ));
+sVersionCible = DimensionElementPrincipalName ( 'Version' , CellGetS( 'ParametresFonctionnels', 'VersionEnCours' , 'ValeurS' ));
+
+# Controle du scénario cible
+# Si Réel, on ne fait rien
+nErrorScenario = 0 ;
+
+IF ( sScenarioCible @= 'REEL' ) ;
+    nErrorScenario = 1 ;
+    ProcessBreak;
+ENDIF ;
+
+###########################################
+## Creation vue SOURCE sur Vente_Sac
+###########################################
+
+### Déclaration des variables
+sCubeSource = 'Vente_Sac';
+sDimSource1 = 'Exercice';
+sDimSource2 = 'Version' ; 
+sDimSource3 = 'Scenario' ; 
+sDimSource4 = 'Mois' ; 
+sDimSource5 = 'Type_Sac' ; 
+sDimSource6 = 'Magasin' ; 
+sDimSource = 'm_Vente_Sac';
+
+# Le nom de la vue du cube :
+sVueSource = 'Source_vue_' | cMainProcName ; 
+
+# Le nom des sous-ensembles
+sSubsetSource = 'Source_Subset_' | cMainProcName ; 
+
+# Création de la vue cible
+IF( ViewExists( sCubeSource, sVueSource ) = 1 );
+  ViewDestroy( sCubeSource, sVueSource );
+ENDIF;
+ViewCreate( sCubeSource, sVueSource , nDebug );
+
+# Exercice
+SubsetDestroy ( sDimSource1 , sSubsetSource ) ;
+SubsetCreate ( sDimSource1 , sSubsetSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource1 , sSubsetSource , sExerciceSource , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource1 , sSubsetSource ) ; 
+
+# Version
+SubsetDestroy ( sDimSource2 , sSubsetSource ) ;
+SubsetCreate ( sDimSource2 , sSubsetSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource2 , sSubsetSource , sVersionSource , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource2 , sSubsetSource ) ; 
+
+# Scenario
+SubsetDestroy ( sDimSource3 , sSubsetSource ) ;
+SubsetCreate ( sDimSource3 , sSubsetSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource3 , sSubsetSource , sScenarioSource , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource3 , sSubsetSource ) ; 
+
+# Mois : si le scénario est budget alors tous les mois sinon que les mois prev
+SubsetDestroy ( sDimSource4 , sSubsetSource ) ; 
+IF ( sScenarioCible @= 'BUDGET' ) ;
+  StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimSource4 | ' ] ) } , 0 ) }' ;
+  SubsetCreateByMDX ( sSubsetSource , StringMDX , nDebug  ) ;
+ELSE ;
+
+  SubsetCreate ( sDimSource4 , sSubsetSource , nDebug ) ; 
+
+  # Récupération du 1er mois de simulation dans les attributs
+  sFirstMoisPrev = CellGetS( '}ElementAttributes_Scenario', sScenarioCible , 'Premier_Mois_Prev'  );
+  nFirstMoisPrev = DIMIX( 'Mois' , sFirstMoisPrev );
+
+  # Boucle sur la dimension mois
+  nTailleBoucle = DIMSIZ( sDimSource4 );
+  i = 1 ;
+
+  WHILE ( i <= nTailleBoucle ) ;
+
+    sMois = DIMNM( sDimSource4 , i );
+  
+    # Contrôle avec l'index du 1er mois simulation
+    IF ( ELLEV ( sDimSource4 , sMois ) = 0 & i >= nFirstMoisPrev ) ;
+      SubsetElementInsert( sDimSource4 , sSubsetSource , sMois , 1 );
+    ENDIF ;
+  
+    i = i + 1 ;
+  
+  END ;
+
+ENDIF ;
+
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource4 , sSubsetSource ) ; 
+
+# Type Sac
+SubsetDestroy ( sDimSource5 , sSubsetSource ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimSource5 | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetSource , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource5 , sSubsetSource ) ; 
+
+# Magasin : Tous les magasins exceptés ceux qui ont une date d'ouverture sur le mois budget
+SubsetDestroy ( sDimSource6 , sSubsetSource ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimSource6 | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetSource , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource6 , sSubsetSource ) ; 
+
+# m_Vente_Sac
+SubsetDestroy ( sDimSource , sSubsetSource ) ; 
+SubsetCreate ( sDimSource , sSubsetSource , nDebug ) ; 
+SubsetElementInsert ( sDimSource , sSubsetSource , 'Taux_Penetration' , nDebug ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource , sSubsetSource ) ;
+
+ViewExtractSkipCalcsSet( sCubeSource , sVueSource , 1 );
+ViewExtractSkipRuleValuesSet( sCubeSource , sVueSource , 0 );
+ViewExtractSkipZeroesSet( sCubeSource , sVueSource , 0 );
+
+# Redéfinition de la source de donnée
+DatasourceCubeview = sVueSource ;
+DatasourceNameForServer = sCubeSource ;
+
+
+###########################################
+## Creation vue CIBLE sur Vente_Sac
+###########################################
+
+### Déclaration des variables
+sCubeCible = 'Vente_Sac';
+sDimCible1 = 'Exercice';
+sDimCible2 = 'Version' ; 
+sDimCible3 = 'Scenario' ; 
+sDimCible4 = 'Mois' ; 
+sDimCible5 = 'Type_Sac' ; 
+sDimCible6 = 'Magasin' ; 
+sDimCible = 'm_Vente_Sac';
+
+# Le nom de la vue du cube :
+sVueZero = 'RAZ_vue_' | cMainProcName ; 
+
+# Le nom des sous-ensembles
+sSubsetZero = 'RAZ_Subset_' | cMainProcName ; 
+
+# Création de la vue cible
+IF( ViewExists( sCubeCible, sVueZero ) = 1 );
+  ViewDestroy( sCubeCible, sVueZero );
+ENDIF;
+ViewCreate( sCubeCible, sVueZero , nDebug );
+
+# Exercice
+SubsetDestroy ( sDimCible1 , sSubsetZero ) ;
+SubsetCreate ( sDimCible1 , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible1 , sSubsetZero , sExerciceCible , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible1 , sSubsetZero ) ; 
+
+# Version
+SubsetDestroy ( sDimCible2 , sSubsetZero ) ;
+SubsetCreate ( sDimCible2 , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible2 , sSubsetZero , sVersionCible , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible2 , sSubsetZero ) ; 
+
+# Scenario
+SubsetDestroy ( sDimCible3 , sSubsetZero ) ;
+SubsetCreate ( sDimCible3 , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible3 , sSubsetZero , sScenarioCible , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible3 , sSubsetZero ) ; 
+
+# Mois : si le scénario est budget alors tous les mois sinon que les mois prev
+SubsetDestroy ( sDimCible4 , sSubsetZero ) ; 
+IF ( sScenarioCible @= 'BUDGET' ) ;
+  StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible4 | ' ] ) } , 0 ) }' ;
+  SubsetCreateByMDX ( sSubsetZero , StringMDX , nDebug  ) ;
+ELSE ;
+
+  SubsetCreate ( sDimCible4 , sSubsetZero , nDebug ) ; 
+
+  # Récupération du 1er mois de simulation dans les attributs
+  sFirstMoisPrev = CellGetS( '}ElementAttributes_Scenario', sScenarioCible , 'Premier_Mois_Prev'  );
+  nFirstMoisPrev = DIMIX( 'Mois' , sFirstMoisPrev );
+
+  # Boucle sur la dimension mois
+  nTailleBoucle = DIMSIZ( sDimCible4 );
+  i = 1 ;
+
+  WHILE ( i <= nTailleBoucle ) ;
+
+    sMois = DIMNM( sDimCible4 , i );
+  
+    # Contrôle avec l'index du 1er mois simulation
+    IF ( ELLEV ( sDimCible4 , sMois ) = 0 & i >= nFirstMoisPrev ) ;
+      SubsetElementInsert( sDimCible4 , sSubsetZero , sMois , 1 );
+    ENDIF ;
+  
+    i = i + 1 ;
+  
+  END ;
+
+ENDIF ;
+
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible4 , sSubsetZero ) ; 
+
+# Type Sac
+SubsetDestroy ( sDimCible5 , sSubsetZero ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible5 | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetZero , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible5 , sSubsetZero ) ; 
+
+# Magasin
+SubsetDestroy ( sDimCible6 , sSubsetZero ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimCible6 | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetZero , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible6 , sSubsetZero ) ; 
+
+# m_Vente_Sac
+SubsetDestroy ( sDimCible , sSubsetZero ) ; 
+SubsetCreate ( sDimCible , sSubsetZero , nDebug ) ; 
+SubsetElementInsert ( sDimCible , sSubsetZero , 'Quantite' , nDebug ) ;
+ViewSubsetAssign ( sCubeCible , sVueZero , sDimCible , sSubsetZero ) ;
+
+# RAZ de la vue zero
+ViewZeroOut( sCubeCible, sVueZero );
+#endregion
+#region Data
+
+# Récupération des fréquentations budget
+nFrequentation = CellGetN( sCubeFrequentation , sExerciceCible , sVersionCible , sScenarioCible , Mois , Magasin , 'Frequentation' );
+
+# Récupération du taux de variation
+nTauxVar = CellGetN( sCubeSource , sExerciceCible , sVersionCible , sScenarioCible , Mois , Type_Sac , Magasin , 'Taux_Variation' );
+
+# Multiplication des fréquentation budget par les taux de pénétration réel n-1 * taux de variation applicable
+nMontant = nFrequentation * Value ;
+nMontant = nMontant * (  1 + nTauxVar ) ;
+
+CellPutN( nMontant , sCubeCible , sExerciceCible , sVersionCible , sScenarioCible , Mois , Type_Sac , Magasin , 'Quantite' );
+
+# Si le montant est à 0 car par de Taux de pénétration réel
+# On récupère le taux n-2
+IF ( nMontant = 0 ) ;
+  
+    nTaux2 = CellGetN( sCubeCible , sExerciceSourceN2 , sVersionCible , sScenarioCible , Mois , Type_Sac , Magasin , 'Taux_Penetration' );
+
+    nMontant = nFrequentation * nTaux2 ;
+    nMontant = nMontant * (  1 + nTauxVar ) ;
+  
+    CellPutN( nMontant  , sCubeCible , sExerciceCible , sVersionCible , sScenarioCible , Mois , Type_Sac , Magasin , 'Quantite' );
+
+    # Si le montant est toujours à 0 ( pas de taux de pénétration n-1 sur tous les magasins )
+    # On fait la moyenne des taux de pénétration n-1
+    IF ( nMontant = 0 ) ;
+        nValeur = ConsolidatedAvg( 2 , sCubeSource , sExerciceSource , sVersionSource , sScenarioSource , Mois , Type_Sac , 'Total_Magasin' , 'Taux_Penetration' );
+        nMontant = nFrequentation * nValeur ;
+        nMontant = nMontant * (  1 + nTauxVar ) ;
+
+        CellPutN( nMontant , sCubeCible , sExerciceCible , sVersionCible , sScenarioCible , Mois , Type_Sac , Magasin , 'Quantite' );
+        
+    ENDIF ;
+
+    # Si le montant est toujours à 0 ( pas de taux de pénétration n-1 sur tous les magasins )
+    # On fait la moyenne des taux de pénétration n-2
+    IF ( nMontant = 0 ) ;
+        
+        nValeur = ConsolidatedAvg( 2 , sCubeSource , sExerciceSourceN2 , sVersionSource , sScenarioSource , Mois , Type_Sac , 'Total_Magasin' , 'Taux_Penetration' );
+        nMontant = nFrequentation * nValeur ;
+        nMontant = nMontant * (  1 + nTauxVar ) ;
+
+        CellPutN( nMontant , sCubeCible , sExerciceCible , sVersionCible , sScenarioCible , Mois , Type_Sac , Magasin , 'Quantite' );
+        
+    ENDIF ;
+  
+ENDIF ;
+
+nTauxPenetration = nMontant \ nFrequentation ;
+
+CellPutN ( nTauxPenetration , sCubeCible , sExerciceCible , sVersionCible , sScenarioCible , Mois , Type_Sac , Magasin  , 'Taux_Penetration' );
+
+nMontant = 0 ;
+#endregion
+#region Epilog
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+# Declaration variables et constantes
+
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+# HEURE D'EXECUTION
+nNewFormatId  =  NewDateFormatter ( 'fr-FR' , 'Europe/Paris' , 'serial' , 'medium' , 'datetime' );
+Z_LOCAL_TIME = FormatDate ( NOW () , 'yyyy-MM-dd H:mm' , nNewFormatId );
+Z_UTILISATEUR = TM1User;
+
+nDebut= SCAN( 'pans:u:', Z_UTILISATEUR );
+nDebutLong = LONG('pans:u:');
+nStart = nDebut + nDebutLong ;
+nTotal = LONG(Z_UTILISATEUR) ;
+Z_UTILISATEUR = SUBST(Z_UTILISATEUR, nStart, nTotal - nStart - 1) ;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+CELLPUTS( Z_STATUS , sCubeParamS , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamS ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamS , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamS , cMainProcName ,'txt_Utilisateur' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------
+
+# Si le scénario n'est pas prévisionnel, on génère un message d'erreur
+IF ( nErrorScenario <> 0 ) ;
+    ItemReject( 'Le scénario sélectionné dans le cube Fonctionnel n' | CHAR ( 39 ) | 'est pas un scénario prévisionnel' ) ;
+ENDIF ;
+
+
+
+#endregion

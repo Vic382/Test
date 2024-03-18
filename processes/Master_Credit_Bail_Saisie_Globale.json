@@ -1,0 +1,45 @@
+{
+	"@type":"Process",
+	"Name":"Master_Credit_Bail_Saisie_Globale",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Master_Credit_Bail_Saisie_Globale.ti",
+	"UIData":"_ParameterConstraints=e30=€",
+	"DataSource":
+	{
+		"Type":"None"
+	},
+	"Parameters":
+	[
+		{
+			"Name":"pDateDeb",
+			"Prompt":"Quelle date de début ?",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pDateFin",
+			"Prompt":"Quelle date de fin ?",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pMensualite",
+			"Prompt":"Quel montant mensuel ?",
+			"Value":0,
+			"Type":"Numeric"
+		},
+		{
+			"Name":"pMotif",
+			"Prompt":"Quel motif ?",
+			"Value":"",
+			"Type":"String"
+		},
+		{
+			"Name":"pGroupe",
+			"Prompt":"Quel groupe de magasin ?",
+			"Value":"",
+			"Type":"String"
+		}
+	],
+	"Variables":[]
+}

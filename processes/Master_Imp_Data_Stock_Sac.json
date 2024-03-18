@@ -1,0 +1,29 @@
+{
+	"@type":"Process",
+	"Name":"Master_Imp_Data_Stock_Sac",
+	"HasSecurityAccess":false,
+	"Code@Code.link":"Master_Imp_Data_Stock_Sac.ti",
+	"UIData":"_ParameterConstraints=e30=€",
+	"VariablesUIData":
+	[
+		"VarType=32€ColType=827€"
+	],
+	"DataSource":
+	{
+		"Type":"TM1DimensionSubset",
+		"dataSourceNameForClient":"Type_Sac:Type_Sac",
+		"dataSourceNameForServer":"Type_Sac:Type_Sac",
+		"subset":"All"
+	},
+	"Parameters":[],
+	"Variables":
+	[
+		{
+			"Name":"Type_Sac",
+			"Type":"String",
+			"Position":1,
+			"StartByte":0,
+			"EndByte":0
+		}
+	]
+}

@@ -1,0 +1,192 @@
+#region Prolog
+
+#***********************************************************************************************
+# CREATEUR : VRT
+# DATE DE CREATION : 06/02/2024
+# DERNIERE MODIFICATION EFFECTUEE PAR : 
+# DATE DE DERNIERE MODIFICATION : 
+# DESCRIPTION DU PROCESSUS : Création des subsets Groupe_Magasin pour saisie en masse dans le cube Credit_Bail
+#************************************************************************************************
+
+###############################   MONITORING   #################################
+
+### 0.Définition des variables du monitoring
+Z_DEBUT_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+sCubeParamS	             = 'ParametresSources' ;
+sCubeParamT	             = 'ParametrageT' ;
+cMainProcName       = GetProcessName();
+cRepertoireRacine   = GetProcessErrorFileDirectory;
+cTimeStamp          = TimSt( Now, '\Y\m\d\h\i\s' );
+cRandomInt          = NumberToString( INT( RAND( ) * 1000 ));
+cTimeProcess        = cTimeStamp | '_' | cRandomInt;
+sSource = '' ;
+sNomFichier =  '' ;
+nErrors = 0 ;
+nErrorsSource = 0 ; 
+zLogNumero         = 1 ;
+nErrors          = 0;
+vMessage              = '';
+
+IF ( SUBST ( TM1User() , 1 , 2 ) @= 'R*' ) ;
+	cUtilisateur = 'Admin' ;
+ELSE ;
+	cUtilisateur        = TM1User();
+ENDIF ;
+
+sDate = TimSt( Now, '\Y\m\d' );
+
+sUser = ATTRS( '}Clients' , cUtilisateur , '}TM1_DefaultDisplayValue' );
+nLong = LONG ( sUser ) ;
+sUser = SUBST ( sUser , 20 , nLong - 19 ) ;
+
+### 1. Déclaration des variables
+
+# Pour suppression des vues et ss ensemble temporaire
+nDebug = 1 ; 
+
+#**Fichier Debug
+sFichierRepDebug = CellGetS ( sCubeParamT , 'Txt_RepertoireDebug' , 'ValeurS' );
+sDebug = sFichierRepDebug | 'test'|cMainProcName|'.csv' ;
+
+#**Fichier Rejet
+sFichierRepRejet = CellGetS ( sCubeParamT , 'Txt_RepertoireRejet' , 'ValeurS' );
+sRejet = sFichierRepRejet | 'Rejet_'| '_' | sUser | '_' | sDate | '_' | cMainProcName|'.csv' ;
+
+# Suppression du fichier de rejet si Existant
+IF ( FileExists( sRejet ) = 1 ) ;
+  ASCIIDelete( sRejet );
+ENDIF ;
+
+
+###############################   FIN MONITORING   #################################
+
+## Variables
+nCtrl = 0 ;
+
+###########################################
+## Creation vue SOURCE sur Groupe_Magasin
+###########################################
+
+### Déclaration des variables
+sCubeSource = 'Groupe_Magasin';
+sDimSource1 = 'Magasin' ; 
+sDimSource = 'm_Groupe_Magasin';
+
+# Le nom de la vue du cube :
+sVueSource = 'Source_vue_' | cMainProcName ; 
+
+# Le nom des sous-ensembles
+sSubsetSource = 'Source_Subset_' | cMainProcName ; 
+
+# Création de la vue cible
+IF( ViewExists( sCubeSource, sVueSource ) = 1 );
+  ViewDestroy( sCubeSource, sVueSource );
+ENDIF;
+ViewCreate( sCubeSource, sVueSource , nDebug );
+
+# Magasin
+SubsetDestroy ( sDimSource1 , sSubsetSource ) ; 
+StringMDX = '{ TM1SUBSETALL ( [ '| sDimSource1 | ' ] ) }' ;
+SubsetCreateByMDX ( sSubsetSource , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource1 , sSubsetSource ) ; 
+
+# m_Groupe_Magasin
+SubsetDestroy ( sDimSource , sSubsetSource ) ; 
+StringMDX = '{TM1FILTERBYLEVEL ( { TM1SUBSETALL ( [ '| sDimSource | ' ] ) } , 0 ) }' ;
+SubsetCreateByMDX ( sSubsetSource , StringMDX , nDebug  ) ;
+ViewSubsetAssign ( sCubeSource , sVueSource , sDimSource , sSubsetSource ) ;
+
+ViewExtractSkipCalcsSet( sCubeSource , sVueSource , 1 );
+ViewExtractSkipRuleValuesSet( sCubeSource , sVueSource , 1 );
+ViewExtractSkipZeroesSet( sCubeSource , sVueSource , 1 );
+
+# Redéfinition de la source de donnée
+DatasourceCubeview = sVueSource ;
+DatasourceNameForServer = sCubeSource ;
+
+#endregion
+#region Data
+
+
+IF ( nCtrl = 0 ) ;
+    # Destruction du sous-ensemble si existant
+    # Incrémentation d'une variable pour ne passer qu'une seule fois
+    IF ( SubsetExists( sDimSource1 , m_Groupe_Magasin ) = 1 ) ;
+        SubsetDestroy( sDimSource1 , m_Groupe_Magasin );
+        nCtrl = 1 ;
+    ENDIF ;
+ENDIF ;
+
+IF ( SubsetExists( sDimSource1 , m_Groupe_Magasin ) = 0 ) ;
+    # Création du sous-ensemble si non existant
+    SubsetCreate( sDimSource1 , m_Groupe_Magasin );
+ENDIF ;
+
+# Si l'élément est un niveau fin, ajout dans le sous-ensemble
+# Sinon, boucle pour récupérer les niveaux fins de l'élément
+IF ( ELLEV ( sDimSource1 , Magasin ) = 0 ) ;
+    
+    # Alimentation du subset
+    SubsetElementInsert( sDimSource1 , m_Groupe_Magasin , Magasin , 1 );
+    
+ELSE ;
+    
+    nTailleBoucle = DIMSIZ( sDimSource1 );
+    i = 1 ;
+
+    WHILE ( i <= nTailleBoucle ) ;
+        
+        sMagasin = DIMNM( sDimSource1 , i ) ;
+
+        IF ( ELLEV( sDimSource1 , sMagasin ) = 0 ) ; 
+            IF ( ELISANC( sDimSource1 , Magasin , sMagasin ) = 1 ) ;
+                SubsetElementInsert( sDimSource1 , m_Groupe_Magasin , sMagasin , 1 );
+            ENDIF ;
+        ENDIF ;
+
+        i = i + 1 ;
+
+    END ;
+
+ENDIF ;
+
+
+    
+
+#endregion
+#region Epilog
+
+#------------------------------------------------ MONITORING  ------------------------------------------------#
+
+# Declaration variables et constantes
+
+Z_FIN_EXE =  StringToNumber(TimSt (Now, '\h'))*3600 +StringToNumber(TimSt (Now, '\i'))*60+StringToNumber(TimSt (Now, '\s'));
+Z_PERIODE=subst(TODAY(1),1,4) | subst(TODAY(1),6,2);
+
+Z_STATUS=IF(GetProcessErrorFilename@='','OK','KO');
+Z_TEMPS_EXECUTION= Z_FIN_EXE - Z_DEBUT_EXE;
+# HEURE D'EXECUTION
+nNewFormatId  =  NewDateFormatter ( 'fr-FR' , 'Europe/Paris' , 'serial' , 'medium' , 'datetime' );
+Z_LOCAL_TIME = FormatDate ( NOW () , 'yyyy-MM-dd H:mm' , nNewFormatId );
+Z_UTILISATEUR = TM1User;
+
+nDebut= SCAN( 'pans:u:', Z_UTILISATEUR );
+nDebutLong = LONG('pans:u:');
+nStart = nDebut + nDebutLong ;
+nTotal = LONG(Z_UTILISATEUR) ;
+Z_UTILISATEUR = SUBST(Z_UTILISATEUR, nStart, nTotal - nStart - 1) ;
+
+# Ecriture des informations sur le processus dans le cube ParametresSources                       
+
+CELLPUTS( Z_STATUS , sCubeParamS , cMainProcName , 'Statut' );
+CELLPUTN( Z_TEMPS_EXECUTION , sCubeParamS ,  cMainProcName ,'TempsExe');
+CELLPUTS( Z_LOCAL_TIME, sCubeParamS , cMainProcName ,'DernExe');
+CELLPUTS( Z_UTILISATEUR, sCubeParamS , cMainProcName ,'txt_Utilisateur' );
+
+#------------------------------------------------ FIN - MONITORING  ------------------------------------------------#
+
+
+
+
+
+#endregion
