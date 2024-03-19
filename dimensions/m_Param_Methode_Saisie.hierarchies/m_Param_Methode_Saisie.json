@@ -1,0 +1,21 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_Param_Methode_Saisie",
+	"Elements":
+	[
+		{
+			"Name":"Methode_Saisie",
+			"Type":"String"
+		},
+		{
+			"Name":"Initialisation_Partielle",
+			"Type":"String"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_Param_Methode_Saisie.subsets/Niv0.json",
+		"m_Param_Methode_Saisie.subsets/Niv0_Desc..json",
+		"m_Param_Methode_Saisie.subsets/Par Défaut.json"
+	]
+}
