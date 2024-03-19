@@ -4,17 +4,46 @@
 	"Elements":
 	[
 		{
-			"Name":"Reel",
+			"Name":"V0",
 			"Type":"Numeric"
 		},
 		{
-			"Name":"Budget",
+			"Name":"V1",
 			"Type":"Numeric"
 		},
 		{
-			"Name":"Atterrissage",
+			"Name":"V2",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"V3",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"V4",
+			"Type":"Numeric"
+		},
+		{
+			"Name":"VF",
 			"Type":"Numeric"
 		}
 	],
-	"Subsets@Code.links":[]
+	"Subsets@Code.links":
+	[
+		"Version.subsets/Niv0.json",
+		"Version.subsets/Niv0_Desc.json",
+		"Version.subsets/Par Défaut.json",
+		"Version.subsets/RAZ_Subset_Maj_Data_Investissement_Investissement_Saisie.json",
+		"Version.subsets/Tous.json",
+		"Version.subsets/VF.json",
+		"Version.subsets/Vue_Source_23-11-28_Maj_Data_Investissement_Investissement_Saisie.json",
+		"Version.subsets/Vue_Source_23-11-29_Maj_Data_Investissement_Investissement_Saisie.json",
+		"Version.subsets/Vue_Source_23-11-29_Maj_Data_Investissement_Saisie_Ouverture_Magasin.json",
+		"Version.subsets/Vue_Source_23-11-30_Maj_Data_Investissement_Investissement_Saisie.json",
+		"Version.subsets/Vue_Source_23-11-30_Maj_Data_Investissement_Saisie_Ouverture_Magasin.json",
+		"Version.subsets/Vue_Source_23-12-04_Maj_Data_Investissement_Investissement_Saisie.json",
+		"Version.subsets/Vue_Source_23-12-04_Maj_Data_Investissement_Saisie_Ouverture_Magasin.json",
+		"Version.subsets/Vue_Source_23-12-05_Maj_Data_Investissement_Investissement_Saisie.json",
+		"Version.subsets/Vue_Source_23-12-06_Maj_Data_Investissement_Investissement_Saisie.json"
+	]
 }

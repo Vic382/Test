@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"m_Param_Redevance_Enseigne",
+	"Hierarchies@Code.links":
+	[
+		"m_Param_Redevance_Enseigne.hierarchies/m_Param_Redevance_Enseigne.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('m_Param_Redevance_Enseigne')/Hierarchies('m_Param_Redevance_Enseigne')"
+	}
+}

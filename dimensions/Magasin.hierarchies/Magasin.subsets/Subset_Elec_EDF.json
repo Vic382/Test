@@ -1,0 +1,6 @@
+{
+	"@type":"Subset",
+	"Name":"Subset_Elec_EDF",
+	"Alias":"Description Longue",
+	"Expression":"{FILTER(TM1SUBSETALL([Magasin]) , [Magasin].[Fournisseur_Elec] = \"EDF\")}"
+}

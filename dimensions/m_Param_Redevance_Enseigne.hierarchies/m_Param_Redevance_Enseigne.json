@@ -1,0 +1,17 @@
+{
+	"@type":"Hierarchy",
+	"Name":"m_Param_Redevance_Enseigne",
+	"Elements":
+	[
+		{
+			"Name":"Taux",
+			"Type":"Numeric"
+		}
+	],
+	"Subsets@Code.links":
+	[
+		"m_Param_Redevance_Enseigne.subsets/Niv0.json",
+		"m_Param_Redevance_Enseigne.subsets/Niv0_Desc..json",
+		"m_Param_Redevance_Enseigne.subsets/Par Défaut.json"
+	]
+}

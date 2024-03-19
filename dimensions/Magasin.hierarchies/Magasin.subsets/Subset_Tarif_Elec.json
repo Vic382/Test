@@ -1,0 +1,6 @@
+{
+	"@type":"Subset",
+	"Name":"Subset_Tarif_Elec",
+	"Alias":"Description Longue",
+	"Expression":"{FILTER(TM1SUBSETALL([Magasin]) , [Magasin].[Fournisseur_Elec] = [ParametresFonctionnels].([ParametresFonctionnels].[Prestataire_Elec],[m_ParametresFonctionnels].[ValeurS]))}"
+}

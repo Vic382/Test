@@ -1,0 +1,37 @@
+{
+	"@type":"Cube",
+	"Name":"Param_Redevance_Enseigne",
+	"Dimensions":
+	[
+		{
+			"@id":"Dimensions('Exercice')"
+		},
+		{
+			"@id":"Dimensions('Version')"
+		},
+		{
+			"@id":"Dimensions('Scenario')"
+		},
+		{
+			"@id":"Dimensions('Mois')"
+		},
+		{
+			"@id":"Dimensions('Magasin')"
+		},
+		{
+			"@id":"Dimensions('m_Param_Redevance_Enseigne')"
+		}
+	],
+	"MeasuresDimension":
+	{
+		"@id":"Dimensions('m_Param_Redevance_Enseigne')"
+	},
+	"TimeDimension":
+	{
+		"@id":"Dimensions('Mois')"
+	},
+	"Views@Code.links":
+	[
+		"Param_Redevance_Enseigne.views/Par Défaut.json"
+	]
+}
