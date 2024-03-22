@@ -1,0 +1,12 @@
+{
+	"@type":"Dimension",
+	"Name":"Moyen_Transaction",
+	"Hierarchies@Code.links":
+	[
+		"Moyen_Transaction.hierarchies/Moyen_Transaction.json"
+	],
+	"DefaultHierarchy":
+	{
+		"@id":"Dimensions('Moyen_Transaction')/Hierarchies('Moyen_Transaction')"
+	}
+}

@@ -1,0 +1,10 @@
+{
+	"@type":"Subset",
+	"Name":"Vue_Source_23-11-28_Maj_Data_Investissement_Investissement_Saisie",
+	"Elements":
+	[
+		{
+			"@id":"Dimensions('Version')/Hierarchies('Version')/Elements('VF')"
+		}
+	]
+}

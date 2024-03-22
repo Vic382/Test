@@ -1,0 +1,84 @@
+{
+	"@type":"NativeView",
+	"Name":"Par Défaut",
+	"Columns":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Mois')/Hierarchies('Mois')/Subsets('Par Défaut')"
+			}
+		}
+	],
+	"Rows":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('m_CA_Magasin')/Hierarchies('m_CA_Magasin')/Subsets('Par Défaut')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Magasin')/Hierarchies('Magasin')/Subsets('Par Défaut')"
+			}
+		}
+	],
+	"Titles":
+	[
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Exercice')/Hierarchies('Exercice')/Subsets('Par Défaut')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Exercice')/Hierarchies('Exercice')/Elements('Total_Exercice')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Version')/Hierarchies('Version')/Subsets('Par Défaut')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Version')/Hierarchies('Version')/Elements('V0')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Scenario')/Hierarchies('Scenario')/Subsets('Par Défaut')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Scenario')/Hierarchies('Scenario')/Elements('Reel')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Partenaire')/Hierarchies('Partenaire')/Subsets('Par Défaut')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Partenaire')/Hierarchies('Partenaire')/Elements('Total_Partenaire')"
+			}
+		},
+		{
+			"Subset":
+			{
+				"@id":"Dimensions('Moyen_Transaction')/Hierarchies('Moyen_Transaction')/Subsets('Par Défaut')"
+			},
+			"Selected":
+			{
+				"@id":"Dimensions('Moyen_Transaction')/Hierarchies('Moyen_Transaction')/Elements('Total_Moyen_Paiement')"
+			}
+		}
+	],
+	"SuppressEmptyColumns":true,
+	"SuppressEmptyRows":true,
+	"FormatString":"0.00"
+}

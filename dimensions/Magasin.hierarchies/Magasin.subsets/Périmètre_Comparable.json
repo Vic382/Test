@@ -1,0 +1,5 @@
+{
+	"@type":"Subset",
+	"Name":"Périmètre_Comparable",
+	"Expression":"{FILTER(TM1FILTERBYLEVEL(TM1SUBSETALL([Magasin]) , 0) , [Magasin].[zDate_Ouverture] < [ParametresFonctionnels].([ParametresFonctionnels].[Date_Reference],[m_ParametresFonctionnels].[ValeurN]))}"
+}
